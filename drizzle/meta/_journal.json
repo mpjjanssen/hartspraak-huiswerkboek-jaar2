@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1762112728367,
+      "tag": "0000_worried_kate_bishop",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1762116344713,
+      "tag": "0001_sticky_randall_flagg",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1762445640518,
+      "tag": "0002_flat_the_watchers",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1762709476431,
+      "tag": "0003_orange_union_jack",
+      "breakpoints": true
+    }
+  ]
+}
