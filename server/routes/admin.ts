@@ -160,48 +160,77 @@ router.get("/verified-members", requireAdmin, async (req, res) => {
  */
 router.post("/verified-members", requireAdmin, async (req, res) => {
   try {
+    console.log('[ADD-MEMBER] Starting to add new member');
+    console.log('[ADD-MEMBER] Request body:', req.body);
+    
     const db = await getDb();
     if (!db) {
+      console.error('[ADD-MEMBER] Database not available');
       return res.status(500).json({ error: "Database not available" });
     }
     
     const adminEmail = (req as any).admin.email;
     const { fullName, email } = req.body;
     
+    console.log('[ADD-MEMBER] Admin email:', adminEmail);
+    console.log('[ADD-MEMBER] Full name:', fullName);
+    console.log('[ADD-MEMBER] Email:', email);
+    
     if (!fullName || !email) {
+      console.error('[ADD-MEMBER] Missing required fields');
       return res.status(400).json({ error: "Full name and email are required" });
     }
     
+    const normalizedEmail = email.toLowerCase();
+    console.log('[ADD-MEMBER] Normalized email:', normalizedEmail);
+    
     // Check if already exists
+    console.log('[ADD-MEMBER] Checking if email already exists...');
     const [existing] = await db
       .select()
       .from(verifiedMembers)
-      .where(eq(verifiedMembers.email, email.toLowerCase()))
+      .where(eq(verifiedMembers.email, normalizedEmail))
       .limit(1);
     
+    console.log('[ADD-MEMBER] Existing member:', existing);
+    
     if (existing) {
+      console.log('[ADD-MEMBER] Email already exists, returning error');
       return res.status(400).json({ error: "Email already exists in verified members" });
     }
     
     // Add member
+    console.log('[ADD-MEMBER] Inserting new member into database...');
     const [result] = await db.insert(verifiedMembers).values({
       fullName,
-      email: email.toLowerCase(),
+      email: normalizedEmail,
       status: "active",
       addedBy: adminEmail,
     });
+    
+    console.log('[ADD-MEMBER] Insert result:', result);
+    console.log('[ADD-MEMBER] Member added successfully with ID:', result.insertId);
+    
+    // Verify the member was actually added
+    const [verifyMember] = await db
+      .select()
+      .from(verifiedMembers)
+      .where(eq(verifiedMembers.email, normalizedEmail))
+      .limit(1);
+    
+    console.log('[ADD-MEMBER] Verification - member in database:', verifyMember);
     
     res.json({ 
       success: true, 
       member: {
         id: result.insertId,
         fullName,
-        email: email.toLowerCase(),
+        email: normalizedEmail,
         status: "active",
       }
     });
   } catch (error) {
-    console.error("Add verified member error:", error);
+    console.error("[ADD-MEMBER] ERROR:", error);
     res.status(500).json({ error: "Server error" });
   }
 });
