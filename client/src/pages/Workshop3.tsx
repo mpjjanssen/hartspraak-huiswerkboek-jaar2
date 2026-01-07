@@ -7,7 +7,6 @@ import { ProgressBar } from "@/components/ProgressBar";
 import { DownloadButtons } from "@/components/DownloadButtons";
 import { AnswerField } from "@/components/AnswerField";
 import { AIHelper } from "@/components/AIHelper";
-import { ResetWorkshop } from "@/components/ResetWorkshop";
 
 export default function Workshop3() {
   const [showOptional, setShowOptional] = useState(false);

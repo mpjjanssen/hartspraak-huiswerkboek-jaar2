@@ -7,7 +7,6 @@ import { AnswerField } from "@/components/AnswerField";
 import { ProgressBar } from "@/components/ProgressBar";
 import { DownloadButtons } from "@/components/DownloadButtons";
 import { AIHelper } from "@/components/AIHelper";
-import { ResetWorkshop } from "@/components/ResetWorkshop";
 
 export default function Workshop2() {
   const [showOptional, setShowOptional] = useState(false);
@@ -58,13 +57,6 @@ export default function Workshop2() {
 
           {/* Download and Share Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-end items-end">
-            <ResetWorkshop 
-              workshopId="workshop2"
-              workshopTitle="Ontdek je Hechtingsfundament"
-              workshopDate="9-10 mei 2026"
-              workshopNumber={2}
-              questions={workshop2Questions}
-            />
             <DownloadButtons 
               workshopId="workshop2"
               workshopTitle="Workshop 2: Ontdek je Hechtingsfundament"

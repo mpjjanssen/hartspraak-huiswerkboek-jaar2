@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/AuthContext";
-import { ResetAllData } from "@/components/ResetAllData";
+
 
 export default function Navigation() {
   const [location] = useLocation();
@@ -83,8 +83,6 @@ export default function Navigation() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <ResetAllData />
-                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={logout} className="cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4" />
                     Uitloggen
@@ -131,9 +129,7 @@ export default function Navigation() {
                     <p className="text-sm font-medium text-foreground">{user.email}</p>
                     <p className="text-xs text-muted-foreground">{user.firstName || 'Deelnemer'}</p>
                   </div>
-                  <div className="px-4">
-                    <ResetAllData />
-                  </div>
+
                   <button
                     onClick={() => {
                       logout();

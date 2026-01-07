@@ -7,7 +7,6 @@ import { AnswerField } from "@/components/AnswerField";
 import { ProgressBar } from "@/components/ProgressBar";
 import { DownloadButtons } from "@/components/DownloadButtons";
 import { AIHelper } from "@/components/AIHelper";
-import { ResetWorkshop } from "@/components/ResetWorkshop";
 
 export default function Workshop1() {
   const [showOptional, setShowOptional] = useState(false);
@@ -60,10 +59,6 @@ export default function Workshop1() {
 
           {/* Download and Reset Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-between items-end">
-            <ResetWorkshop 
-              workshopId="workshop1"
-              workshopTitle="Workshop 1"
-            />
             <DownloadButtons 
               workshopId="workshop1"
               workshopTitle="Workshop 1: De Kracht van de Psychologische Basisbehoeften"
