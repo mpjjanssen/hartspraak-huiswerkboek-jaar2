@@ -27,37 +27,36 @@ export function ResetWorkshop({ workshopId, workshopTitle }: ResetWorkshopProps)
       // Get all localStorage keys
       const keys = Object.keys(localStorage);
       
+      console.log('[RESET] All keys:', keys);
+      console.log('[RESET] Workshop ID:', workshopId);
+      
       // Filter keys that belong to this workshop
       const workshopKeys = keys.filter(key => 
         key.includes(`workshop${workshopId}`) || 
         key.startsWith(`ai_conversation_${workshopId}_`)
       );
       
+      console.log('[RESET] Keys to delete:', workshopKeys);
+      
       // Remove all workshop-related data
       workshopKeys.forEach(key => {
+        console.log('[RESET] Deleting key:', key);
         localStorage.removeItem(key);
       });
       
-      toast({
-        title: "Workshop gereset!",
-        description: `Alle antwoorden en AI gesprekken van ${workshopTitle} zijn verwijderd.`,
-      });
+      console.log('[RESET] Reset complete, reloading page...');
       
-      // Reload page to show empty state
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      // Close dialog first
+      setShowDialog(false);
+      
+      // Reload page immediately to show empty state
+      window.location.reload();
       
     } catch (error) {
-      console.error("Error resetting workshop:", error);
-      toast({
-        title: "Fout",
-        description: "Er ging iets mis bij het resetten. Probeer het opnieuw.",
-        variant: "destructive",
-      });
+      console.error('[RESET] Error resetting workshop:', error);
+      alert('Er ging iets mis bij het resetten. Probeer het opnieuw.');
+      setShowDialog(false);
     }
-    
-    setShowDialog(false);
   };
 
   return (
