@@ -6,6 +6,7 @@ import { useState } from "react";
 import { AnswerField } from "@/components/AnswerField";
 import { ProgressBar } from "@/components/ProgressBar";
 import { DownloadButtons } from "@/components/DownloadButtons";
+import { ShareHomework } from "@/components/ShareHomework";
 import { AIHelper } from "@/components/AIHelper";
 
 export default function Workshop1() {
@@ -13,18 +14,66 @@ export default function Workshop1() {
 
   // Definieer alle vragen voor deze workshop
   const workshop1Questions = [
-    { id: "q1-moment1", title: "Moment 1: Een moment waarin je straalde" },
-    { id: "q1-moment2", title: "Moment 2: Een moment waarin je je klein voelde" },
-    { id: "q1-moment3", title: "Moment 3: Een moment dat je raadselachtig vindt" },
-    { id: "q2-verbinding", title: "De kamer van verbinding" },
-    { id: "q2-veiligheid", title: "De kamer van veiligheid" },
-    { id: "q2-eigenwaarde", title: "De kamer van eigenwaarde" },
-    { id: "q2-levenslust", title: "De kamer van levenslust" },
-    { id: "q3-overtuigingen", title: "De Echo van het Verleden" },
-    { id: "q4-vermijding", title: "Jouw vermijdingsstrategieën" },
-    { id: "q4-prijs", title: "De prijs van vermijding" },
-    { id: "q4-levenslust", title: "De weg naar levenslust" },
-    { id: "q5-brief", title: "Brief aan je jongere zelf" }
+    { 
+      id: "q1-moment1", 
+      title: "Moment 1: Een moment waarin je straalde",
+      fullText: "Sluit je ogen. Laat beelden uit je kindertijd en jeugd opkomen zonder ze te sturen. Kies drie momenten die je iets vertellen over wie je was en hoe je werd gezien: Een moment waarin je straalde. Beschrijf voor elk moment: Wat zie je? Waar ben je, wie is erbij, wat gebeurt er? Geef details - details dragen betekenis. Welk gevoel roept dit beeld op nu je het weer beleeft? Laat het gevoel er zijn zonder het te beoordelen. Welke basisbehoefte werd vervuld of juist gefrustreerd? (verbinding, veiligheid, eigenwaarde, levenslust) Welke conclusie trok je toen over jezelf of over het leven? Schrijf de exacte boodschap op die je toen internaliseerde."
+    },
+    { 
+      id: "q1-moment2", 
+      title: "Moment 2: Een moment waarin je je klein voelde",
+      fullText: "Sluit je ogen. Laat beelden uit je kindertijd en jeugd opkomen zonder ze te sturen. Kies drie momenten die je iets vertellen over wie je was en hoe je werd gezien: Een moment waarin je je klein voelde. Beschrijf voor elk moment: Wat zie je? Waar ben je, wie is erbij, wat gebeurt er? Geef details - details dragen betekenis. Welk gevoel roept dit beeld op nu je het weer beleeft? Laat het gevoel er zijn zonder het te beoordelen. Welke basisbehoefte werd vervuld of juist gefrustreerd? (verbinding, veiligheid, eigenwaarde, levenslust) Welke conclusie trok je toen over jezelf of over het leven? Schrijf de exacte boodschap op die je toen internaliseerde."
+    },
+    { 
+      id: "q1-moment3", 
+      title: "Moment 3: Een moment dat je raadselachtig vindt",
+      fullText: "Sluit je ogen. Laat beelden uit je kindertijd en jeugd opkomen zonder ze te sturen. Kies drie momenten die je iets vertellen over wie je was en hoe je werd gezien: Een moment dat je raadselachtig vindt. Beschrijf voor elk moment: Wat zie je? Waar ben je, wie is erbij, wat gebeurt er? Geef details - details dragen betekenis. Welk gevoel roept dit beeld op nu je het weer beleeft? Laat het gevoel er zijn zonder het te beoordelen. Welke basisbehoefte werd vervuld of juist gefrustreerd? (verbinding, veiligheid, eigenwaarde, levenslust) Welke conclusie trok je toen over jezelf of over het leven? Schrijf de exacte boodschap op die je toen internaliseerde."
+    },
+    { 
+      id: "q2-verbinding", 
+      title: "De kamer van verbinding",
+      fullText: "Visualiseer je innerlijke wereld als een huis met vier kamers, één voor elke basisbehoefte. Loop door dit huis. Wat ontdek je? 🤝 De kamer van verbinding: Hoe voelt deze kamer? Warm en bewoond, of kil en verlaten? Wie laat je binnen? Wanneer voel je je werkelijk verbonden en wanneer voel je je eenzaam terwijl er mensen om je heen zijn?"
+    },
+    { 
+      id: "q2-veiligheid", 
+      title: "De kamer van veiligheid",
+      fullText: "Visualiseer je innerlijke wereld als een huis met vier kamers, één voor elke basisbehoefte. Loop door dit huis. Wat ontdek je? 🛡️ De kamer van veiligheid: Hoe is deze kamer ingericht? Dikke muren of open ramen? Waar voel je je veilig en in controle, waar machteloos en angstig? Beschrijf een situatie waarin je volledig losliet."
+    },
+    { 
+      id: "q2-eigenwaarde", 
+      title: "De kamer van eigenwaarde",
+      fullText: "Visualiseer je innerlijke wereld als een huis met vier kamers, één voor elke basisbehoefte. Loop door dit huis. Wat ontdek je? ⭐ De kamer van eigenwaarde: Wat zie je als je in de spiegel kijkt? Iemand waardevol of voornamelijk tekortkomingen? Welke stem spreekt hier - kritisch of liefdevol? Beschrijf een moment van echte trots en een moment van diepe twijfel."
+    },
+    { 
+      id: "q2-levenslust", 
+      title: "De kamer van levenslust",
+      fullText: "Visualiseer je innerlijke wereld als een huis met vier kamers, één voor elke basisbehoefte. Loop door dit huis. Wat ontdek je? ✨ De kamer van levenslust: Is deze kamer gevuld met licht en gelach, of stil en serieus? Wat doe je puur voor je plezier, zonder dat het iets moet opleveren? Wanneer heb je voor het laatst ongeremd gelachen?"
+    },
+    { 
+      id: "q3-overtuigingen", 
+      title: "De Echo van het Verleden",
+      fullText: "Onze overtuigingen zijn vaak onbewuste echo's uit het verleden. Maak de volgende zinnen af met je eerste gedachte: • Liefde betekent voor mij... • Als ik een fout maak, dan... • Om erbij te horen, moet ik... • Ik ben pas goed genoeg als... • Als ik mijn ware gevoelens toon, dan... • De wereld is een plek waar... 💡 Bekijk je antwoorden. Welke overtuigingen geven je kracht en welke houden je klein? Kies één beperkende overtuiging en onderzoek de oorsprong. Het herkennen van de bron is de eerste stap naar vrijheid."
+    },
+    { 
+      id: "q4-vermijding", 
+      title: "Jouw vermijdingsstrategieën",
+      fullText: "Deze opdracht onderzoekt de vierde basisbehoefte: plezier maximaliseren en pijn minimaliseren. Jouw vermijdingsstrategieën: Wat doe je om ongemakkelijke gevoelens te ontlopen? Wees radicaal eerlijk. Noteer je top 3."
+    },
+    { 
+      id: "q4-prijs", 
+      title: "De prijs van vermijding",
+      fullText: "Deze opdracht onderzoekt de vierde basisbehoefte: plezier maximaliseren en pijn minimaliseren. De prijs van vermijding: Kies één strategie. Wat is de korte-termijn winst? En wat is de lange-termijn prijs? Schrijf een eerlijke kosten-batenanalyse."
+    },
+    { 
+      id: "q4-levenslust", 
+      title: "De weg naar levenslust",
+      fullText: "Deze opdracht onderzoekt de vierde basisbehoefte: plezier maximaliseren en pijn minimaliseren. De weg naar levenslust: Wat geeft jou échte voldoening? Maak een lijst van minimaal 10 dingen. Hoeveel ruimte krijgen deze in je leven? Plan er deze week één concreet in."
+    },
+    { 
+      id: "q5-brief", 
+      title: "Brief aan je jongere zelf",
+      fullText: "Kies één moment uit opdracht 1 waarin je je onveilig of onzichtbaar voelde. Schrijf een brief aan het kind dat je toen was. • Begin met: 'Lieve kleine [jouw naam], ik zie je daar...' • Beschrijf wat je ziet in de ogen van dit kind • Erken zijn gevoelens • Vertel wat je nu weet • Geef de troost, erkenning of veiligheid die toen ontbrak • Sluit af met een belofte: Wat beloof je dit kind in jezelf vanaf nu? 💡 Lees de brief hardop voor aan jezelf, met je hand op je hart. Laat de woorden binnenkomen."
+    }
   ];
 
 
@@ -57,9 +106,15 @@ export default function Workshop1() {
           {/* Progress Bar */}
           <ProgressBar workshopId="workshop1" totalQuestions={12} />
 
-          {/* Download and Reset Buttons */}
+          {/* Download and Share Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-between items-end">
             <DownloadButtons 
+              workshopId="workshop1"
+              workshopTitle="Workshop 1: De Kracht van de Psychologische Basisbehoeften"
+              workshopDate="14-15 maart 2026"
+              questions={workshop1Questions}
+            />
+            <ShareHomework
               workshopId="workshop1"
               workshopTitle="Workshop 1: De Kracht van de Psychologische Basisbehoeften"
               workshopDate="14-15 maart 2026"
