@@ -6,7 +6,7 @@ import { useState } from "react";
 import { AnswerField } from "@/components/AnswerField";
 import { ProgressBar } from "@/components/ProgressBar";
 import { DownloadButtons } from "@/components/DownloadButtons";
-import { ShareHomework } from "@/components/ShareHomework";
+
 import { AIHelper } from "@/components/AIHelper";
 
 export default function Workshop1() {
@@ -114,12 +114,7 @@ export default function Workshop1() {
               workshopDate="14-15 maart 2026"
               questions={workshop1Questions}
             />
-            <ShareHomework
-              workshopId="workshop1"
-              workshopTitle="Workshop 1: De Kracht van de Psychologische Basisbehoeften"
-              workshopDate="14-15 maart 2026"
-              questions={workshop1Questions}
-            />
+
           </div>
 
                     {/* Introduction */}
