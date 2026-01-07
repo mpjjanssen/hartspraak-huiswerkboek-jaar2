@@ -29,7 +29,7 @@ export function ResetWorkshop({ workshopId, workshopTitle }: ResetWorkshopProps)
       
       // Filter keys that belong to this workshop
       const workshopKeys = keys.filter(key => 
-        key.startsWith(`${workshopId}_`) || 
+        key.includes(`workshop${workshopId}`) || 
         key.startsWith(`ai_conversation_${workshopId}_`)
       );
       
