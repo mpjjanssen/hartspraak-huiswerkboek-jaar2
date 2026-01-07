@@ -2,18 +2,18 @@ import express from "express";
 import { getDb } from "../db.js";
 import { users } from "../../drizzle/schema.js";
 import { eq } from "drizzle-orm";
+import { requireAuth } from "../lib/auth.js";
 
 const router = express.Router();
+
+// Apply auth middleware to all routes
+router.use(requireAuth);
 
 // Share homework endpoint
 router.post("/", async (req, res) => {
   try {
     const { workshopId, workshopTitle } = req.body;
-    const userId = (req as any).session?.userId;
-
-    if (!userId) {
-      return res.status(401).json({ message: "Niet ingelogd" });
-    }
+    const userId = (req as any).user.userId;
 
     if (!workshopId || !workshopTitle) {
       return res.status(400).json({ message: "Workshop ID en titel zijn verplicht" });

@@ -46,6 +46,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
     sessionStorage.removeItem("auth_token");
     sessionStorage.removeItem("auth_user");
+    // Clear localStorage to prevent data leakage between users
+    localStorage.clear();
   };
 
   return (
