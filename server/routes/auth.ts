@@ -16,28 +16,16 @@ router.post("/check-email", async (req, res) => {
   try {
     const { email } = req.body;
     
-    console.log('[CHECK-EMAIL] Received email:', email);
-    
     if (!email) {
       return res.status(400).json({ error: "Email is required" });
     }
     
     const db = await getDb();
     if (!db) {
-      console.error('[CHECK-EMAIL] Database not available');
       return res.status(500).json({ error: "Database not available" });
     }
     
     const normalizedEmail = email.toLowerCase();
-    console.log('[CHECK-EMAIL] Normalized email:', normalizedEmail);
-    
-    // First, get all members to debug
-    const allMembers = await db
-      .select()
-      .from(verifiedMembers);
-    
-    console.log('[CHECK-EMAIL] Total members in database:', allMembers.length);
-    console.log('[CHECK-EMAIL] All member emails:', allMembers.map(m => m.email));
     
     // Check if email exists in verified members
     const [member] = await db
@@ -48,8 +36,6 @@ router.post("/check-email", async (req, res) => {
         eq(verifiedMembers.status, "active")
       ))
       .limit(1);
-    
-    console.log('[CHECK-EMAIL] Found member:', member);
     
     if (!member) {
       return res.json({ 
