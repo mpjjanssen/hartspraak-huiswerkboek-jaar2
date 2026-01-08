@@ -14,6 +14,7 @@ router.use(requireAuth);
  * Submit homework to be shared with the team
  */
 router.post("/", async (req, res) => {
+  console.log("[API] Received share request from user:", (req as any).user?.email);
   try {
     const { 
       workshopId, 
@@ -27,17 +28,21 @@ router.post("/", async (req, res) => {
     const userId = (req as any).user.userId;
     const userEmail = (req as any).user.email;
 
+    console.log("[API] Sharing workshop:", workshopTitle, "for user:", userEmail);
+
     if (!workshopId || !pdfData || !fileName) {
+      console.error("[API] Missing required fields:", { workshopId, hasPdf: !!pdfData, fileName });
       return res.status(400).json({ error: "Missing required fields" });
     }
 
     const db = await getDb();
     if (!db) {
+      console.error("[API] Database unavailable");
       return res.status(503).json({ error: "Database unavailable" });
     }
 
     // Insert into shared_homework table
-    await db.insert(sharedHomework).values({
+    const result = await db.insert(sharedHomework).values({
       userId,
       userEmail,
       workshopId,
@@ -49,6 +54,8 @@ router.post("/", async (req, res) => {
       status: "pending",
       sharedAt: new Date(),
     });
+
+    console.log("[API] Successfully inserted shared homework. Result:", result);
 
     res.json({ success: true, message: "Huiswerk succesvol gedeeld met het team" });
   } catch (error) {
@@ -73,7 +80,7 @@ router.get("/my-submissions", async (req, res) => {
     const submissions = await db
       .select({
         id: sharedHomework.id,
-        workshopTitle: sharedHomework.title,
+        workshopTitle: sharedHomework.workshopTitle,
         sharedAt: sharedHomework.sharedAt,
         status: sharedHomework.status,
       })
