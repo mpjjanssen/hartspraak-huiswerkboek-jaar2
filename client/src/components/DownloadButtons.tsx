@@ -46,17 +46,17 @@ export function DownloadButtons({
   const { encryptionKey, isReady } = useEncryption();
 
   const getAnswersWithAI = async (): Promise<AnswerWithAI[]> => {
-    const answers: AnswerWithAI[] = [];
     const authToken = sessionStorage.getItem('auth_token');
     
-    for (const q of questions) {
+    // Fetch all AI conversations in parallel for better performance and reliability
+    const fetchPromises = questions.map(async (q) => {
       const answerKey = `hartspraak-${workshopId}-${q.id}`;
       const aiKey = `hartspraak-ai-${workshopId}-${q.id}`;
       
       const answer = localStorage.getItem(answerKey) || "";
       let aiConversation: Message[] | undefined;
       
-      // Try to get AI conversation from server first if encryption is ready
+      // 1. Try server fetch if possible
       if (isReady && encryptionKey && authToken) {
         try {
           const response = await fetch(`/api/user-data/conversations/${workshopId}/${q.id}`, {
@@ -76,11 +76,11 @@ export function DownloadButtons({
             }
           }
         } catch (e) {
-          console.warn(`Failed to fetch AI data for ${q.id} from server:`, e);
+          console.warn(`[DownloadButtons] Server fetch failed for ${q.id}:`, e);
         }
       }
       
-      // Fallback to localStorage if server fetch failed or was skipped
+      // 2. Fallback to localStorage
       if (!aiConversation) {
         const aiDataRaw = localStorage.getItem(aiKey);
         if (aiDataRaw) {
@@ -90,21 +90,22 @@ export function DownloadButtons({
               aiConversation = aiData.filter(m => m.role === "user" || m.role === "assistant");
             }
           } catch (e) {
-            console.error("Failed to parse AI data from localStorage:", e);
+            console.error(`[DownloadButtons] LocalStorage parse failed for ${q.id}:`, e);
           }
         }
       }
       
-      if (answer.trim() || (aiConversation && aiConversation.length > 0)) {
-        answers.push({
-          question: q.title,
-          answer: answer,
-          aiConversation: aiConversation
-        });
-      }
-    }
+      return {
+        question: q.title,
+        answer: answer,
+        aiConversation: aiConversation
+      };
+    });
+
+    const results = await Promise.all(fetchPromises);
     
-    return answers;
+    // Filter out items that have neither an answer nor an AI conversation
+    return results.filter(item => item.answer.trim() || (item.aiConversation && item.aiConversation.length > 0));
   };
 
   const generatePDFBlob = async (): Promise<Blob> => {
@@ -122,22 +123,25 @@ export function DownloadButtons({
     const maxWidth = doc.internal.pageSize.width - 2 * margin;
     
     if (answers.length === 0) {
-      doc.text("Geen antwoorden gevonden voor deze workshop.", margin, yPosition);
+      doc.text("Geen antwoorden of AI-gesprekken gevonden voor deze workshop.", margin, yPosition);
       return doc.output('blob');
     }
 
     answers.forEach((item, index) => {
+      // Check for page break before question
       if (yPosition > pageHeight - 40) {
         doc.addPage();
         yPosition = 20;
       }
       
+      // Question
       doc.setFontSize(14);
       doc.setFont('helvetica', 'bold');
       const questionLines = doc.splitTextToSize(`${index + 1}. ${item.question}`, maxWidth);
       doc.text(questionLines, margin, yPosition);
       yPosition += questionLines.length * 7 + 5;
       
+      // Answer
       if (item.answer.trim()) {
         doc.setFontSize(11);
         doc.setFont('helvetica', 'normal');
@@ -151,8 +155,10 @@ export function DownloadButtons({
         yPosition += 10;
       }
       
+      // AI Conversation
       if (item.aiConversation && item.aiConversation.length > 0) {
-        if (yPosition > pageHeight - 60) {
+        // Check for page break before AI section
+        if (yPosition > pageHeight - 50) {
           doc.addPage();
           yPosition = 20;
         }
@@ -166,7 +172,8 @@ export function DownloadButtons({
         
         doc.setFontSize(10);
         item.aiConversation.forEach((msg) => {
-          if (yPosition > pageHeight - 40) {
+          // Check for page break before each message
+          if (yPosition > pageHeight - 30) {
             doc.addPage();
             yPosition = 20;
           }
@@ -190,59 +197,77 @@ export function DownloadButtons({
   };
 
   const downloadPDF = async () => {
-    const blob = await generatePDFBlob();
-    const filename = `${workshopTitle.replace(/\s+/g, '_')}_Antwoorden.pdf`;
-    saveAs(blob, filename);
+    try {
+      const blob = await generatePDFBlob();
+      const filename = `${workshopTitle.replace(/\s+/g, '_')}_Antwoorden.pdf`;
+      saveAs(blob, filename);
+    } catch (error) {
+      console.error("[DownloadButtons] PDF generation failed:", error);
+      toast({
+        title: "Fout bij PDF genereren",
+        description: "Er is iets misgegaan bij het maken van de PDF. Probeer het opnieuw.",
+        variant: "destructive"
+      });
+    }
   };
 
   const downloadWord = async () => {
-    const answers = await getAnswersWithAI();
-    const children: Paragraph[] = [
-      new Paragraph({ text: workshopTitle, heading: HeadingLevel.HEADING_1, spacing: { after: 200 } }),
-      new Paragraph({ text: workshopDate, spacing: { after: 400 } })
-    ];
-    
-    if (answers.length === 0) {
-      children.push(new Paragraph({ text: "Geen antwoorden gevonden voor deze workshop." }));
-    }
-
-    answers.forEach((item, index) => {
-      children.push(new Paragraph({
-        children: [new TextRun({ text: `${index + 1}. ${item.question}`, bold: true, size: 28 })],
-        spacing: { before: 300, after: 200 }
-      }));
+    try {
+      const answers = await getAnswersWithAI();
+      const children: Paragraph[] = [
+        new Paragraph({ text: workshopTitle, heading: HeadingLevel.HEADING_1, spacing: { after: 200 } }),
+        new Paragraph({ text: workshopDate, spacing: { after: 400 } })
+      ];
       
-      if (item.answer.trim()) {
-        children.push(new Paragraph({ text: item.answer, spacing: { after: 300 } }));
-      } else {
-        children.push(new Paragraph({ 
-          children: [new TextRun({ text: "(Geen tekstueel antwoord ingevuld)", italic: true })],
-          spacing: { after: 300 } 
-        }));
+      if (answers.length === 0) {
+        children.push(new Paragraph({ text: "Geen antwoorden of AI-gesprekken gevonden voor deze workshop." }));
       }
-      
-      if (item.aiConversation && item.aiConversation.length > 0) {
+
+      answers.forEach((item, index) => {
         children.push(new Paragraph({
-          children: [new TextRun({ text: "💬 AI Begeleiding", bold: true, size: 24, color: "4B5563" })],
-          spacing: { before: 200, after: 150 }
+          children: [new TextRun({ text: `${index + 1}. ${item.question}`, bold: true, size: 28 })],
+          spacing: { before: 300, after: 200 }
         }));
         
-        item.aiConversation.forEach((msg) => {
-          const roleLabel = msg.role === "user" ? "Jij:" : "AI Begeleider:";
-          children.push(new Paragraph({
-            children: [new TextRun({ text: roleLabel, bold: true, size: 22 })],
-            spacing: { before: 100, after: 50 }
+        if (item.answer.trim()) {
+          children.push(new Paragraph({ text: item.answer, spacing: { after: 300 } }));
+        } else {
+          children.push(new Paragraph({ 
+            children: [new TextRun({ text: "(Geen tekstueel antwoord ingevuld)", italic: true })],
+            spacing: { after: 300 } 
           }));
-          children.push(new Paragraph({ text: msg.content, spacing: { after: 150 } }));
-        });
-      }
-      children.push(new Paragraph({ text: "", spacing: { after: 200 } }));
-    });
-    
-    const doc = new Document({ sections: [{ properties: {}, children: children }] });
-    const blob = await Packer.toBlob(doc);
-    const filename = `${workshopTitle.replace(/\s+/g, '_')}_Antwoorden.docx`;
-    saveAs(blob, filename);
+        }
+        
+        if (item.aiConversation && item.aiConversation.length > 0) {
+          children.push(new Paragraph({
+            children: [new TextRun({ text: "💬 AI Begeleiding", bold: true, size: 24, color: "4B5563" })],
+            spacing: { before: 200, after: 150 }
+          }));
+          
+          item.aiConversation.forEach((msg) => {
+            const roleLabel = msg.role === "user" ? "Jij:" : "AI Begeleider:";
+            children.push(new Paragraph({
+              children: [new TextRun({ text: roleLabel, bold: true, size: 22 })],
+              spacing: { before: 100, after: 50 }
+            }));
+            children.push(new Paragraph({ text: msg.content, spacing: { after: 150 } }));
+          });
+        }
+        children.push(new Paragraph({ text: "", spacing: { after: 200 } }));
+      });
+      
+      const doc = new Document({ sections: [{ properties: {}, children: children }] });
+      const blob = await Packer.toBlob(doc);
+      const filename = `${workshopTitle.replace(/\s+/g, '_')}_Antwoorden.docx`;
+      saveAs(blob, filename);
+    } catch (error) {
+      console.error("[DownloadButtons] Word generation failed:", error);
+      toast({
+        title: "Fout bij Word genereren",
+        description: "Er is iets misgegaan bij het maken van het Word-document.",
+        variant: "destructive"
+      });
+    }
   };
 
   const shareWithTeam = async () => {
@@ -277,11 +302,11 @@ export function DownloadButtons({
         setHasShared(true);
         toast({
           title: "Succesvol gedeeld",
-          description: "Je huiswerk inclusief AI-begeleiding is gedeeld met het Hartspraak-team.",
+          description: "Je huiswerk inclusief álle AI-begeleiding is gedeeld met het Hartspraak-team.",
         });
       };
     } catch (error) {
-      console.error("Error sharing homework:", error);
+      console.error("[DownloadButtons] Error sharing homework:", error);
       toast({
         title: "Fout bij delen",
         description: "Er is iets misgegaan bij het delen van je huiswerk. Probeer het later opnieuw.",
@@ -298,16 +323,18 @@ export function DownloadButtons({
         onClick={downloadPDF}
         variant="outline"
         className="gap-2"
+        disabled={isSharing}
       >
-        <Download className="h-4 w-4" />
+        {isSharing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
         Download PDF
       </Button>
       <Button
         onClick={downloadWord}
         variant="outline"
         className="gap-2"
+        disabled={isSharing}
       >
-        <FileText className="h-4 w-4" />
+        {isSharing ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileText className="h-4 w-4" />}
         Download Word
       </Button>
       <Button
