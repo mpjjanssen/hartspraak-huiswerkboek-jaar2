@@ -1,488 +1,181 @@
-import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, BookOpen, Heart, Lightbulb } from "lucide-react";
 import { Link } from "wouter";
+import { ChevronRight } from "lucide-react";
+import { AnswerField } from "@/components/AnswerField";
 import { ProgressBar } from "@/components/ProgressBar";
 import { DownloadButtons } from "@/components/DownloadButtons";
-import { AnswerField } from "@/components/AnswerField";
 import { AIHelper } from "@/components/AIHelper";
 
 export default function Workshop3() {
-  const [showOptional, setShowOptional] = useState(false);
-  
-  const workshopId = "workshop3";
-  const workshopTitle = "Workshop 3: Versterk je Eigenwaarde";
-  const workshopDate = "29.08.2026 - 30.08.2026";
-  
-  // Question IDs for this workshop
-  const questionIds = [
-    "w3_q1_moment",
-    "w3_q1_details",
-    "w3_q1_gevoel",
-    "w3_q1_bron",
-    "w3_q2_herkennen",
-    "w3_q2_wat_zegt",
-    "w3_q2_wiens_stem",
-    "w3_q2_impact",
-    "w3_q3_situaties",
-    "w3_q3_reactie",
-    "w3_q3_gedrag",
-    "w3_q3_patroon",
-    "w3_q4_oefening",
-    "w3_q4_weerstand",
-    "w3_q4_reflectie",
-    "w3_q4_affirmaties",
-    "w3_q5_gebieden",
-    "w3_q5_prijs",
-    "w3_q5_angst",
-    "w3_q5_experiment"
-  ];
-
   const questions = [
-    { id: "w3_q1_moment", title: "Vraag 1" },
-    { id: "w3_q1_details", title: "Vraag 2" },
-    { id: "w3_q1_gevoel", title: "Vraag 3" },
-    { id: "w3_q1_bron", title: "Vraag 4" },
-    { id: "w3_q2_herkennen", title: "Vraag 5" },
-    { id: "w3_q2_wat_zegt", title: "Vraag 6" },
-    { id: "w3_q2_wiens_stem", title: "Vraag 7" },
-    { id: "w3_q2_impact", title: "Vraag 8" },
-    { id: "w3_q3_situaties", title: "Vraag 9" },
-    { id: "w3_q3_reactie", title: "Vraag 10" },
-    { id: "w3_q3_gedrag", title: "Vraag 11" },
-    { id: "w3_q3_patroon", title: "Vraag 12" },
-    { id: "w3_q4_oefening", title: "Vraag 13" },
-    { id: "w3_q4_weerstand", title: "Vraag 14" },
-    { id: "w3_q4_reflectie", title: "Vraag 15" },
-    { id: "w3_q4_affirmaties", title: "Vraag 16" },
-    { id: "w3_q5_gebieden", title: "Vraag 17" },
-    { id: "w3_q5_prijs", title: "Vraag 18" },
-    { id: "w3_q5_angst", title: "Vraag 19" },
-    { id: "w3_q5_experiment", title: "Vraag 20" },
-  ];
+    {
+        "id": "ws3-q1",
+        "title": "Het Verraad van het Vertrouwen",
+        "fullText": "Vraag: Herinner jij je momenten (of een sfeer) waarin je als kind voelde dat je gebruikt werd voor het geluk van je vader of moeder? Of dat er beloftes werden gedaan die niet werden nagekomen?\nVerdiepende vraag: Welk besluit heb je toen onbewust genomen over mensen en vertrouwen? En hoe be\u00efnvloedt dat besluit nog steeds hoe je je vandaag in relaties beweegt?\n\"Als je structureel in de steek gelaten wordt... dan wordt het basisvertrouwen dat je als kind van nature hebt beschaamd. Je bent in hen teleurgesteld en je voelt je verraden.\"\n(Bron: De Maskermaker, Hoofdstuk 7)"
+    },
+    {
+        "id": "ws3-q2",
+        "title": "Parentificatie en de Kleine Prins/Prinses",
+        "fullText": "Vraag: Heb jij je als kind 'groter' of sterker gevoeld dan je ouders? Had je het gevoel dat jij de situatie moest redden of de speciale vertrouweling was?\nVerdiepende vraag: Wat moest je opgeven van je kindertijd om die 'grote' rol te kunnen spelen? En is er een deel van jou dat nog steeds rouwt om het kind dat niet kind mocht zijn?\n\"Je nam de taak van een afwezige ouder vaak over om op die manier dicht bij de blijvende ouder te zijn. Met je kinderlijke almacht zei je: ik doe het voor jou, dat kan ik best.\"\n(Bron: De Maskermaker, Hoofdstuk 7)"
+    },
+    {
+        "id": "ws3-q3",
+        "title": "Het Besluit tot Onkwetsbaarheid",
+        "fullText": "Vraag: Herken je het moment (of de houding) dat je besloot: \"Ik doe het wel alleen\" of \"Niemand krijgt mij er nog onder\"?\nVerdiepende vraag: Wat zou er gebeuren als je dat pantser even zou afleggen? Welke kwetsbaarheid of pijn ligt eronder verborgen die je nooit meer wilde voelen?\n\"Hij leerde vroeg dat de wereld verdeeld was in roofdieren en prooi, en hij had besloten nooit prooi te zijn. [...] Ik geef mezelf nooit volledig. Ik blijf in controle.\"\n(Bron: Van wond naar wonder, Hoofdstuk 5)\nONDERDEEL 2: DYNAMIEK IN RELATIES (ZELF EN ANDER)\nIn relaties toont deze structuur zich door verleiding, strijd, controle houden en moeite met werkelijke overgave."
+    },
+    {
+        "id": "ws3-q4",
+        "title": "Verleiden en Afstoten",
+        "fullText": "Vraag: Herken je bij jezelf (of een partner) dat de jacht spannender is dan de vangst? Gebruik je charme of hulpvaardigheid om de situatie naar je hand te zetten?\nVerdiepende vraag: Wat zou er gebeuren als je zou blijven n\u00e1dat je iemand 'veroverd' hebt? Welke intimiteit vermijd je door steeds verder te jagen?\n\"In de liefde wordt de psychopathische dynamiek het meest pijnlijk zichtbaar. Want wat de psychopaat zoekt is niet liefde maar verovering, niet intimiteit maar controle... Deze cyclus van verleiden en afstoten, van veroveren en verlaten, is typerend.\"\n(Bron: Van wond naar wonder, Hoofdstuk 5)"
+    },
+    {
+        "id": "ws3-q5",
+        "title": "Macht en Strijd",
+        "fullText": "Vraag: Hoe reageer je als je partner of een autoriteitsfiguur je vertelt wat je moet doen? Voel je direct de neiging om in verzet te komen, de discussie te winnen, of te bewijzen dat jij het beter weet?\nVerdiepende vraag: Wat zou er veranderen als je een keer zou 'verliezen' of toegeven, zonder dat het betekent dat je zwak of ondergeschikt bent? Wat is het ergste dat zou kunnen gebeuren?\n\"Een relatie bekijk je vooral vanuit het perspectief hoog of laag, meer of minder, macht of onmacht. Jij staat per definitie bovenaan... In een ruzie toon je je onaangedaan of je verschuilt je achter grootspraak.\"\n(Bron: De Maskermaker, Hoofdstuk 7)"
+    },
+    {
+        "id": "ws3-q6",
+        "title": "Angst voor Afhankelijkheid",
+        "fullText": "Vraag: Hoe makkelijk is het voor jou om te zeggen: \"Ik heb je nodig\" of \"Ik weet het even niet\"? Of los je je problemen liever alleen op om niemand dankbaar te hoeven zijn?\nVerdiepende vraag: Kun je je een moment herinneren waarop je w\u00e9l afhankelijk was en het goed afliep? Wat zou het je kosten om dat opnieuw te proberen?\n\"Afhankelijkheid voorkom je het liefst... Steun vragen brengt je in een lastig parket. Je bijt liever je tong af dan hieraan toe te geven. [...] Je hebt het gevoel dat je je kracht kwijtraakt als je 'ik heb je nodig' zegt.\"\n(Bron: De Maskermaker, Hoofdstuk 7)\nONDERDEEL 3: HET LICHAAM EN DE ENERGIE\nHet lichaam straalt kracht en 'opgeblazenheid' uit, vooral aan de bovenkant, terwijl de basis smal of onstabiel is."
+    },
+    {
+        "id": "ws3-q7",
+        "title": "De Omgekeerde Piramide",
+        "fullText": "Vraag: Ga voor de spiegel staan. Kijk naar de verhouding tussen je schouders/borstkas en je bekken/benen. Is er sprake van een \"V-shape\"? Voelt je bovenlichaam krachtiger of meer 'aanwezig' dan je benen?\nVerdiepende vraag: Als je je aandacht en energie naar je benen en voeten zou brengen, hoe zou dat voelen? Wat zou er veranderen als je steviger 'gegrond' zou zijn?\n\"Deze ongelijke verdeling van energie en aandacht cre\u00ebert wat ik het 'omgekeerde piramide lichaam' noem - massief bovenaan, smal onderaan. Het is een lichaam dat macht uitstraalt maar letterlijk geen sterke basis heeft om op te staan.\"\n(Bron: Van wond naar wonder, Hoofdstuk 5)"
+    },
+    {
+        "id": "ws3-q8",
+        "title": "De Ogen die Scannen",
+        "fullText": "Vraag: Let eens op hoe je een ruimte met nieuwe mensen binnenkomt. Ben je aan het scannen? Kijk je wie er belangrijk is, wie een bedreiging vormt, of wie je kunt 'gebruiken' of charmeren?\nVerdiepende vraag: Wat zou er gebeuren als je een ruimte zou binnenkomen zonder te scannen? Als je gewoon aanwezig zou zijn, zonder strategie? Welke kwetsbaarheid zou dat blootleggen?\n\"Ze scannen constant de omgeving: Wie is een bedreiging? Wie kan gebruikt worden? Wie moet geneutraliseerd worden?\"\n(Bron: Van wond naar wonder, Hoofdstuk 5)\nONDERDEEL 4: DE KWALITEIT (HET GOUD)\nAls de strijd wordt opgegeven, transformeert de manipulator in een ware leider die dient in plaats van heerst."
+    },
+    {
+        "id": "ws3-q9",
+        "title": "De Krijger van het Hart / De Leider",
+        "fullText": "Vraag: Jij hebt een enorme daadkracht en charisma. Als je deze kwaliteiten niet inzet om jezelf te beschermen of te winnen, maar om anderen te steunen of een hoger doel te dienen, hoe ziet dat er dan uit?\nVerdiepende vraag: Kun je je een situatie voorstellen waarin je je kracht inzet om iets kwetsbaars te beschermen, in plaats van om macht te verwerven? Hoe zou dat voelen?\n\"De energie die ooit gebruikt werd om te domineren kan nu gebruikt worden om te beschermen wat kwetsbaar is. Ze worden de krijgers van het hart.\"\n(Bron: Van wond naar wonder, Hoofdstuk 5)\nTer afsluiting:\nDe stap van macht naar overgave is misschien wel de spannendste sprong die er is. Het vraagt moed om te erkennen dat je het niet alleen kunt. In de workshop gaan we oefenen met die sprong, in een veilige bedding.\nMartien\nWorkshop 6: De Rigide Structuur\nThema: Het Harnas van Perfectie & De Kunst van Overgave\nBeste deelnemer,\nWe eindigen onze reis met de structuur die vaak het meest 'succesvol' oogt aan de buitenkant, maar die van binnen misschien wel het eenzaamst is. Het is de structuur van de perfectie, de prestatie, en het hart dat op slot ging om nooit meer gekwetst te worden.\nIn mijn praktijk zie ik hier vaak prachtige, krachtige mensen binnenkomen. Alles lijkt te kloppen: de baan, het uiterlijk, het verhaal. Maar de prijs voor die perfectie is hoog: het verlies van levendigheid. De rigide mens heeft geleerd: \"Als ik perfect ben, kan niemand me pijn doen.\" Maar als je perfect bent, kan niemand je ook \u00e9cht raken.\nIk nodig je uit om je harnas heel even op een kier te zetten en te kijken wat eronder zit.\nONDERDEEL 1: DE OORSPRONG (ACHTERGROND)\nDe rigide wond ontstaat later dan de andere, in de 'genitale fase' (3 tot 6 jaar). Het is de tijd waarin het kind zijn hart en zijn bekken (vitaliteit/seksualiteit) wil verbinden en zich voluit wil laten zien aan de ouders, maar daarin wordt afgewezen of gecorrigeerd."
+    },
+    {
+        "id": "ws3-q10",
+        "title": "De Afgewezen Vitaliteit",
+        "fullText": "Vraag: Herinner jij je uit je kindertijd dat je spontaniteit, je wildheid of je prille verliefdheid/seksualiteit werd afgeremd? Werd er gezegd \"doe maar gewoon\", of \"dat hoort niet\"? Voelde je dat je prestaties welkom waren, maar je gevoelens niet?\nVerdiepende vraag: Welk deel van je levenskracht heb je toen 'op slot' gezet? En wat zou er gebeuren als je dat deel nu weer zou toelaten?\n\"Wat alle rigide kinderen leren - is dat hun natuurlijke vitaliteit, hun spontane levenslust, hun wilde hart niet welkom is. Niet verboden... Maar gewoon... irrelevant.\"\n(Bron: Van wond naar wonder, Hoofdstuk 6)"
+    },
+    {
+        "id": "ws3-q11",
+        "title": "De Alchemie van Perfectie",
+        "fullText": "Vraag: Op welke gebieden in je leven (werk, uiterlijk, huishouden) streef jij naar foutloosheid? Heb je het gevoel dat je liefde moet verdienen door dingen goed te doen?\nVerdiepende vraag: Wat zou er gebeuren als je een fout zou maken en niemand zou je minder waarderen? Kun je je voorstellen geliefd te worden om wie je bent, niet om wat je doet?\n\"Het rigide kind vindt een briljante oplossing: het wordt perfect. Als mijn natuurlijke zelf niet goed genoeg is, dan cre\u00eber ik een zelf dat wel goed genoeg is.\"\n(Bron: Van wond naar wonder, Hoofdstuk 6)"
+    },
+    {
+        "id": "ws3-q12",
+        "title": "De Split tussen Hart en Bekken",
+        "fullText": "Vraag: Herken je bij jezelf dat je \u00f3f heel erg in je hoofd zit (controle), \u00f3f heel erg in de actie/seksualiteit (prestatie), maar zelden met je hele hart en gevoel aanwezig bent in het moment?\nVerdiepende vraag: Wat zou er nodig zijn om je hart, je hoofd en je bekken met elkaar te verbinden? En welke emotie vermijd je door ze gescheiden te houden?\n\"Je trekt je terug uit je bekken om zo je lust te beheersen... Je hoofd, hart en geslacht verbinden is een voorwaarde voor overgave, maar je bewaakt op die fronten de controle.\"\n(Bron: De Maskermaker, Hoofdstuk 9)\nONDERDEEL 2: DYNAMIEK IN RELATIES (ZELF EN ANDER)\nIn relaties is de rigide mens vaak de 'ideale' partner op papier: trouw, plichtsgetrouw en stabiel. Maar de partner voelt vaak een afstand, een onbereikbaarheid."
+    },
+    {
+        "id": "ws3-q13",
+        "title": "De Glazen Wand (De Actor)",
+        "fullText": "Vraag: Heb je wel eens van een partner gehoord dat je \"alles volgens het boekje doet\" maar dat ze je niet kunnen voelen? Dat je functioneert als een perfecte echtgenoot/vriend, maar dat de intimiteit ontbreekt?\nVerdiepende vraag: Als je zou stoppen met 'spelen' en zou laten zien wat er werkelijk in je omgaat, wat zou je partner dan zien? Wat houd je achter die glazen wand verborgen?\n\"'Het is alsof ik leef met een actor die perfect de rol van echtgenoot speelt. Hij doet alle juiste dingen, zegt alle juiste woorden, maar ik voel hem niet. Waar is h\u00edj in dit alles?'\"\n(Bron: Van wond naar wonder, Hoofdstuk 6)"
+    },
+    {
+        "id": "ws3-q14",
+        "title": "Aantrekken en Afstoten",
+        "fullText": "Vraag: Herken je het patroon van verleiden (charmeren, aantrekken) en vervolgens afstand nemen zodra de ander echt voor je gaat?\nVerdiepende vraag: Wat is het moment waarop je 'dichtslaat'? En welke kwetsbaarheid of angst bescherm je door afstand te nemen voordat de ander te dichtbij komt?\n\"Als het op intimiteit aankomt, wordt het al snel verwarrend door je dubbele boodschappen als 'kom alstublieft' en 'blijf op een afstand'. [...] Je houdt jezelf in twijfel en voorzichtigheid gevangen.\"\n(Bron: De Maskermaker, Hoofdstuk 9)"
+    },
+    {
+        "id": "ws3-q15",
+        "title": "De Strijd om de Eerste Plek",
+        "fullText": "Vraag: Merk je dat je in relaties (of vriendschappen) bezig bent met wie er 'beter' is, wie er gelijk heeft, of wie de controle heeft? Is het moeilijk voor je om je ongelijk toe te geven of je kwetsbaar op te stellen?\nVerdiepende vraag: Wat zou er veranderen in je relaties als je zou stoppen met vergelijken en strijden? En wat zou je moeten loslaten om 'gewoon' gelijkwaardig te kunnen zijn?\n\"Je bent geneigd de ander te beoordelen, bijvoorbeeld over de vormgeving van een sessie. [...] Je houdt koste wat kost de regie.\"\n(Bron: De Maskermaker, Hoofdstuk 9)\nONDERDEEL 3: HET LICHAAM EN DE ENERGIE\nHet rigide lichaam is vaak atletisch, proportioneel en 'mooi', maar er zit een hoge spanning op. Het is een fort."
+    },
+    {
+        "id": "ws3-q16",
+        "title": "De Rechte Rug (Trots)",
+        "fullText": "Vraag: Ga staan en voel je houding. Heb je de neiging je kin iets op te tillen en je rug kaarsrecht te houden (de \"militaire houding\")? Voelt het alsof je altijd 'aan' staat en klaar bent om te presteren?\nVerdiepende vraag: Wat zou er gebeuren als je zou zakken, zou hangen, zou 'falen' in je houding? Welke emotie zou dan naar boven komen die je nu met je rechte rug in bedwang houdt?\n\"Je bewegingen zijn beheerst en soms wat star, als een mannequin of militair... De stand van je hoofd met opgeheven kin zit een zekere trots.\"\n(Bron: De Maskermaker, Hoofdstuk 9)"
+    },
+    {
+        "id": "ws3-q17",
+        "title": "De Machine",
+        "fullText": "Vraag: Probeer eens 5 minuten lang doelloos te bewegen of gewoon te 'hangen' zonder doel. Wat gebeurt er? Voelt je lichaam ongemakkelijk als het niet 'nuttig' bezig is?\nVerdiepende vraag: Als je lichaam geen machine zou zijn maar een levend wezen met eigen verlangens, wat zou het dan willen? Wat mist het al jarenlang?\n\"'Mijn lichaam is een machine,' zei hij later. 'Een heel effici\u00ebnte machine. Maar machines hebben geen verlangens.' [...] Thomas stond daar, verlamd.\"\n(Bron: Van wond naar wonder, Hoofdstuk 6)\nONDERDEEL 4: DE KWALITEIT (HET GOUD)\nWanneer het pantser smelt, komt er een enorme kracht vrij: de kracht van het open hart, passie en leiderschap."
+    },
+    {
+        "id": "ws3-q18",
+        "title": "De Edelman / De Jonkvrouw (Authenticiteit)",
+        "fullText": "Vraag: Jij hebt discipline en vormkracht. Als je deze niet gebruikt om jezelf te beschermen of te verharden, maar om voluit lief te hebben en schoonheid te cre\u00ebren, hoe ziet jouw leven er dan uit?\nVerdiepende vraag: Kun je een moment herinneren waarop je \u00e9cht open was, zonder harnas, en het goed was? Wat maakte dat moment mogelijk, en hoe kun je meer van die momenten cre\u00ebren?\n\"Doorleefde rigiditeit maakt het mogelijk om voluit in de liefde te staan door hart- en bekkenenergie met elkaar te verbinden. De essentie van deze structuur zit in oog hebben voor de innerlijke schoonheid van ieder mens.\"\n(Bron: De Maskermaker, Hoofdstuk 9)\nTer afsluiting:\nDe rigide structuur vraagt ons om de controle te verliezen. Dat klinkt als sterven, maar het is de enige weg naar echt leven. Zoals ik in het boek schrijf: \"Faal vandaag ergens in. Niet dramatisch, maar gewoon menselijk.\"\nIk zie ernaar uit om samen met jullie het harnas af te leggen.\nMartien"
+    }
+];
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <main className="flex-1">
-        <div className="container py-8 max-w-4xl">
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-primary mb-2">
-              {workshopTitle}
-            </h1>
-            <p className="text-muted-foreground">{workshopDate}</p>
-          </div>
-
-          {/* Progress Bar */}
-          <ProgressBar workshopId={workshopId} totalQuestions={20} />
-
-          {/* Download Buttons */}
-          <DownloadButtons 
-            workshopId={workshopId}
-            workshopTitle={workshopTitle}
-            workshopDate={workshopDate}
-            questions={questions}
-          />
-
-          {/* Introduction */}
-          <Card className="bg-gradient-to-br from-accent/30 to-background border-primary/20">
-            <CardContent className="pt-6 space-y-4">
-              <p className="text-foreground/90 leading-relaxed">
-                Wanneer heb jij voor het laatst in de spiegel gekeken en werkelijk de persoon gezien die daar staat? Niet de lijst met tekortkomingen die automatisch afrolt, niet het masker voor de buitenwereld, maar jij - in al je complexe, wonderlijke menselijkheid.
-              </p>
-              <p className="text-foreground/90 leading-relaxed">
-                We beginnen met een eenvoudige maar diepgaande oefening: een brief schrijven aan je jongere zelf. Wat zou je willen zeggen tegen dat kind dat zo hard zijn best deed om gezien te worden, om "goed genoeg" te zijn?
-              </p>
-              <p className="text-foreground/90 leading-relaxed">
-                De pen aarzelt boven het papier. In die aarzeling gebeurt vaak iets bijzonders - er ontstaat een opening naar dieper begrip van hoe we onszelf zijn gaan zien door andermans ogen.
-              </p>
-              <p className="text-foreground/90 leading-relaxed">
-                "Ik schreef altijd vanuit mijn volwassen, kritische zelf," vertelde Marieke. "Maar toen ik die brief schreef, was het alsof dat kleine meisje in mij eindelijk haar verhaal mocht vertellen. Over hoe ze leerde dat liefde voorwaardelijk was. Hoe ze dacht dat ze haar bestaansrecht moest verdienen door perfect te zijn."
-              </p>
-              <p className="text-foreground/90 leading-relaxed">
-                Deze workshop nodigt je uit de verhalen die je over jezelf vertelt te onderzoeken. Niet om ze te veroordelen, maar om ze te begrijpen. Om te zien hoe ze je hebben beschermd én hoe ze je nu beperken. We werken met schrijven, beweging, dialoog, HeartSong Therapy - maar altijd met het doel een nieuwe, zachtere manier van naar jezelf kijken te ontwikkelen.
-              </p>
-              <p className="text-foreground/90 leading-relaxed">
-                Want eigenwaarde is niets wat je kunt "maken" of "verdienen". Het is een thuiskomen bij wie je in essentie al bent. Van jezelf gaan houden wordt mogelijk als je medegevoel voor je schaduwkind voelbaar wordt.
-              </p>
-              <p className="text-foreground/90 leading-relaxed">
-                Dit gaat niet over positief denken of affirmaties. Dit is een reis naar de wortels van je zelfbeeld, waar we samen onderzoeken hoe oude overtuigingen nog steeds je keuzes sturen. Waar we ontdekken dat échte eigenwaarde niet gaat over "beter" worden, maar over heel worden.
-              </p>
-              <p className="text-foreground/90 leading-relaxed">
-                Om je voor te bereiden nodigen we je uit thuis alvast je zelfbeeld en de bronnen daarvan te onderzoeken. Dit huiswerk helpt je bewuster te worden van de stemmen die je innerlijke waarde bepalen en hoe je een zachtere, liefdevoller stem kunt ontwikkelen.
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Wat Deze Workshop Jou Biedt */}
-          <div className="space-y-4 mt-8">
-            <h3 className="text-xl font-semibold text-primary mb-3">Wat Deze Workshop Jou Biedt</h3>
-            <p className="text-foreground/90 leading-relaxed">
-              In deze tweedaagse workshop gaan we op drie niveaus werken:
-            </p>
-            <div className="grid md:grid-cols-3 gap-6 my-6">
-              <div className="p-6 bg-white rounded-lg border-2 border-rose-200 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-3">
-                  <BookOpen className="h-6 w-6 text-rose-600" />
-                  <h4 className="font-bold text-lg text-rose-900">Begrijpen</h4>
-                </div>
-                <div className="space-y-3 text-sm text-foreground/80">
-                  <p className="leading-relaxed">
-                    Je ontdekt <strong>hoe je zelfbeeld</strong> is gevormd door vroege ervaringen en welke stemmen je eigenwaarde nog steeds bepalen.
-                  </p>
-                  <p className="leading-relaxed italic text-rose-800">
-                    "Ik leerde dat liefde voorwaardelijk was. Dat ik mijn bestaansrecht moest verdienen door perfect te zijn."
-                  </p>
-                </div>
+    <div className="min-h-screen py-12 md:py-16">
+      <div className="container">
+        <div className="max-w-4xl mx-auto space-y-12">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Link href="/">
+                <span className="hover:text-primary cursor-pointer">Home</span>
+              </Link>
+              <ChevronRight className="h-4 w-4" />
+              <span>Workshop 3</span>
+            </div>
+            <div className="space-y-2">
+              <div className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                19-20 september 2026
               </div>
-              <div className="p-6 bg-white rounded-lg border-2 border-purple-200 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-3">
-                  <Heart className="h-6 w-6 text-purple-600" />
-                  <h4 className="font-bold text-lg text-purple-900">Voelen</h4>
-                </div>
-                <div className="space-y-3 text-sm text-foreground/80">
-                  <p className="leading-relaxed">
-                    Door oefeningen <strong>ontwikkel je medegevoel</strong> voor je schaduwkind en leer je zachter naar jezelf te kijken.
-                  </p>
-                  <p className="leading-relaxed italic text-purple-800">
-                    Wanneer heb jij voor het laatst in de spiegel gekeken en werkelijk de persoon gezien die daar staat?
-                  </p>
-                </div>
-              </div>
-              <div className="p-6 bg-white rounded-lg border-2 border-amber-200 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-3">
-                  <Lightbulb className="h-6 w-6 text-amber-600" />
-                  <h4 className="font-bold text-lg text-amber-900">Transformeren</h4>
-                </div>
-                <div className="space-y-3 text-sm text-foreground/80">
-                  <p className="leading-relaxed">
-                    Je leert <strong>een nieuwe, liefdevolle stem</strong> ontwikkelen die niet gaat over "beter" worden, maar over heel worden.
-                  </p>
-                  <p className="leading-relaxed italic text-amber-800">
-                    Van "Ik moet perfect zijn" naar "Ik ben waardevol zoals ik ben, met al mijn imperfecties."
-                  </p>
-                </div>
-              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-foreground">
+                Macht, Controle en Perfectie
+              </h1>
+              <p className="text-xl text-muted-foreground">
+                De Psychopathische en Rigide structuur
+              </p>
             </div>
           </div>
 
-          {/* Leeswerk */}
-          <Card className="mt-8">
-            <CardContent className="pt-6">
-              <h2 className="text-2xl font-bold text-primary mb-4">Leeswerk</h2>
-              
-              <div className="space-y-4">
-                <div>
-                  <h3 className="font-bold text-lg mb-2">Uit het boek "Wie we zijn":</h3>
-                  <p className="text-foreground/90 leading-relaxed mb-2">
-                    Lees "Eigenwaarde: het epicentrum van de psyche" (blz. 62-73). Dit hoofdstuk legt uit waarom eigenwaarde zo centraal staat. Je leest hoe onze behoefte aan eigenwaarde samenhangt met hechting en autonomie, en hoe in de eerste levensjaren de basis wordt gelegd. Markeer passages die resoneren én die weerstand oproepen.
-                  </p>
-                  <p className="text-foreground/90 leading-relaxed">
-                    Bestudeer de passage over het "schaduwkind" (blz. 195-200). Hier beschrijft Stefanie Stahl hoe negatieve overtuigingen uit de jeugd - het schaduwkind - onze eigenwaarde ondermijnen. Probeer te voelen welke delen bij jou resoneren. Herken je de stem van jouw schaduwkind? Welke boodschappen fluistert het?
-                  </p>
-                </div>
+          <ProgressBar workshopId="workshop3_jaar2" totalQuestions={questions.length} />
 
-                <div>
-                  <h3 className="font-bold text-lg mb-2">Uit het werkboek "Wie we zijn":</h3>
-                  <p className="text-foreground/90 leading-relaxed mb-2">
-                    Werk de zelfreflecties door op blz. 19-20 ("Hoe is het met je gevoel van eigenwaarde?"). Neem tijd voor eerlijke antwoorden. Voel je je meestal goed zoals je bent, of betrap je jezelf vaak op zelfkritiek?
-                  </p>
-                  <p className="text-foreground/90 leading-relaxed">
-                    Doe de zelfhelende oefening "Ik ben waardevol" (blz. 20-22). Zoek een rustig moment en spreek de affirmaties zacht en met aandacht uit. Voel bij elke zin even na. Herhaal eventueel meerdere keren deze week.
-                  </p>
-                </div>
-                <div className="mt-4 p-4 bg-primary/5 rounded-lg border border-primary/20">
-                  <p className="font-semibold text-primary mb-2">📝 Belangrijkste opdracht uit het werkboek:</p>
-                  <p className="text-sm text-foreground/80">
-                    <strong>Wat geloof jij? - Negatieve overtuigingen (blz. 83):</strong> Deze opdracht helpt je negatieve kernovertuigingen over jezelf identificeren. Je maakt zinnen af zoals "Ik ben pas goed genoeg als..." en onderzoekt waar deze overtuigingen vandaan komen en hoe ze je leven beïnvloeden.
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="flex flex-col sm:flex-row gap-4 justify-between items-end">
+            <DownloadButtons 
+              workshopId="workshop3_jaar2"
+              workshopTitle="Workshop 3: Macht, Controle en Perfectie"
+              workshopDate="19-20 september 2026"
+              questions={questions}
+            />
+          </div>
 
-          {/* Reflectieopdrachten */}
-          <Card className="mt-8">
-            <CardContent className="pt-6">
-              <h2 className="text-2xl font-bold text-primary mb-6">Reflectieopdrachten</h2>
-              
-              <div className="space-y-8">
-                {/* Opdracht 1 */}
-                <div>
-                  <h3 className="text-xl font-bold mb-4">1. Jouw verhaal van eigenwaarde</h3>
-                  <p className="text-foreground/90 leading-relaxed mb-4">
-                    Reis terug naar je kindertijd. Sluit je ogen en laat herinneringen opkomen van momenten die je gevoel van eigenwaarde hebben gevormd.
-                  </p>
-                  
-                  <div className="space-y-6">
-                    <div>
-                      <p className="font-semibold mb-2">Een bepalend moment:</p>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Kun je een herinnering vinden waarin jouw eigenwaarde sterk werd beïnvloed - positief of negatief? Een situatie waarin je je heel waardevol voelde (bijvoorbeeld door een oprecht compliment, een succeservaring, onverdeelde aandacht), of juist waarin je aan jezelf begon te twijfelen (bijvoorbeeld door kritiek, afwijzing, niet gezien worden).
-                      </p>
-                      <AnswerField workshopId="workshop3" questionId="w3_q1_moment" />
-                      <AIHelper workshopId="workshop3" questionId="w3_q1_moment" questionTitle="Moment" />
-                    </div>
-
-                    <div>
-                      <p className="font-semibold mb-2">De details:</p>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Beschrijf gedetailleerd. Wat gebeurde er precies? Waar was je? Wie waren erbij? Wat werd gezegd of gedaan? Hoe oud was je? Wat droeg je? Welke geuren, geluiden, beelden herinner je?
-                      </p>
-                      <AnswerField workshopId="workshop3" questionId="w3_q1_details" />
-                      <AIHelper workshopId="workshop3" questionId="w3_q1_details" questionTitle="Details" />
-                    </div>
-
-                    <div>
-                      <p className="font-semibold mb-2">Het gevoel:</p>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Welk gevoel of welke overtuiging hield je eraan over? Schrijf de exacte woorden op die je toen over jezelf dacht. (Bijvoorbeeld: "Ik ben niet slim genoeg", "Ik ben te veel", "Ik moet perfect zijn om geliefd te worden", "Ik ben waardevol zoals ik ben").
-                      </p>
-                      <AnswerField workshopId="workshop3" questionId="w3_q1_gevoel" />
-                      <AIHelper workshopId="workshop3" questionId="w3_q1_gevoel" questionTitle="Gevoel" />
-                    </div>
-
-                    <div>
-                      <p className="font-semibold mb-2">De bron:</p>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Probeer te benoemen van wie die boodschap afkomstig was. Impliciet of expliciet. Was het de stem van een ouder, leraar, broer/zus, iemand anders die belangrijk was? Hoe resoneert die oude boodschap nu nog? Wanneer hoor je die stem?
-                      </p>
-                      <AnswerField workshopId="workshop3" questionId="w3_q1_bron" />
-                      <AIHelper workshopId="workshop3" questionId="w3_q1_bron" questionTitle="Bron" />
-                    </div>
+          <div className="space-y-8">
+            {questions.map((q, index) => (
+              <Card key={q.id} className="border-primary/10 shadow-sm hover:shadow-md transition-shadow">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-xl flex items-center gap-3">
+                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm">
+                      {index + 1}
+                    </span>
+                    {q.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="text-foreground/80 leading-relaxed whitespace-pre-wrap italic">
+                    {q.fullText}
                   </div>
-                </div>
+                  <AnswerField 
+                    workshopId="workshop3_jaar2" 
+                    questionId={q.id} 
+                    placeholder="Schrijf hier je reflectie..."
+                  />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
 
-                {/* Opdracht 2 */}
-                <div>
-                  <h3 className="text-xl font-bold mb-4">2. De innerlijke criticus ontmoeten</h3>
-                  <p className="text-foreground/90 leading-relaxed mb-4">
-                    We hebben allemaal een innerlijke criticus - die stem die zegt dat we niet goed genoeg zijn, die ons vergelijkt, die ons klein houdt. Tijd om deze stem bewust te maken.
-                  </p>
-                  
-                  <div className="space-y-6">
-                    <div>
-                      <p className="font-semibold mb-2">De stem herkennen:</p>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Wanneer hoor je je innerlijke criticus het luidst? In welke situaties komt hij naar voren? (Als je een fout maakt, je kwetsbaar voelt, iets nieuws probeert, succes hebt).
-                      </p>
-                      <AnswerField workshopId="workshop3" questionId="w3_q2_herkennen" />
-                      <AIHelper workshopId="workshop3" questionId="w3_q2_herkennen" questionTitle="Herkennen" />
-                    </div>
+          <AIHelper 
+            workshopId="workshop3_jaar2"
+            workshopTitle="Macht, Controle en Perfectie"
+            context="Deze workshop behandelt de volgende thema's: De Psychopathische en Rigide structuur. De teksten zijn letterlijk overgenomen uit het huiswerkboek van Martien Janssen."
+          />
 
-                    <div>
-                      <p className="font-semibold mb-2">Wat zegt hij:</p>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Schrijf letterlijk op wat je innerlijke criticus zegt. Gebruik de exacte woorden. Wees niet bang hard te zijn - dit is niet jouw stem, maar een geïnternaliseerde stem. (Bijvoorbeeld: "Je bent zo dom", "Niemand vindt je aardig", "Je bent te dik/lelijk/saai", "Je doet nooit iets goed").
-                      </p>
-                      <AnswerField workshopId="workshop3" questionId="w3_q2_wat_zegt" />
-                      <AIHelper workshopId="workshop3" questionId="w3_q2_wat_zegt" questionTitle="Zegt" />
-                    </div>
-
-                    <div>
-                      <p className="font-semibold mb-2">Wiens stem is het:</p>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Als je goed luistert, wiens stem hoor je eigenlijk? Die van een ouder, leraar, pester, de maatschappij? Herken je de oorsprong?
-                      </p>
-                      <AnswerField workshopId="workshop3" questionId="w3_q2_wiens_stem" />
-                      <AIHelper workshopId="workshop3" questionId="w3_q2_wiens_stem" questionTitle="Stem" />
-                    </div>
-
-                    <div>
-                      <p className="font-semibold mb-2">De impact:</p>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Hoe beïnvloedt deze criticus je leven? Welke keuzes maak je (of maak je juist niet) vanwege deze stem? Welke dromen heb je opgegeven? Welke risico's durf je niet?
-                      </p>
-                      <AnswerField workshopId="workshop3" questionId="w3_q2_impact" />
-                      <AIHelper workshopId="workshop3" questionId="w3_q2_impact" questionTitle="Impact" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Opdracht 3 */}
-                <div>
-                  <h3 className="text-xl font-bold mb-4">3. Herkenning in het heden</h3>
-                  <p className="text-foreground/90 leading-relaxed mb-4">
-                    Nu je de wortels van je zelfbeeld hebt verkend, is het tijd te kijken hoe je eigenwaarde zich nu manifesteert.
-                  </p>
-                  
-                  <div className="space-y-6">
-                    <div>
-                      <p className="font-semibold mb-2">Concrete situaties:</p>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Denk aan twee à drie concrete situaties uit de afgelopen tijd waarin je zelfvertrouwen op de proef werd gesteld. Je kreeg kritiek op je werk, voelde je onzeker in gezelschap, merkte jaloezie in een relatie, durfde je mening niet te geven.
-                      </p>
-                      <AnswerField workshopId="workshop3" questionId="w3_q3_situaties" />
-                      <AIHelper workshopId="workshop3" questionId="w3_q3_situaties" questionTitle="Situaties" />
-                    </div>
-
-                    <div>
-                      <p className="font-semibold mb-2">Je reactie:</p>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Beschrijf voor elke situatie wat er gebeurde en wat je interne reactie was. Welke gedachten schoten door je hoofd? Welke emoties voelde je - schaamte, boosheid, angst, minderwaardigheid, verdriet?
-                      </p>
-                      <AnswerField workshopId="workshop3" questionId="w3_q3_reactie" />
-                      <AIHelper workshopId="workshop3" questionId="w3_q3_reactie" questionTitle="Reactie" />
-                    </div>
-
-                    <div>
-                      <p className="font-semibold mb-2">Je gedrag:</p>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Hoe ging je ermee om? Trok je terug? Ging je extra je best doen? Zocht je bevestiging? Werd je defensief? Deed je alsof het je niet raakte?
-                      </p>
-                      <AnswerField workshopId="workshop3" questionId="w3_q3_gedrag" />
-                      <AIHelper workshopId="workshop3" questionId="w3_q3_gedrag" questionTitle="Gedrag" />
-                    </div>
-
-                    <div>
-                      <p className="font-semibold mb-2">Het patroon:</p>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Probeer patronen te herkennen. Zie je overeenkomsten? Kun je zien hoe deze reacties teruggaan naar je schaduwkind - dat deel dat bang is niet goed genoeg te zijn?
-                      </p>
-                      <AnswerField workshopId="workshop3" questionId="w3_q3_patroon" />
-                      <AIHelper workshopId="workshop3" questionId="w3_q3_patroon" questionTitle="Patroon" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Verdiepende opdrachten */}
-          <Card className="mt-8">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold text-primary">
-                  Verdiepende opdrachten (optioneel)
-                </h2>
-                <Button
-                  variant="outline"
-                  onClick={() => setShowOptional(!showOptional)}
-                >
-                  {showOptional ? "Verberg" : "Toon"}
-                </Button>
-              </div>
-              
-              <p className="text-sm italic text-muted-foreground mb-4">
-                De volgende opdrachten zijn voor wie nog dieper in het thema wil duiken. Voel je volledig vrij om te kiezen wat je nu aanspreekt.
-              </p>
-
-              {showOptional && (
-                <div className="space-y-8 mt-6">
-                  {/* Opdracht 4 */}
-                  <div>
-                    <h3 className="text-xl font-bold mb-4">4. Het spiegelbeeld omkeren</h3>
-                    <p className="text-foreground/90 leading-relaxed mb-4">
-                      Deze opdracht helpt een nieuwe, liefdevoller stem te ontwikkelen - de stem van je zonnekind, het deel dat weet dat je waardevol bent.
-                    </p>
-                    
-                    <div className="space-y-6">
-                      <div>
-                        <p className="font-semibold mb-2">De oefening herhalen en reflectie:</p>
-                        <p className="text-sm text-muted-foreground mb-3">
-                          Doe opnieuw de oefening "Ik ben waardevol" uit het werkboek (blz. 20-22). Spreek de zinnen hardop uit. Schrijf uitgebreid wat je ervaarde. Welke zin raakte je het meest, waarom? Welke zin voelde het moeilijkst?
-                        </p>
-                        <AnswerField workshopId="workshop3" questionId="w3_q4_oefening" />
-                        <AIHelper workshopId="workshop3" questionId="w3_q4_oefening" questionTitle="Oefening" />
-                      </div>
-
-                      <div>
-                        <p className="font-semibold mb-2">De weerstand voelen:</p>
-                        <p className="text-sm text-muted-foreground mb-3">
-                          Merk op wat dit doet. Komen er stemmetjes van ongeloof? ("Ja, maar...", "Dit is onzin", "Dit geldt niet voor mij"). Voel je verdriet, opluchting, weerstand, warmte? Alles mag er zijn.
-                        </p>
-                        <AnswerField workshopId="workshop3" questionId="w3_q4_weerstand" />
-                        <AIHelper workshopId="workshop3" questionId="w3_q4_weerstand" questionTitle="Weerstand" />
-                      </div>
-
-                      <div>
-                        <p className="font-semibold mb-2">Reflectie:</p>
-                        <p className="text-sm text-muted-foreground mb-3">
-                          Schrijf uitgebreid wat je ervaarde. Welke zin raakte je het meest, waarom? Welke zin voelde het moeilijkst? Voelde iets ongemakkelijk of juist bevrijdend? Probeer woorden te geven aan de emoties die voorbijkwamen.
-                        </p>
-                        <AnswerField workshopId="workshop3" questionId="w3_q4_reflectie" />
-                        <AIHelper workshopId="workshop3" questionId="w3_q4_reflectie" questionTitle="Reflectie" />
-                      </div>
-
-                      <div>
-                        <p className="font-semibold mb-2">Jouw eigen affirmaties:</p>
-                        <p className="text-sm text-muted-foreground mb-3">
-                          Schrijf nu drie eigen affirmaties die specifiek voor jou betekenisvol zijn. Wat zou je graag over jezelf willen geloven? Wat heeft jouw schaduwkind nodig te horen?
-                        </p>
-                        <AnswerField workshopId="workshop3" questionId="w3_q4_affirmaties" />
-                        <AIHelper workshopId="workshop3" questionId="w3_q4_affirmaties" questionTitle="Affirmaties" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Opdracht 5 */}
-                  <div>
-                    <h3 className="text-xl font-bold mb-4">5. Waar verdien je je eigenwaarde?</h3>
-                    <p className="text-foreground/90 leading-relaxed mb-4">
-                      Deze opdracht onderzoekt op welke gebieden je probeert je eigenwaarde te "verdienen" in plaats van te voelen dat je inherent waardevol bent.
-                    </p>
-                    
-                    <div className="space-y-6">
-                      <div>
-                        <p className="font-semibold mb-2">De gebieden:</p>
-                        <p className="text-sm text-muted-foreground mb-3">
-                          Op welke gebieden probeer je misschien je eigenwaarde te "verdienen"? (Prestaties, uiterlijk, zorgen voor anderen, perfect zijn, controle hebben, etc.)
-                        </p>
-                        <AnswerField workshopId="workshop3" questionId="w3_q5_gebieden" />
-                        <AIHelper workshopId="workshop3" questionId="w3_q5_gebieden" questionTitle="Gebieden" />
-                      </div>
-
-                      <div>
-                        <p className="font-semibold mb-2">De prijs:</p>
-                        <p className="text-sm text-muted-foreground mb-3">
-                          Kies het gebied waar je het hardst voor werkt. Wat is de prijs? Wat kost het aan energie, vrijheid, authenticiteit? Wat moet je opgeven om aan deze eisen te voldoen?
-                        </p>
-                        <AnswerField workshopId="workshop3" questionId="w3_q5_prijs" />
-                        <AIHelper workshopId="workshop3" questionId="w3_q5_prijs" questionTitle="Prijs" />
-                      </div>
-
-                      <div>
-                        <p className="font-semibold mb-2">De angst:</p>
-                        <p className="text-sm text-muted-foreground mb-3">
-                          Wat ben je bang dat er gebeurt als je stopt met verdienen? Als je niet meer perfect bent, niet meer zorgt voor iedereen, niet meer presteert? Schrijf je diepste angst op.
-                        </p>
-                        <AnswerField workshopId="workshop3" questionId="w3_q5_angst" />
-                        <AIHelper workshopId="workshop3" questionId="w3_q5_angst" questionTitle="Angst" />
-                      </div>
-
-                      <div>
-                        <p className="font-semibold mb-2">Een experiment:</p>
-                        <p className="text-sm text-muted-foreground mb-3">
-                          Kies één klein experiment voor deze week. Wat zou er gebeuren als je op één gebied stopt met verdienen? Bijvoorbeeld: één keer nee zeggen, één imperfectie laten zien, één keer niet de beste willen zijn. Beschrijf je experiment en voer het uit. Schrijf daarna wat er gebeurde.
-                        </p>
-                        <AnswerField workshopId="workshop3" questionId="w3_q5_experiment" />
-                        <AIHelper workshopId="workshop3" questionId="w3_q5_experiment" questionTitle="Experiment" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Navigation */}
-          <div className="flex justify-between mt-8">
-            <Link href="/workshop2">
-              <Button variant="outline" className="gap-2">
-                <ChevronLeft className="h-4 w-4" />
-                Workshop 2
-              </Button>
+          <div className="flex justify-between items-center pt-8 border-t border-border">
+            <Link href="/">
+              <Button variant="ghost">Terug naar Home</Button>
             </Link>
-            <Link href="/workshop4">
-              <Button className="gap-2">
-                Workshop 4
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </Link>
+            <Link href="/workshop/4"><Button className="gap-2">Volgende Workshop <ChevronRight className="h-4 w-4" /></Button></Link>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

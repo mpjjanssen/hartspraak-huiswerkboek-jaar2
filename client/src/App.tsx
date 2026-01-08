@@ -15,8 +15,6 @@ import Workshop1 from "./pages/Workshop1";
 import Workshop2 from "./pages/Workshop2";
 import Workshop3 from "./pages/Workshop3";
 import Workshop4 from "./pages/Workshop4";
-import Workshop5 from "./pages/Workshop5";
-import Workshop6 from "./pages/Workshop6";
 import Referenties from "./pages/Referenties";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -63,16 +61,6 @@ function MemberRouter() {
           <Route path="/workshop/4" component={() => (
             <ProtectedRoute>
               <Workshop4 />
-            </ProtectedRoute>
-          )} />
-          <Route path="/workshop/5" component={() => (
-            <ProtectedRoute>
-              <Workshop5 />
-            </ProtectedRoute>
-          )} />
-          <Route path="/workshop/6" component={() => (
-            <ProtectedRoute>
-              <Workshop6 />
             </ProtectedRoute>
           )} />
           <Route path="/referenties" component={() => (
