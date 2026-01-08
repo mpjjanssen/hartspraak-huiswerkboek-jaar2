@@ -27,10 +27,6 @@ export function AIHelper({ questionTitle, questionId, workshopId, context }: AIH
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced' | 'error'>('idle');
   const [expandedMessages, setExpandedMessages] = useState<Set<number>>(new Set());
   const { encryptionKey, isReady } = useEncryption();
-  useEffect(() => {
-    console.log('[AIHelper Debug] Status:', { isReady, hasEncryptionKey: !!encryptionKey, workshopId, questionId });
-  }, [isReady, encryptionKey, workshopId, questionId]);
-
 
   const toggleMessage = (index: number) => {
     setExpandedMessages(prev => {
@@ -50,7 +46,6 @@ export function AIHelper({ questionTitle, questionId, workshopId, context }: AIH
 
     const loadConversation = async () => {
       try {
-        // Try to load from server first
         const authToken = sessionStorage.getItem('auth_token');
         if (authToken) {
           const response = await fetch(`/api/user-data/conversations/${workshopId}/${questionId}`, {
@@ -62,7 +57,6 @@ export function AIHelper({ questionTitle, questionId, workshopId, context }: AIH
           if (response.ok) {
             const data = await response.json();
             if (data.messagesEncrypted && data.encryptionIv) {
-              // Try to decrypt
               const decrypted = decryptData(data.messagesEncrypted, data.encryptionIv, encryptionKey);
               if (decrypted) {
                 try {
@@ -71,17 +65,12 @@ export function AIHelper({ questionTitle, questionId, workshopId, context }: AIH
                   return;
                 } catch (parseError) {
                   console.warn('[AIHelper] Failed to parse decrypted messages:', parseError);
-                  // Fall through to localStorage fallback
                 }
-              } else {
-                console.warn('[AIHelper] Decryption returned null, falling back to localStorage');
-                // Fall through to localStorage fallback
               }
             }
           }
         }
 
-        // Fallback to localStorage
         const saved = localStorage.getItem(storageKey);
         if (saved) {
           try {
@@ -93,16 +82,6 @@ export function AIHelper({ questionTitle, questionId, workshopId, context }: AIH
         }
       } catch (error) {
         console.error('[AIHelper] Failed to load conversation:', error);
-        // Fallback to localStorage
-        const saved = localStorage.getItem(storageKey);
-        if (saved) {
-          try {
-            const parsedMessages = JSON.parse(saved);
-            setMessages(parsedMessages);
-          } catch (error) {
-            console.error('[AIHelper] Failed to parse saved messages:', error);
-          }
-        }
       }
     };
 
@@ -114,13 +93,9 @@ export function AIHelper({ questionTitle, questionId, workshopId, context }: AIH
     if (messages.length === 0 || !isReady || !encryptionKey) return;
 
     const saveConversation = async () => {
-      console.log('[AIHelper] Starting sync...');
       setSyncStatus('syncing');
-      
-      // Save to localStorage (unencrypted for now, for backwards compatibility)
       localStorage.setItem(storageKey, JSON.stringify(messages));
 
-      // Sync to server (encrypted)
       try {
         const authToken = sessionStorage.getItem('auth_token');
         if (authToken) {
@@ -141,18 +116,11 @@ export function AIHelper({ questionTitle, questionId, workshopId, context }: AIH
           });
           
           if (response.ok) {
-            console.log('[AIHelper] Sync successful, showing confirmation');
             setSyncStatus('synced');
-            // Reset to idle after 5 seconds
-            setTimeout(() => {
-              console.log('[AIHelper] Hiding sync confirmation');
-              setSyncStatus('idle');
-            }, 5000);
+            setTimeout(() => setSyncStatus('idle'), 5000);
           } else {
             setSyncStatus('error');
           }
-        } else {
-          setSyncStatus('error');
         }
       } catch (error) {
         console.error('[AIHelper] Failed to sync conversation:', error);
@@ -175,12 +143,9 @@ export function AIHelper({ questionTitle, questionId, workshopId, context }: AIH
 
   const clearConversation = async () => {
     if (!confirm('Weet je zeker dat je deze conversatie wilt wissen?')) return;
-
-    // Clear from state and localStorage
     setMessages([]);
     localStorage.removeItem(storageKey);
 
-    // Delete from server
     try {
       const authToken = sessionStorage.getItem('auth_token');
       if (authToken) {
@@ -210,14 +175,12 @@ export function AIHelper({ questionTitle, questionId, workshopId, context }: AIH
       timestamp: new Date().toISOString(),
     };
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = input;
     setInput("");
     setLoading(true);
 
     try {
-      // Get user's current answer
       const userAnswer = getUserAnswer();
-      
-      // Build context for AI
       const systemContext = `Je bent een empathische AI begeleider voor het Hartspraak programma. 
 Je helpt deelnemers met reflectievragen over psychologische basisbehoeften, hechtingspatronen, eigenwaarde en emoties.
 
@@ -227,7 +190,6 @@ ${userAnswer ? `Het huidige antwoord van de deelnemer: "${userAnswer}"` : 'De de
 
 Geef warme, ondersteunende begeleiding. Stel verdiepende vragen. Wees compassievol en niet-oordelend.`;
 
-      // Call AI API via server (for usage logging)
       const authToken = sessionStorage.getItem('auth_token');
       const response = await fetch('/api/ai-helper/chat', {
         method: 'POST',
@@ -240,12 +202,13 @@ Geef warme, ondersteunende begeleiding. Stel verdiepende vragen. Wees compassiev
           questionId,
           systemContext,
           messages: messages.map(m => ({ role: m.role, content: m.content })),
-          userMessage: input,
+          userMessage: currentInput,
         })
       });
 
       if (!response.ok) {
-        throw new Error('AI response failed');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'AI response failed');
       }
 
       const data = await response.json();
@@ -256,11 +219,11 @@ Geef warme, ondersteunende begeleiding. Stel verdiepende vragen. Wees compassiev
       };
 
       setMessages(prev => [...prev, assistantMessage]);
-    } catch (error) {
+    } catch (error: any) {
       console.error('AI Error:', error);
       const errorMessage: Message = {
         role: 'assistant',
-        content: 'Sorry, ik kan momenteel niet reageren. Probeer het later opnieuw.',
+        content: `Sorry, er is iets misgegaan: ${error.message || 'Ik kan momenteel niet reageren'}. Probeer het later opnieuw.`,
         timestamp: new Date().toISOString(),
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -291,132 +254,103 @@ Geef warme, ondersteunende begeleiding. Stel verdiepende vragen. Wees compassiev
 
       {messages.length > 0 && (
         <div className="space-y-4 mb-4">
-        {messages.map((msg, idx) => (
-          <div
-            key={idx}
-            className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
-          >
+          {messages.map((msg, idx) => (
             <div
-              className={`max-w-[85%] rounded-lg ${
-                msg.role === 'user'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-background border'
-              }`}
+              key={idx}
+              className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
             >
-              <div className="flex items-start justify-between gap-2 p-3">
-                <p className={`text-sm whitespace-pre-wrap break-words flex-1 ${
-                  !expandedMessages.has(idx) && msg.content.length > 150 ? 'line-clamp-3' : ''
-                }`}>
-                  {msg.content}
-                </p>
-                {msg.content.length > 150 && (
-                  <button
-                    onClick={() => toggleMessage(idx)}
-                    className="shrink-0 p-1 hover:bg-muted/50 rounded transition-colors"
-                    aria-label={expandedMessages.has(idx) ? 'Inklappen' : 'Uitklappen'}
-                  >
-                    {expandedMessages.has(idx) ? (
-                      <ChevronUp className="h-4 w-4" />
-                    ) : (
-                      <ChevronDown className="h-4 w-4" />
-                    )}
-                  </button>
+              <div
+                className={`max-w-[85%] rounded-lg ${
+                  msg.role === 'user'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-background border'
+                }`}
+              >
+                <div className="p-3">
+                  <p className={`text-sm whitespace-pre-wrap break-words ${
+                    !expandedMessages.has(idx) && msg.content.length > 300 ? 'line-clamp-4' : ''
+                  }`}>
+                    {msg.content}
+                  </p>
+                  {msg.content.length > 300 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="mt-1 h-6 text-xs"
+                      onClick={() => toggleMessage(idx)}
+                    >
+                      {expandedMessages.has(idx) ? (
+                        <><ChevronUp className="h-3 w-3 mr-1" /> Minder tonen</>
+                      ) : (
+                        <><ChevronDown className="h-3 w-3 mr-1" /> Meer tonen</>
+                      )}
+                    </Button>
+                  )}
+                </div>
+                {msg.role === 'assistant' && (
+                  <div className="flex items-center justify-end gap-1 px-2 pb-2 border-t pt-1 bg-muted/10">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={`h-7 w-7 ${msg.feedback === 'positive' ? 'text-green-600' : 'text-muted-foreground'}`}
+                      onClick={() => handleFeedback(idx, 'positive')}
+                    >
+                      <ThumbsUp className="h-3.5 w-3.5" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={`h-7 w-7 ${msg.feedback === 'negative' ? 'text-red-600' : 'text-muted-foreground'}`}
+                      onClick={() => handleFeedback(idx, 'negative')}
+                    >
+                      <ThumbsDown className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
                 )}
               </div>
+              <span className="text-[10px] text-muted-foreground mt-1 px-1">
+                {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </span>
             </div>
-            {msg.role === 'assistant' && (
-              <div className="flex gap-1 mt-1">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={`h-7 w-7 p-0 ${
-                    msg.feedback === 'positive'
-                      ? 'text-green-600 dark:text-green-400'
-                      : 'text-muted-foreground hover:text-green-600'
-                  }`}
-                  onClick={() => handleFeedback(idx, 'positive')}
-                >
-                  <ThumbsUp className="h-3 w-3" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={`h-7 w-7 p-0 ${
-                    msg.feedback === 'negative'
-                      ? 'text-red-600 dark:text-red-400'
-                      : 'text-muted-foreground hover:text-red-600'
-                  }`}
-                  onClick={() => handleFeedback(idx, 'negative')}
-                >
-                  <ThumbsDown className="h-3 w-3" />
-                </Button>
-              </div>
-            )}
-          </div>
-        ))}
-        
-        {loading && (
-          <div className="flex justify-start">
-            <div className="bg-background border rounded-lg p-3">
-              <Loader2 className="h-4 w-4 animate-spin" />
-            </div>
-          </div>
-        )}
+          ))}
         </div>
       )}
 
-      <div className={messages.length > 0 ? "border-t pt-4" : ""}>
-        <div className="flex items-center gap-2 mb-2">
-          <Bot className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-medium">Vraag de AI Begeleider om hulp</span>
-        </div>
-        <div className="flex gap-2">
-          <Textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Stel een vraag of vraag om feedback op je antwoord..."
-            className="resize-none"
-            rows={2}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-              }
-            }}
-          />
-          <Button
-            onClick={sendMessage}
-            disabled={!input.trim() || loading}
-            size="icon"
-            className="shrink-0"
-          >
+      <div className="relative">
+        <Textarea
+          placeholder="Stel een vraag of vraag om feedback op je antwoord..."
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              sendMessage();
+            }
+          }}
+          className="pr-12 min-h-[80px] resize-none bg-background border-primary/20 focus-visible:ring-primary"
+          disabled={loading}
+        />
+        <Button
+          size="icon"
+          className="absolute right-2 bottom-2 h-8 w-8"
+          onClick={sendMessage}
+          disabled={loading || !input.trim()}
+        >
+          {loading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
             <Send className="h-4 w-4" />
-          </Button>
+          )}
+        </Button>
+      </div>
+      
+      <div className="mt-2 flex items-center justify-between text-[10px] text-muted-foreground">
+        <div className="flex items-center gap-1">
+          {syncStatus === 'syncing' && <><Loader2 className="h-3 w-3 animate-spin" /> Synchroniseren...</>}
+          {syncStatus === 'synced' && <><Check className="h-3 w-3 text-green-500" /> Opgeslagen in cloud</>}
+          {syncStatus === 'error' && <><AlertCircle className="h-3 w-3 text-destructive" /> Synchronisatie fout</>}
         </div>
-        
-        {/* Sync Status Indicator */}
-        {syncStatus !== 'idle' && (
-          <div className="mt-2 flex items-center gap-2 text-sm">
-            {syncStatus === 'syncing' && (
-              <>
-                <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
-                <span className="text-muted-foreground">Conversatie wordt opgeslagen...</span>
-              </>
-            )}
-            {syncStatus === 'synced' && (
-              <>
-                <Check className="h-3 w-3 text-green-600" />
-                <span className="text-green-600">Conversatie opgeslagen ✓</span>
-              </>
-            )}
-            {syncStatus === 'error' && (
-              <>
-                <AlertCircle className="h-3 w-3 text-red-600" />
-                <span className="text-red-600">Opslaan mislukt - probeer opnieuw</span>
-              </>
-            )}
-          </div>
-        )}
+        <p>Je gesprekken zijn end-to-end versleuteld en privé.</p>
       </div>
     </div>
   );
