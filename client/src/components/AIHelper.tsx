@@ -27,6 +27,10 @@ export function AIHelper({ questionTitle, questionId, workshopId, context }: AIH
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced' | 'error'>('idle');
   const [expandedMessages, setExpandedMessages] = useState<Set<number>>(new Set());
   const { encryptionKey, isReady } = useEncryption();
+  useEffect(() => {
+    console.log('[AIHelper Debug] Status:', { isReady, hasEncryptionKey: !!encryptionKey, workshopId, questionId });
+  }, [isReady, encryptionKey, workshopId, questionId]);
+
 
   const toggleMessage = (index: number) => {
     setExpandedMessages(prev => {
