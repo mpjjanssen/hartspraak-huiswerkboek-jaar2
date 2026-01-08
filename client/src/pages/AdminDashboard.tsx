@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Loader2, UserPlus, Shield, LogOut, RefreshCw, BarChart3, Key, FileDown, Clock, Eye, Download, FileText } from "lucide-react";
+import { Loader2, UserPlus, Shield, LogOut, RefreshCw, BarChart3, Key, FileDown, Clock, Eye, Download } from "lucide-react";
 import { useLocation } from "wouter";
 import { WorkshopReminders } from "@/components/WorkshopReminders";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -410,39 +410,50 @@ export default function AdminDashboard() {
                               Bekijk
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-4xl h-[90vh] flex flex-col">
-                            <DialogHeader>
-                              <DialogTitle>Huiswerk Preview: {submission.userEmail}</DialogTitle>
-                              <DialogDescription>
-                                {submission.workshopTitle} - {submission.workshopDate}
-                              </DialogDescription>
-                            </DialogHeader>
-                            <div className="flex-1 min-h-0 mt-4 border rounded-md bg-slate-50 overflow-hidden">
-                              {isPreviewLoading ? (
-                                <div className="h-full flex items-center justify-center">
-                                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                          <DialogContent className="max-w-[95vw] w-[1200px] h-[95vh] flex flex-col p-0 overflow-hidden">
+                            <div className="p-6 border-b bg-white">
+                              <DialogHeader>
+                                <div className="flex items-center justify-between">
+                                  <div>
+                                    <DialogTitle className="text-2xl">Huiswerk Preview: {submission.userEmail}</DialogTitle>
+                                    <DialogDescription className="text-base">
+                                      {submission.workshopTitle} - {submission.workshopDate}
+                                    </DialogDescription>
+                                  </div>
+                                  <div className="flex gap-3">
+                                    <Button 
+                                      variant="default" 
+                                      className="gap-2"
+                                      onClick={() => handleDownload(submission.id, submission.fileName)}
+                                    >
+                                      <Download className="h-4 w-4" />
+                                      Download PDF
+                                    </Button>
+                                  </div>
                                 </div>
-                              ) : previewPdfData ? (
-                                <iframe 
-                                  src={previewPdfData} 
-                                  className="w-full h-full" 
-                                  title="PDF Preview"
-                                />
-                              ) : (
-                                <div className="h-full flex items-center justify-center text-muted-foreground">
-                                  Kon preview niet laden.
-                                </div>
-                              )}
+                              </DialogHeader>
                             </div>
-                            <div className="flex justify-end gap-3 mt-4">
-                              <Button 
-                                variant="outline" 
-                                className="gap-2"
-                                onClick={() => handleDownload(submission.id, submission.fileName)}
-                              >
-                                <Download className="h-4 w-4" />
-                                Download PDF
-                              </Button>
+                            <div className="flex-1 bg-slate-100 p-4 overflow-hidden">
+                              <div className="w-full h-full rounded-lg border bg-white shadow-inner overflow-hidden">
+                                {isPreviewLoading ? (
+                                  <div className="h-full flex items-center justify-center">
+                                    <div className="flex flex-col items-center gap-3">
+                                      <Loader2 className="h-10 w-10 animate-spin text-primary" />
+                                      <p className="text-muted-foreground font-medium">Preview laden...</p>
+                                    </div>
+                                  </div>
+                                ) : previewPdfData ? (
+                                  <iframe 
+                                    src={`${previewPdfData}#view=FitH`} 
+                                    className="w-full h-full border-none" 
+                                    title="PDF Preview"
+                                  />
+                                ) : (
+                                  <div className="h-full flex items-center justify-center text-muted-foreground">
+                                    Kon preview niet laden.
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           </DialogContent>
                         </Dialog>
