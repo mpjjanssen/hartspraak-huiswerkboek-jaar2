@@ -25,8 +25,6 @@ export default function Navigation() {
     { path: "/workshop/2", label: "Workshop 2" },
     { path: "/workshop/3", label: "Workshop 3" },
     { path: "/workshop/4", label: "Workshop 4" },
-    { path: "/workshop/5", label: "Workshop 5" },
-    { path: "/workshop/6", label: "Workshop 6" },
   ];
 
   return (
