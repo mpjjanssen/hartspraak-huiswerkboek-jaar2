@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Download, FileText } from "lucide-react";
+import { Download, FileText, Share2, Loader2, CheckCircle2 } from "lucide-react";
 import { jsPDF } from "jspdf";
 import { Document, Packer, Paragraph, TextRun, HeadingLevel } from "docx";
 import { saveAs } from "file-saver";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Question {
   id: string;
@@ -35,6 +37,9 @@ export function DownloadButtons({
   questions,
   allWorkshops = false 
 }: DownloadButtonsProps) {
+  const { toast } = useToast();
+  const [isSharing, setIsSharing] = useState(false);
+  const [hasShared, setHasShared] = useState(false);
 
   const getAnswersWithAI = (): AnswerWithAI[] => {
     const answers: AnswerWithAI[] = [];
@@ -49,13 +54,10 @@ export function DownloadButtons({
       if (answer.trim()) {
         let aiConversation: Message[] | undefined;
         
-        // Parse AI conversation if it exists
         if (aiDataRaw) {
           try {
             const aiData = JSON.parse(aiDataRaw);
-            // aiData is directly an array of messages, not an object with a messages property
             if (Array.isArray(aiData)) {
-              // Filter to only keep user/assistant messages
               aiConversation = aiData.filter(
                 (msg: Message) => msg.role === "user" || msg.role === "assistant"
               );
@@ -76,15 +78,12 @@ export function DownloadButtons({
     return answers;
   };
 
-  const downloadPDF = () => {
+  const generatePDFBlob = (): Blob => {
     const doc = new jsPDF();
     const answers = getAnswersWithAI();
     
-    // Title
     doc.setFontSize(20);
     doc.text(workshopTitle, 20, 20);
-    
-    // Date
     doc.setFontSize(12);
     doc.text(workshopDate, 20, 30);
     
@@ -94,174 +93,149 @@ export function DownloadButtons({
     const maxWidth = doc.internal.pageSize.width - 2 * margin;
     
     answers.forEach((item, index) => {
-      // Check if we need a new page
       if (yPosition > pageHeight - 40) {
         doc.addPage();
         yPosition = 20;
       }
       
-      // Question
       doc.setFontSize(14);
       doc.setFont('helvetica', 'bold');
       const questionLines = doc.splitTextToSize(`${index + 1}. ${item.question}`, maxWidth);
       doc.text(questionLines, margin, yPosition);
       yPosition += questionLines.length * 7 + 5;
       
-      // Answer
       doc.setFontSize(11);
       doc.setFont('helvetica', 'normal');
       const answerLines = doc.splitTextToSize(item.answer, maxWidth);
       doc.text(answerLines, margin, yPosition);
       yPosition += answerLines.length * 6 + 10;
       
-      // AI Conversation (if exists)
       if (item.aiConversation && item.aiConversation.length > 0) {
-        // Check if we need a new page
         if (yPosition > pageHeight - 60) {
           doc.addPage();
           yPosition = 20;
         }
         
-        // AI Conversation Header
         doc.setFontSize(12);
         doc.setFont('helvetica', 'bold');
         doc.text("💬 AI Coaching Gesprek", margin, yPosition);
         yPosition += 10;
         
-        // AI Messages
         doc.setFontSize(10);
         item.aiConversation.forEach((msg) => {
-          // Check if we need a new page
           if (yPosition > pageHeight - 40) {
             doc.addPage();
             yPosition = 20;
           }
           
-          // Message role label
           doc.setFont('helvetica', 'bold');
           const roleLabel = msg.role === "user" ? "Jij:" : "AI Coach:";
           doc.text(roleLabel, margin, yPosition);
           yPosition += 6;
           
-          // Message content
           doc.setFont('helvetica', 'normal');
           const messageLines = doc.splitTextToSize(msg.content, maxWidth - 5);
           doc.text(messageLines, margin + 5, yPosition);
           yPosition += messageLines.length * 5 + 8;
         });
-        
         yPosition += 5;
       }
-      
-      yPosition += 10; // Extra space between questions
+      yPosition += 10;
     });
     
-    // Save
+    return doc.output('blob');
+  };
+
+  const downloadPDF = () => {
+    const blob = generatePDFBlob();
     const filename = `${workshopTitle.replace(/\s+/g, '_')}_Antwoorden.pdf`;
-    doc.save(filename);
+    saveAs(blob, filename);
   };
 
   const downloadWord = async () => {
     const answers = getAnswersWithAI();
-    
     const children: Paragraph[] = [
-      // Title
-      new Paragraph({
-        text: workshopTitle,
-        heading: HeadingLevel.HEADING_1,
-        spacing: { after: 200 }
-      }),
-      // Date
-      new Paragraph({
-        text: workshopDate,
-        spacing: { after: 400 }
-      })
+      new Paragraph({ text: workshopTitle, heading: HeadingLevel.HEADING_1, spacing: { after: 200 } }),
+      new Paragraph({ text: workshopDate, spacing: { after: 400 } })
     ];
     
     answers.forEach((item, index) => {
-      // Question
-      children.push(
-        new Paragraph({
-          children: [
-            new TextRun({
-              text: `${index + 1}. ${item.question}`,
-              bold: true,
-              size: 28
-            })
-          ],
-          spacing: { before: 300, after: 200 }
-        })
-      );
+      children.push(new Paragraph({
+        children: [new TextRun({ text: `${index + 1}. ${item.question}`, bold: true, size: 28 })],
+        spacing: { before: 300, after: 200 }
+      }));
+      children.push(new Paragraph({ text: item.answer, spacing: { after: 300 } }));
       
-      // Answer
-      children.push(
-        new Paragraph({
-          text: item.answer,
-          spacing: { after: 300 }
-        })
-      );
-      
-      // AI Conversation (if exists)
       if (item.aiConversation && item.aiConversation.length > 0) {
-        // AI Conversation Header
-        children.push(
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: "💬 AI Coaching Gesprek",
-                bold: true,
-                size: 24
-              })
-            ],
-            spacing: { before: 200, after: 150 }
-          })
-        );
+        children.push(new Paragraph({
+          children: [new TextRun({ text: "💬 AI Coaching Gesprek", bold: true, size: 24 })],
+          spacing: { before: 200, after: 150 }
+        }));
         
-        // AI Messages
         item.aiConversation.forEach((msg) => {
           const roleLabel = msg.role === "user" ? "Jij:" : "AI Coach:";
-          
-          children.push(
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: roleLabel,
-                  bold: true,
-                  size: 22
-                })
-              ],
-              spacing: { before: 100, after: 50 }
-            })
-          );
-          
-          children.push(
-            new Paragraph({
-              text: msg.content,
-              spacing: { after: 150 }
-            })
-          );
+          children.push(new Paragraph({
+            children: [new TextRun({ text: roleLabel, bold: true, size: 22 })],
+            spacing: { before: 100, after: 50 }
+          }));
+          children.push(new Paragraph({ text: msg.content, spacing: { after: 150 } }));
         });
       }
-      
-      // Extra spacing between questions
-      children.push(
-        new Paragraph({
-          text: "",
-          spacing: { after: 200 }
-        })
-      );
+      children.push(new Paragraph({ text: "", spacing: { after: 200 } }));
     });
     
-    const doc = new Document({
-      sections: [{
-        properties: {},
-        children: children
-      }]
-    });
-    
+    const doc = new Document({ sections: [{ properties: {}, children: children }] });
     const blob = await Packer.toBlob(doc);
     const filename = `${workshopTitle.replace(/\s+/g, '_')}_Antwoorden.docx`;
     saveAs(blob, filename);
+  };
+
+  const shareWithTeam = async () => {
+    try {
+      setIsSharing(true);
+      const pdfBlob = generatePDFBlob();
+      
+      // Convert blob to base64
+      const reader = new FileReader();
+      reader.readAsDataURL(pdfBlob);
+      reader.onloadend = async () => {
+        const base64data = reader.result as string;
+        const fileName = `${workshopTitle.replace(/\s+/g, '_')}_Antwoorden.pdf`;
+
+        const response = await fetch("/api/shared-homework", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${sessionStorage.getItem("auth_token")}`
+          },
+          body: JSON.stringify({
+            workshopId,
+            workshopNumber: parseInt(workshopId.replace(/\D/g, '')) || 0,
+            workshopTitle,
+            workshopDate,
+            pdfData: base64data,
+            fileName
+          })
+        });
+
+        if (!response.ok) throw new Error("Failed to share homework");
+
+        setHasShared(true);
+        toast({
+          title: "Succesvol gedeeld",
+          description: "Je huiswerk is gedeeld met het Hartspraak-team.",
+        });
+      };
+    } catch (error) {
+      console.error("Error sharing homework:", error);
+      toast({
+        title: "Fout bij delen",
+        description: "Er is iets misgegaan bij het delen van je huiswerk. Probeer het later opnieuw.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSharing(false);
+    }
   };
 
   const hasAnswers = getAnswersWithAI().length > 0;
@@ -285,6 +259,21 @@ export function DownloadButtons({
       >
         <FileText className="h-4 w-4" />
         Download Word
+      </Button>
+      <Button
+        onClick={shareWithTeam}
+        disabled={!hasAnswers || isSharing || hasShared}
+        variant={hasShared ? "secondary" : "default"}
+        className="gap-2 bg-primary hover:bg-primary/90"
+      >
+        {isSharing ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : hasShared ? (
+          <CheckCircle2 className="h-4 w-4" />
+        ) : (
+          <Share2 className="h-4 w-4" />
+        )}
+        {hasShared ? "Gedeeld met team" : "Deel met het team"}
       </Button>
     </div>
   );

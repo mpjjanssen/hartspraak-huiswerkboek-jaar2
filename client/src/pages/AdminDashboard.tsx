@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Loader2, UserPlus, Users, Shield, LogOut, RefreshCw, BarChart3, Key } from "lucide-react";
+import { Loader2, UserPlus, Shield, LogOut, RefreshCw, BarChart3, Key, FileDown, Clock } from "lucide-react";
 import { useLocation } from "wouter";
 import { WorkshopReminders } from "@/components/WorkshopReminders";
 
@@ -26,11 +26,22 @@ interface RegisteredUser {
   lastSignedIn: string | null;
 }
 
+interface SharedSubmission {
+  id: number;
+  userEmail: string;
+  workshopTitle: string;
+  workshopDate: string;
+  fileName: string;
+  sharedAt: string;
+  status: string;
+}
+
 export default function AdminDashboard() {
   const { admin, token, logout } = useAdminAuth();
   const [, setLocation] = useLocation();
   const [verifiedMembers, setVerifiedMembers] = useState<VerifiedMember[]>([]);
   const [registeredUsers, setRegisteredUsers] = useState<RegisteredUser[]>([]);
+  const [sharedSubmissions, setSharedSubmissions] = useState<SharedSubmission[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isAddingMember, setIsAddingMember] = useState(false);
   const [newMemberName, setNewMemberName] = useState("");
@@ -41,14 +52,18 @@ export default function AdminDashboard() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isDownloading, setIsDownloading] = useState<number | null>(null);
 
   const fetchData = async () => {
     try {
-      const [membersRes, usersRes] = await Promise.all([
+      const [membersRes, usersRes, sharedRes] = await Promise.all([
         fetch("/api/admin/verified-members", {
           headers: { Authorization: `Bearer ${token}` },
         }),
         fetch("/api/admin/users", {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch("/api/admin/shared-homework", {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -62,6 +77,11 @@ export default function AdminDashboard() {
         const usersData = await usersRes.json();
         setRegisteredUsers(usersData.users);
       }
+
+      if (sharedRes.ok) {
+        const sharedData = await sharedRes.json();
+        setSharedSubmissions(sharedData.submissions);
+      }
     } catch (error) {
       toast.error("Failed to load data");
     } finally {
@@ -72,6 +92,33 @@ export default function AdminDashboard() {
   useEffect(() => {
     fetchData();
   }, [token]);
+
+  const handleDownload = async (submissionId: number, fileName: string) => {
+    try {
+      setIsDownloading(submissionId);
+      const response = await fetch(`/api/admin/shared-homework/${submissionId}/download`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) throw new Error("Download failed");
+
+      const data = await response.json();
+      
+      // Create download link
+      const link = document.createElement('a');
+      link.href = data.pdfData;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      toast.success("Download gestart");
+    } catch (error) {
+      toast.error("Download mislukt");
+    } finally {
+      setIsDownloading(null);
+    }
+  };
 
   const handleAddMember = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -161,20 +208,15 @@ export default function AdminDashboard() {
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validation
     if (newPassword !== confirmPassword) {
       toast.error("New passwords do not match");
       return;
     }
-    
     if (newPassword.length < 8) {
       toast.error("Password must be at least 8 characters");
       return;
     }
-    
     setIsChangingPassword(true);
-    
     try {
       const response = await fetch("/api/admin/change-password", {
         method: "POST",
@@ -182,19 +224,13 @@ export default function AdminDashboard() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          currentPassword,
-          newPassword,
-        }),
+        body: JSON.stringify({ currentPassword, newPassword }),
       });
-      
       const data = await response.json();
-      
       if (!response.ok) {
         toast.error(data.error || "Failed to change password");
         return;
       }
-      
       toast.success("Password changed successfully!");
       setCurrentPassword("");
       setNewPassword("");
@@ -246,56 +282,23 @@ export default function AdminDashboard() {
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Change Admin Password</DialogTitle>
-                  <DialogDescription>
-                    Enter your current password and choose a new one
-                  </DialogDescription>
+                  <DialogDescription>Enter your current password and choose a new one</DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleChangePassword} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="currentPassword">Current Password</Label>
-                    <Input
-                      id="currentPassword"
-                      type="password"
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                      required
-                      disabled={isChangingPassword}
-                    />
+                    <Input id="currentPassword" type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required disabled={isChangingPassword} />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="newPassword">New Password</Label>
-                    <Input
-                      id="newPassword"
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      required
-                      disabled={isChangingPassword}
-                      minLength={8}
-                    />
-                    <p className="text-xs text-muted-foreground">Minimum 8 characters</p>
+                    <Input id="newPassword" type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required disabled={isChangingPassword} minLength={8} />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                    <Input
-                      id="confirmPassword"
-                      type="password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      required
-                      disabled={isChangingPassword}
-                      minLength={8}
-                    />
+                    <Input id="confirmPassword" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required disabled={isChangingPassword} minLength={8} />
                   </div>
                   <Button type="submit" className="w-full" disabled={isChangingPassword}>
-                    {isChangingPassword ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Changing...
-                      </>
-                    ) : (
-                      "Change Password"
-                    )}
+                    {isChangingPassword ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Change Password"}
                   </Button>
                 </form>
               </DialogContent>
@@ -310,40 +313,101 @@ export default function AdminDashboard() {
 
       <div className="container mx-auto px-4 py-8 space-y-8">
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
-            <CardHeader>
-              <CardTitle>Verified Members</CardTitle>
-              <CardDescription>People allowed to register</CardDescription>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground uppercase">Verified Members</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">{verifiedMembers.length}</div>
             </CardContent>
           </Card>
           <Card>
-            <CardHeader>
-              <CardTitle>Registered Users</CardTitle>
-              <CardDescription>Active accounts</CardDescription>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground uppercase">Registered Users</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">{registeredUsers.length}</div>
             </CardContent>
           </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground uppercase">Gedeeld Huiswerk</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold">{sharedSubmissions.length}</div>
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Verified Members */}
-        <Card>
-          <CardHeader>
+        {/* Shared Homework Section */}
+        <Card className="border-primary/20 shadow-md">
+          <CardHeader className="bg-primary/5">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Verified Members</CardTitle>
-                <CardDescription>Manage who can register</CardDescription>
+                <CardTitle>Ingeleverd Huiswerk</CardTitle>
+                <CardDescription>Bekijk en download huiswerk dat door cliënten is gedeeld</CardDescription>
               </div>
-              <div className="flex gap-2">
-                <Button size="sm" variant="outline" onClick={fetchData}>
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Refresh
-                </Button>
+              <Button size="sm" variant="outline" onClick={fetchData}>
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Vernieuwen
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <div className="space-y-4">
+              {sharedSubmissions.length === 0 ? (
+                <p className="text-sm text-muted-foreground text-center py-8">Nog geen gedeeld huiswerk ontvangen.</p>
+              ) : (
+                <div className="grid gap-4">
+                  {sharedSubmissions.map((submission) => (
+                    <div key={submission.id} className="flex items-center justify-between p-4 border rounded-lg bg-white hover:border-primary/50 transition-colors">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold text-lg">{submission.userEmail}</p>
+                          <span className="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full font-medium">
+                            {submission.workshopTitle}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                          <span className="flex items-center gap-1">
+                            <Clock className="h-3 w-3" />
+                            {new Date(submission.sharedAt).toLocaleString('nl-NL')}
+                          </span>
+                          <span>{submission.workshopDate}</span>
+                        </div>
+                      </div>
+                      <Button 
+                        size="sm" 
+                        className="gap-2"
+                        onClick={() => handleDownload(submission.id, submission.fileName)}
+                        disabled={isDownloading === submission.id}
+                      >
+                        {isDownloading === submission.id ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <FileDown className="h-4 w-4" />
+                        )}
+                        Download PDF
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Verified Members & Registered Users grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Verified Members */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Verified Members</CardTitle>
+                  <CardDescription>Manage who can register</CardDescription>
+                </div>
                 <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
                   <DialogTrigger asChild>
                     <Button size="sm">
@@ -354,115 +418,73 @@ export default function AdminDashboard() {
                   <DialogContent>
                     <DialogHeader>
                       <DialogTitle>Add Verified Member</DialogTitle>
-                      <DialogDescription>
-                        Add a new member who will be allowed to register
-                      </DialogDescription>
+                      <DialogDescription>Add a new member who will be allowed to register</DialogDescription>
                     </DialogHeader>
                     <form onSubmit={handleAddMember} className="space-y-4">
                       <div className="space-y-2">
                         <Label htmlFor="fullName">Full Name</Label>
-                        <Input
-                          id="fullName"
-                          value={newMemberName}
-                          onChange={(e) => setNewMemberName(e.target.value)}
-                          required
-                          disabled={isAddingMember}
-                        />
+                        <Input id="fullName" value={newMemberName} onChange={(e) => setNewMemberName(e.target.value)} required disabled={isAddingMember} />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="email">Email</Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          value={newMemberEmail}
-                          onChange={(e) => setNewMemberEmail(e.target.value)}
-                          required
-                          disabled={isAddingMember}
-                        />
+                        <Input id="email" type="email" value={newMemberEmail} onChange={(e) => setNewMemberEmail(e.target.value)} required disabled={isAddingMember} />
                       </div>
                       <Button type="submit" className="w-full" disabled={isAddingMember}>
-                        {isAddingMember ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Adding...
-                          </>
-                        ) : (
-                          "Add Member"
-                        )}
+                        {isAddingMember ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Add Member"}
                       </Button>
                     </form>
                   </DialogContent>
                 </Dialog>
               </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {verifiedMembers.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-8">
-                  No verified members yet. Add your first member to get started.
-                </p>
-              ) : (
-                verifiedMembers.map((member) => (
-                  <div
-                    key={member.id}
-                    className="flex items-center justify-between p-3 border rounded-lg"
-                  >
-                    <div>
-                      <p className="font-medium">{member.fullName}</p>
-                      <p className="text-sm text-muted-foreground">{member.email}</p>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2">
+                {verifiedMembers.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-8">No verified members yet.</p>
+                ) : (
+                  verifiedMembers.map((member) => (
+                    <div key={member.id} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div>
+                        <p className="font-medium">{member.fullName}</p>
+                        <p className="text-sm text-muted-foreground">{member.email}</p>
+                      </div>
+                      <Button size="sm" variant={member.status === "active" ? "outline" : "default"} onClick={() => handleToggleMemberStatus(member.id, member.status)}>
+                        {member.status === "active" ? "Disable" : "Enable"}
+                      </Button>
                     </div>
-                    <Button
-                      size="sm"
-                      variant={member.status === "active" ? "outline" : "default"}
-                      onClick={() => handleToggleMemberStatus(member.id, member.status)}
-                    >
-                      {member.status === "active" ? "Disable" : "Enable"}
-                    </Button>
-                  </div>
-                ))
-              )}
-            </div>
-          </CardContent>
-        </Card>
+                  ))
+                )}
+              </div>
+            </CardContent>
+          </Card>
 
-        {/* Registered Users */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Registered Users</CardTitle>
-            <CardDescription>Manage user accounts</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {registeredUsers.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-8">
-                  No registered users yet.
-                </p>
-              ) : (
-                registeredUsers.map((user) => (
-                  <div
-                    key={user.id}
-                    className="flex items-center justify-between p-3 border rounded-lg"
-                  >
-                    <div>
-                      <p className="font-medium">{user.email}</p>
-                      <p className="text-sm text-muted-foreground">
-                        Registered: {new Date(user.createdAt).toLocaleDateString()}
-                      </p>
+          {/* Registered Users */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Registered Users</CardTitle>
+              <CardDescription>Manage user accounts</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2">
+                {registeredUsers.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-8">No registered users yet.</p>
+                ) : (
+                  registeredUsers.map((user) => (
+                    <div key={user.id} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div>
+                        <p className="font-medium">{user.email}</p>
+                        <p className="text-sm text-muted-foreground">Registered: {new Date(user.createdAt).toLocaleDateString()}</p>
+                      </div>
+                      <Button size="sm" variant={user.status === "active" ? "outline" : "default"} onClick={() => handleToggleUserStatus(user.id, user.status)}>
+                        {user.status === "active" ? "Disable" : "Enable"}
+                      </Button>
                     </div>
-                    <Button
-                      size="sm"
-                      variant={user.status === "active" ? "outline" : "default"}
-                      onClick={() => handleToggleUserStatus(user.id, user.status)}
-                    >
-                      {user.status === "active" ? "Disable" : "Enable"}
-                    </Button>
-                  </div>
-                ))
-              )}
-            </div>
-          </CardContent>
-        </Card>
+                  ))
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
