@@ -5,6 +5,8 @@ import { Document, Packer, Paragraph, TextRun, HeadingLevel } from "docx";
 import { saveAs } from "file-saver";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { decryptData } from "@/lib/encryption";
+import { useEncryption } from "@/contexts/EncryptionContext";
 
 interface Question {
   id: string;
@@ -22,6 +24,7 @@ interface DownloadButtonsProps {
 interface Message {
   role: "system" | "user" | "assistant";
   content: string;
+  timestamp?: string;
 }
 
 interface AnswerWithAI {
@@ -40,47 +43,73 @@ export function DownloadButtons({
   const { toast } = useToast();
   const [isSharing, setIsSharing] = useState(false);
   const [hasShared, setHasShared] = useState(false);
+  const { encryptionKey, isReady } = useEncryption();
 
-  const getAnswersWithAI = (): AnswerWithAI[] => {
+  const getAnswersWithAI = async (): Promise<AnswerWithAI[]> => {
     const answers: AnswerWithAI[] = [];
+    const authToken = sessionStorage.getItem('auth_token');
     
-    questions.forEach(q => {
+    for (const q of questions) {
       const answerKey = `hartspraak-${workshopId}-${q.id}`;
       const aiKey = `hartspraak-ai-${workshopId}-${q.id}`;
       
       const answer = localStorage.getItem(answerKey) || "";
-      const aiDataRaw = localStorage.getItem(aiKey);
+      let aiConversation: Message[] | undefined;
       
-      if (answer.trim()) {
-        let aiConversation: Message[] | undefined;
-        
+      // Try to get AI conversation from server first if encryption is ready
+      if (isReady && encryptionKey && authToken) {
+        try {
+          const response = await fetch(`/api/user-data/conversations/${workshopId}/${q.id}`, {
+            headers: { 'Authorization': `Bearer ${authToken}` },
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            if (data.messagesEncrypted && data.encryptionIv) {
+              const decrypted = decryptData(data.messagesEncrypted, data.encryptionIv, encryptionKey);
+              if (decrypted) {
+                const parsed = JSON.parse(decrypted);
+                if (Array.isArray(parsed)) {
+                  aiConversation = parsed.filter(m => m.role === "user" || m.role === "assistant");
+                }
+              }
+            }
+          }
+        } catch (e) {
+          console.warn(`Failed to fetch AI data for ${q.id} from server:`, e);
+        }
+      }
+      
+      // Fallback to localStorage if server fetch failed or was skipped
+      if (!aiConversation) {
+        const aiDataRaw = localStorage.getItem(aiKey);
         if (aiDataRaw) {
           try {
             const aiData = JSON.parse(aiDataRaw);
             if (Array.isArray(aiData)) {
-              aiConversation = aiData.filter(
-                (msg: Message) => msg.role === "user" || msg.role === "assistant"
-              );
+              aiConversation = aiData.filter(m => m.role === "user" || m.role === "assistant");
             }
           } catch (e) {
-            console.error("Failed to parse AI data:", e);
+            console.error("Failed to parse AI data from localStorage:", e);
           }
         }
-        
+      }
+      
+      if (answer.trim() || (aiConversation && aiConversation.length > 0)) {
         answers.push({
           question: q.title,
           answer: answer,
           aiConversation: aiConversation
         });
       }
-    });
+    }
     
     return answers;
   };
 
-  const generatePDFBlob = (): Blob => {
+  const generatePDFBlob = async (): Promise<Blob> => {
     const doc = new jsPDF();
-    const answers = getAnswersWithAI();
+    const answers = await getAnswersWithAI();
     
     doc.setFontSize(20);
     doc.text(workshopTitle, 20, 20);
@@ -92,6 +121,11 @@ export function DownloadButtons({
     const margin = 20;
     const maxWidth = doc.internal.pageSize.width - 2 * margin;
     
+    if (answers.length === 0) {
+      doc.text("Geen antwoorden gevonden voor deze workshop.", margin, yPosition);
+      return doc.output('blob');
+    }
+
     answers.forEach((item, index) => {
       if (yPosition > pageHeight - 40) {
         doc.addPage();
@@ -104,11 +138,18 @@ export function DownloadButtons({
       doc.text(questionLines, margin, yPosition);
       yPosition += questionLines.length * 7 + 5;
       
-      doc.setFontSize(11);
-      doc.setFont('helvetica', 'normal');
-      const answerLines = doc.splitTextToSize(item.answer, maxWidth);
-      doc.text(answerLines, margin, yPosition);
-      yPosition += answerLines.length * 6 + 10;
+      if (item.answer.trim()) {
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'normal');
+        const answerLines = doc.splitTextToSize(item.answer, maxWidth);
+        doc.text(answerLines, margin, yPosition);
+        yPosition += answerLines.length * 6 + 10;
+      } else {
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'italic');
+        doc.text("(Geen tekstueel antwoord ingevuld)", margin, yPosition);
+        yPosition += 10;
+      }
       
       if (item.aiConversation && item.aiConversation.length > 0) {
         if (yPosition > pageHeight - 60) {
@@ -118,7 +159,9 @@ export function DownloadButtons({
         
         doc.setFontSize(12);
         doc.setFont('helvetica', 'bold');
-        doc.text("💬 AI Coaching Gesprek", margin, yPosition);
+        doc.setTextColor(75, 85, 99); // Gray-600
+        doc.text("💬 AI Begeleiding", margin, yPosition);
+        doc.setTextColor(0, 0, 0);
         yPosition += 10;
         
         doc.setFontSize(10);
@@ -129,7 +172,7 @@ export function DownloadButtons({
           }
           
           doc.setFont('helvetica', 'bold');
-          const roleLabel = msg.role === "user" ? "Jij:" : "AI Coach:";
+          const roleLabel = msg.role === "user" ? "Jij:" : "AI Begeleider:";
           doc.text(roleLabel, margin, yPosition);
           yPosition += 6;
           
@@ -146,34 +189,46 @@ export function DownloadButtons({
     return doc.output('blob');
   };
 
-  const downloadPDF = () => {
-    const blob = generatePDFBlob();
+  const downloadPDF = async () => {
+    const blob = await generatePDFBlob();
     const filename = `${workshopTitle.replace(/\s+/g, '_')}_Antwoorden.pdf`;
     saveAs(blob, filename);
   };
 
   const downloadWord = async () => {
-    const answers = getAnswersWithAI();
+    const answers = await getAnswersWithAI();
     const children: Paragraph[] = [
       new Paragraph({ text: workshopTitle, heading: HeadingLevel.HEADING_1, spacing: { after: 200 } }),
       new Paragraph({ text: workshopDate, spacing: { after: 400 } })
     ];
     
+    if (answers.length === 0) {
+      children.push(new Paragraph({ text: "Geen antwoorden gevonden voor deze workshop." }));
+    }
+
     answers.forEach((item, index) => {
       children.push(new Paragraph({
         children: [new TextRun({ text: `${index + 1}. ${item.question}`, bold: true, size: 28 })],
         spacing: { before: 300, after: 200 }
       }));
-      children.push(new Paragraph({ text: item.answer, spacing: { after: 300 } }));
+      
+      if (item.answer.trim()) {
+        children.push(new Paragraph({ text: item.answer, spacing: { after: 300 } }));
+      } else {
+        children.push(new Paragraph({ 
+          children: [new TextRun({ text: "(Geen tekstueel antwoord ingevuld)", italic: true })],
+          spacing: { after: 300 } 
+        }));
+      }
       
       if (item.aiConversation && item.aiConversation.length > 0) {
         children.push(new Paragraph({
-          children: [new TextRun({ text: "💬 AI Coaching Gesprek", bold: true, size: 24 })],
+          children: [new TextRun({ text: "💬 AI Begeleiding", bold: true, size: 24, color: "4B5563" })],
           spacing: { before: 200, after: 150 }
         }));
         
         item.aiConversation.forEach((msg) => {
-          const roleLabel = msg.role === "user" ? "Jij:" : "AI Coach:";
+          const roleLabel = msg.role === "user" ? "Jij:" : "AI Begeleider:";
           children.push(new Paragraph({
             children: [new TextRun({ text: roleLabel, bold: true, size: 22 })],
             spacing: { before: 100, after: 50 }
@@ -193,9 +248,8 @@ export function DownloadButtons({
   const shareWithTeam = async () => {
     try {
       setIsSharing(true);
-      const pdfBlob = generatePDFBlob();
+      const pdfBlob = await generatePDFBlob();
       
-      // Convert blob to base64
       const reader = new FileReader();
       reader.readAsDataURL(pdfBlob);
       reader.onloadend = async () => {
@@ -223,7 +277,7 @@ export function DownloadButtons({
         setHasShared(true);
         toast({
           title: "Succesvol gedeeld",
-          description: "Je huiswerk is gedeeld met het Hartspraak-team.",
+          description: "Je huiswerk inclusief AI-begeleiding is gedeeld met het Hartspraak-team.",
         });
       };
     } catch (error) {
@@ -238,13 +292,10 @@ export function DownloadButtons({
     }
   };
 
-  const hasAnswers = getAnswersWithAI().length > 0;
-
   return (
     <div className="flex flex-wrap gap-3">
       <Button
         onClick={downloadPDF}
-        disabled={!hasAnswers}
         variant="outline"
         className="gap-2"
       >
@@ -253,7 +304,6 @@ export function DownloadButtons({
       </Button>
       <Button
         onClick={downloadWord}
-        disabled={!hasAnswers}
         variant="outline"
         className="gap-2"
       >
@@ -262,7 +312,7 @@ export function DownloadButtons({
       </Button>
       <Button
         onClick={shareWithTeam}
-        disabled={!hasAnswers || isSharing || hasShared}
+        disabled={isSharing || hasShared}
         variant={hasShared ? "secondary" : "default"}
         className="gap-2 bg-primary hover:bg-primary/90"
       >
