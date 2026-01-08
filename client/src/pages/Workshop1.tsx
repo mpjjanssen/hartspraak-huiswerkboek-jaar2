@@ -1,12 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { ChevronRight, Info } from "lucide-react";
+import { ChevronRight, Anchor } from "lucide-react";
 import { AnswerField } from "@/components/AnswerField";
 import { ProgressBar } from "@/components/ProgressBar";
 import { DownloadButtons } from "@/components/DownloadButtons";
 import { AIHelper } from "@/components/AIHelper";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface QuestionPair {
   id: string;
@@ -79,8 +78,8 @@ export default function Workshop1() {
         fullText: "Als je zou ontdekken dat je onbewust trouw bent aan iemand die niet meer leeft of die uit het systeem is gestoten, wat zou je tegen die persoon willen zeggen? En wat zou je nodig hebben om je blik volledig naar het leven te kunnen richten?"
       },
       citation: {
-        text: "Een partner van een schizoïde cliënt zei me eens: 'Het is alsof ik verliefd ben geworden op iemand achter een glazen muur. Ik kan hem zien, soms zelfs voelen, maar er is altijd die barrière tussen ons.'",
-        source: "Van wond naar wonder, Hoofdstuk 1"
+        text: "Vaak leef je als het ware in een dubbele werkelijkheid: terwijl je je in de aardse realiteit beweegt, luister je tegelijkertijd naar de roep van die andere wereld.",
+        source: "De Maskermaker, Hoofdstuk 4"
       }
     },
     {
@@ -133,8 +132,8 @@ export default function Workshop1() {
         fullText: "Als liefde niet zou betekenen dat je verdwijnt, maar dat je juist méér jezelf zou kunnen zijn, hoe zou dat er dan uitzien? Wat zou de eerste kleine stap zijn om dat te onderzoeken?"
       },
       citation: {
-        text: "Je ijzig terugtrekken is je meest vertrouwde oplossing bij een conflict. Zo probeer je buiten de relatie te blijven. Dat geldt ook voor je neiging tot ontkennen als de ander je duidelijk maakt dat je er niet werkelijk bent.",
-        source: "De Maskermaker, Hoofdstuk 4"
+        text: "Een cliënt beschreef het prachtig: 'Als iemand echt van me houdt, word ik bang. Niet alleen bang om gekwetst te worden, maar bang om te verdwijnen, om opgeslokt te worden. Het is alsof liefde een zwart gat is...'",
+        source: "Van wond naar wonder, Hoofdstuk 1"
       }
     },
     {
@@ -164,7 +163,7 @@ export default function Workshop1() {
         fullText: "Scan je lichaam op temperatuur en aanwezigheid. Zijn je handen en voeten vaak koud? Voel je een spanning rond je middenrif of je nekbasis die dient om gevoelens (en energie) af te splitsen van je hoofd?"
       },
       deepQuestion: {
-        id: "ws1-q8-deep",
+        id: "ws1-o8-deep",
         title: "De Koude Kern - Verdiepende Vraag",
         fullText: "Als je je voorstelt dat warmte en levensenergie door je hele lichaam zouden stromen tot in je vingertoppen en tenen, wat zou er dan anders voelen? Welke emotie of sensatie zou dan misschien bovenkomen?"
       },
@@ -352,7 +351,7 @@ export default function Workshop1() {
         fullText: "Kun je een moment herinneren waarop je gaf vanuit overvloed in plaats van uit hoop op terugkrijgen? Hoe voelde dat anders, en hoe zou je meer van die momenten kunnen creëren?"
       },
       citation: {
-        text: "Orale mensen die hun eigen bron hebben gevonden, kunnen geven zoals niemand anders kan geven. Ze kennen de honger, ze kennen de leegte, dus ze weten precies wat others nodig hebben.",
+        text: "Orale mensen die hun eigen bron hebben gevonden, kunnen geven zoals niemand anders kan geven. Ze kennen de honger, ze kennen de leegte, dus ze weten precies wat anderen nodig hebben.",
         source: "Van wond naar wonder, Hoofdstuk 2"
       }
     }
@@ -463,38 +462,48 @@ export default function Workshop1() {
             </div>
           </div>
 
-          <Tabs defaultValue="schizoid" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-8">
-              <TabsTrigger value="schizoid">Dag 1: Schizoïde Structuur</TabsTrigger>
-              <TabsTrigger value="oral">Dag 2: Orale Structuur</TabsTrigger>
-            </TabsList>
+          {/* Quick Navigation */}
+          <Card className="border-primary/20 bg-primary/5">
+            <CardContent className="pt-6">
+              <h3 className="text-lg font-semibold mb-4">Inhoudsopgave</h3>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a href="#schizoid" className="flex items-center gap-2 text-primary hover:underline">
+                  <Anchor className="h-4 w-4" /> Dag 1: Schizoïde Structuur
+                </a>
+                <a href="#oral" className="flex items-center gap-2 text-primary hover:underline">
+                  <Anchor className="h-4 w-4" /> Dag 2: Orale Structuur
+                </a>
+              </div>
+            </CardContent>
+          </Card>
 
-            <TabsContent value="schizoid" className="space-y-12">
-              <Card className="border-primary/20 bg-primary/5">
-                <CardContent className="pt-6">
-                  <div className="space-y-4 text-foreground/90 leading-relaxed">
-                    <h2 className="text-2xl font-bold">De Schizoïde Structuur</h2>
-                    <p><strong>Thema: Het Recht om te Bestaan & De Dans van Nabijheid en Afstand</strong></p>
-                    <p>Beste deelnemer, lees voordat je begint in de “Maskermaker” en “Van wond naar Wonder” het hoofdstuk over deze structuur.</p>
-                  </div>
-                </CardContent>
-              </Card>
-              {renderPairs(schizoidPairs, "workshop1_schizoid_jaar2")}
-            </TabsContent>
+          {/* Schizoid Section */}
+          <div id="schizoid" className="space-y-12 scroll-mt-20">
+            <Card className="border-primary/20 bg-primary/5">
+              <CardContent className="pt-6">
+                <div className="space-y-4 text-foreground/90 leading-relaxed">
+                  <h2 className="text-3xl font-bold">Dag 1: De Schizoïde Structuur</h2>
+                  <p><strong>Thema: Het Recht om te Bestaan & De Dans van Nabijheid en Afstand</strong></p>
+                  <p>Beste deelnemer, lees voordat je begint in de “Maskermaker” en “Van wond naar Wonder” het hoofdstuk over deze structuur.</p>
+                </div>
+              </CardContent>
+            </Card>
+            {renderPairs(schizoidPairs, "workshop1_schizoid_jaar2")}
+          </div>
 
-            <TabsContent value="oral" className="space-y-12">
-              <Card className="border-primary/20 bg-primary/5">
-                <CardContent className="pt-6">
-                  <div className="space-y-4 text-foreground/90 leading-relaxed">
-                    <h2 className="text-2xl font-bold">De Orale Structuur</h2>
-                    <p><strong>Thema: De Honger die Nooit Stilt & De Weg naar de Bron</strong></p>
-                    <p>Beste deelnemer, welkom bij de tweede stap op onze reis. Waar de schizoïde structuur gaat over het recht om te bestaan, gaat de orale structuur over het recht om nodig te hebben.</p>
-                  </div>
-                </CardContent>
-              </Card>
-              {renderPairs(oralPairs, "workshop1_oral_jaar2")}
-            </TabsContent>
-          </Tabs>
+          {/* Oral Section */}
+          <div id="oral" className="space-y-12 scroll-mt-20 pt-16 border-t-4 border-primary/10">
+            <Card className="border-primary/20 bg-primary/5">
+              <CardContent className="pt-6">
+                <div className="space-y-4 text-foreground/90 leading-relaxed">
+                  <h2 className="text-3xl font-bold">Dag 2: De Orale Structuur</h2>
+                  <p><strong>Thema: De Honger die Nooit Stilt & De Weg naar de Bron</strong></p>
+                  <p>Beste deelnemer, welkom bij de tweede stap op onze reis. Waar de schizoïde structuur gaat over het recht om te bestaan, gaat de orale structuur over het recht om nodig te hebben.</p>
+                </div>
+              </CardContent>
+            </Card>
+            {renderPairs(oralPairs, "workshop1_oral_jaar2")}
+          </div>
 
           <div className="flex justify-between items-center pt-8 border-t border-border">
             <Link href="/">
