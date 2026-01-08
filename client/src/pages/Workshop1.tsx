@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
@@ -415,16 +416,18 @@ export default function Workshop1() {
           </Card>
 
           {/* Citation */}
-          <Card className="border-primary/20 bg-primary/5 italic">
-            <CardContent className="pt-6">
-              <blockquote className="text-foreground/80 leading-relaxed">
-                <p className="mb-3">"{pair.citation.text}"</p>
-                <p className="text-sm text-foreground/60">
-                  (Bron: {pair.citation.source})
-                </p>
-              </blockquote>
-            </CardContent>
-          </Card>
+          {pair.citation && pair.citation.text && (
+            <Card className="border-primary/20 bg-primary/5 italic">
+              <CardContent className="pt-6">
+                <blockquote className="text-foreground/80 leading-relaxed">
+                  <p className="mb-3">\"{pair.citation.text}\"</p>
+                  <p className="text-sm text-foreground/60">
+                    (Bron: {pair.citation.source})
+                  </p>
+                </blockquote>
+              </CardContent>
+            </Card>
+          )}
 
           {/* AI Feedback Box after each pair */}
           <div className="mt-8 pt-8 border-t border-primary/10">
@@ -432,7 +435,6 @@ export default function Workshop1() {
               questionTitle={`${pair.mainQuestion.title} & ${pair.deepQuestion.title}`}
               questionId={pair.id}
               workshopId={workshopId}
-              context={`Vraag 1: ${pair.mainQuestion.title}\n${pair.mainQuestion.fullText}\n\nVraag 2: ${pair.deepQuestion.title}\n${pair.deepQuestion.fullText}\n\nCitaat: "${pair.citation.text}" (${pair.citation.source})`}
             />
           </div>
         </div>
@@ -441,80 +443,50 @@ export default function Workshop1() {
   );
 
   return (
-    <div className="min-h-screen py-12 md:py-16">
-      <div className="container">
-        <div className="max-w-4xl mx-auto space-y-12">
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Link href="/">
-                <span className="hover:text-primary cursor-pointer">Home</span>
-              </Link>
-              <ChevronRight className="h-4 w-4" />
-              <span>Workshop 1</span>
-            </div>
-            <div className="space-y-2">
-              <div className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
-                18-19 april 2026
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground">
-                Workshop 1: Karakterstructuren
-              </h1>
-            </div>
-          </div>
+    <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+      <div className="space-y-12">
+        <Card className="shadow-lg">
+          <CardHeader>
+            <CardTitle className="text-3xl font-bold text-center text-primary">Workshop 1: De Fundamenten</CardTitle>
+          </CardHeader>
+          <CardContent className="text-center text-foreground/80">
+            <p className="mb-4">We beginnen onze reis bij het absolute fundament: het bestaansrecht en de eerste verbinding. De schizoïde en orale structuren zijn de eerste verdedigingen die we als mens ontwikkelen. Ze raken aan de oervragen: Mag ik er zijn? En: Wordt er voor mij gezorgd?</p>
+            <p>We dragen allemaal stukjes van deze vroege patronen in ons. Laten we ze met zachtheid en nieuwsgierigheid onderzoeken.</p>
+          </CardContent>
+        </Card>
 
-          {/* Quick Navigation */}
-          <Card className="border-primary/20 bg-primary/5">
-            <CardContent className="pt-6">
-              <h3 className="text-lg font-semibold mb-4">Inhoudsopgave</h3>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <a href="#schizoid" className="flex items-center gap-2 text-primary hover:underline">
-                  <Anchor className="h-4 w-4" /> Dag 1: Schizoïde Structuur
-                </a>
-                <a href="#oral" className="flex items-center gap-2 text-primary hover:underline">
-                  <Anchor className="h-4 w-4" /> Dag 2: Orale Structuur
-                </a>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Schizoid Section */}
-          <div id="schizoid" className="space-y-12 scroll-mt-20">
-            <Card className="border-primary/20 bg-primary/5">
-              <CardContent className="pt-6">
-                <div className="space-y-4 text-foreground/90 leading-relaxed">
-                  <h2 className="text-3xl font-bold">Dag 1: De Schizoïde Structuur</h2>
-                  <p><strong>Thema: Het Recht om te Bestaan & De Dans van Nabijheid en Afstand</strong></p>
-                  <p>Beste deelnemer, lees voordat je begint in de “Maskermaker” en “Van wond naar Wonder” het hoofdstuk over deze structuur.</p>
-                </div>
-              </CardContent>
-            </Card>
-            {renderPairs(schizoidPairs, "workshop1_schizoid_jaar2")}
-          </div>
-
-          {/* Oral Section */}
-          <div id="oral" className="space-y-12 scroll-mt-20 pt-16 border-t-4 border-primary/10">
-            <Card className="border-primary/20 bg-primary/5">
-              <CardContent className="pt-6">
-                <div className="space-y-4 text-foreground/90 leading-relaxed">
-                  <h2 className="text-3xl font-bold">Dag 2: De Orale Structuur</h2>
-                  <p><strong>Thema: De Honger die Nooit Stilt & De Weg naar de Bron</strong></p>
-                  <p>Beste deelnemer, welkom bij de tweede stap op onze reis. Waar de schizoïde structuur gaat over het recht om te bestaan, gaat de orale structuur over het recht om nodig te hebben.</p>
-                </div>
-              </CardContent>
-            </Card>
-            {renderPairs(oralPairs, "workshop1_oral_jaar2")}
-          </div>
-
-          <div className="flex justify-between items-center pt-8 border-t border-border">
-            <Link href="/">
-              <Button variant="ghost">Terug naar Home</Button>
-            </Link>
-            <Link href="/workshop/2">
-              <Button className="gap-2">Volgende Workshop <ChevronRight className="h-4 w-4" /></Button>
-            </Link>
-          </div>
+        <div id="schizoid-structure">
+          <h1 className="text-4xl font-bold text-center mb-2 text-primary/90">Dag 1: De Schizoïde Structuur</h1>
+          <p className="text-center text-lg text-foreground/70 mb-12">Thema: Het Recht om te Bestaan & De Dans van Nabijheid en Afstand</p>
+          {renderPairs(schizoidPairs, "ws1")}
         </div>
+
+        <div id="oral-structure" className="mt-24 pt-12 border-t-4 border-primary/30">
+          <h1 className="text-4xl font-bold text-center mb-2 text-primary/90">Dag 2: De Orale Structuur</h1>
+          <p className="text-center text-lg text-foreground/70 mb-12">Thema: De Honger die Nooit Stilt & De Weg naar de Bron</p>
+          {renderPairs(oralPairs, "ws1")}
+        </div>
+
+        <Card className="shadow-lg mt-24">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold text-center">Klaar met Workshop 1?</CardTitle>
+          </CardHeader>
+          <CardContent className="text-center">
+            <p className="mb-6">Je hebt de eerste twee fundamentele structuren onderzocht. Neem je inzichten mee. In de volgende workshop duiken we in de thema's van autonomie en versmelting.</p>
+            <div className="flex justify-center space-x-4">
+              <DownloadButtons workshopId="ws1" />
+              <Button asChild>
+                <Link href="/workshop/2">
+                  Naar Workshop 2 <ChevronRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
+      <ProgressBar workshopId="ws1" totalQuestions={schizoidPairs.length * 2 + oralPairs.length * 2} />
     </div>
   );
 }
+
+// Forced cache refresh comment: 
