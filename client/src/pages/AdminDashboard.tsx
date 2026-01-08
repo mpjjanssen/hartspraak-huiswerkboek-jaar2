@@ -444,8 +444,9 @@ export default function AdminDashboard() {
                                   </div>
                                 ) : previewPdfData ? (
                                   <iframe 
-                                    src={`${previewPdfData}#view=FitH`} 
+                                    src={`${previewPdfData}#view=FitH&navpanes=0&toolbar=0`} 
                                     className="w-full h-full border-none" 
+                                    style={{ width: '100%', height: '100%', display: 'block' }}
                                     title="PDF Preview"
                                   />
                                 ) : (
