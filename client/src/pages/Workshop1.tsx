@@ -157,22 +157,23 @@ export default function Workshop1() {
                     questionId={q.id} 
                     placeholder="Schrijf hier je reflectie..."
                   />
+                  <AIHelper 
+                    workshopId="workshop1_jaar2"
+                    questionId={q.id}
+                    workshopTitle="Fundament en Bestaansrecht"
+                    context={`Vraag: ${q.title}\nInhoud: ${q.fullText}` }
+                  />
                 </CardContent>
               </Card>
             ))}
           </div>
-
-          <AIHelper 
-            workshopId="workshop1_jaar2"
-            workshopTitle="Fundament en Bestaansrecht"
-            context="Deze workshop behandelt de volgende thema's: De Schizoïde en Orale structuur. De teksten zijn letterlijk overgenomen uit het huiswerkboek van Martien Janssen."
-          />
 
           <div className="flex justify-between items-center pt-8 border-t border-border">
             <Link href="/">
               <Button variant="ghost">Terug naar Home</Button>
             </Link>
             <Link href="/workshop/2"><Button className="gap-2">Volgende Workshop <ChevronRight className="h-4 w-4" /></Button></Link>
+            
           </div>
         </div>
       </div>
