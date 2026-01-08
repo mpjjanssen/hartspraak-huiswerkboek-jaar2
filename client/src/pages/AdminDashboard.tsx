@@ -6,9 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Loader2, UserPlus, Shield, LogOut, RefreshCw, BarChart3, Key, FileDown, Clock } from "lucide-react";
+import { Loader2, UserPlus, Shield, LogOut, RefreshCw, BarChart3, Key, FileDown, Clock, Eye, Download, FileText } from "lucide-react";
 import { useLocation } from "wouter";
 import { WorkshopReminders } from "@/components/WorkshopReminders";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface VerifiedMember {
   id: number;
@@ -53,6 +54,9 @@ export default function AdminDashboard() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isDownloading, setIsDownloading] = useState<number | null>(null);
+  const [selectedSubmission, setSelectedSubmission] = useState<SharedSubmission | null>(null);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const [previewPdfData, setPreviewPdfData] = useState<string | null>(null);
 
   const fetchData = async () => {
     try {
@@ -104,7 +108,6 @@ export default function AdminDashboard() {
 
       const data = await response.json();
       
-      // Create download link
       const link = document.createElement('a');
       link.href = data.pdfData;
       link.download = fileName;
@@ -117,6 +120,23 @@ export default function AdminDashboard() {
       toast.error("Download mislukt");
     } finally {
       setIsDownloading(null);
+    }
+  };
+
+  const handlePreview = async (submission: SharedSubmission) => {
+    setSelectedSubmission(submission);
+    setIsPreviewLoading(true);
+    try {
+      const response = await fetch(`/api/admin/shared-homework/${submission.id}/download`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) throw new Error("Failed to load preview");
+      const data = await response.json();
+      setPreviewPdfData(data.pdfData);
+    } catch (error) {
+      toast.error("Kon preview niet laden");
+    } finally {
+      setIsPreviewLoading(false);
     }
   };
 
@@ -377,19 +397,69 @@ export default function AdminDashboard() {
                           <span>{submission.workshopDate}</span>
                         </div>
                       </div>
-                      <Button 
-                        size="sm" 
-                        className="gap-2"
-                        onClick={() => handleDownload(submission.id, submission.fileName)}
-                        disabled={isDownloading === submission.id}
-                      >
-                        {isDownloading === submission.id ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <FileDown className="h-4 w-4" />
-                        )}
-                        Download PDF
-                      </Button>
+                      <div className="flex gap-2">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              className="gap-2"
+                              onClick={() => handlePreview(submission)}
+                            >
+                              <Eye className="h-4 w-4" />
+                              Bekijk
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-4xl h-[90vh] flex flex-col">
+                            <DialogHeader>
+                              <DialogTitle>Huiswerk Preview: {submission.userEmail}</DialogTitle>
+                              <DialogDescription>
+                                {submission.workshopTitle} - {submission.workshopDate}
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="flex-1 min-h-0 mt-4 border rounded-md bg-slate-50 overflow-hidden">
+                              {isPreviewLoading ? (
+                                <div className="h-full flex items-center justify-center">
+                                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                                </div>
+                              ) : previewPdfData ? (
+                                <iframe 
+                                  src={previewPdfData} 
+                                  className="w-full h-full" 
+                                  title="PDF Preview"
+                                />
+                              ) : (
+                                <div className="h-full flex items-center justify-center text-muted-foreground">
+                                  Kon preview niet laden.
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex justify-end gap-3 mt-4">
+                              <Button 
+                                variant="outline" 
+                                className="gap-2"
+                                onClick={() => handleDownload(submission.id, submission.fileName)}
+                              >
+                                <Download className="h-4 w-4" />
+                                Download PDF
+                              </Button>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                        <Button 
+                          size="sm" 
+                          className="gap-2"
+                          onClick={() => handleDownload(submission.id, submission.fileName)}
+                          disabled={isDownloading === submission.id}
+                        >
+                          {isDownloading === submission.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <FileDown className="h-4 w-4" />
+                          )}
+                          Download PDF
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -438,23 +508,25 @@ export default function AdminDashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2">
-                {verifiedMembers.length === 0 ? (
-                  <p className="text-sm text-muted-foreground text-center py-8">No verified members yet.</p>
-                ) : (
-                  verifiedMembers.map((member) => (
-                    <div key={member.id} className="flex items-center justify-between p-3 border rounded-lg">
-                      <div>
-                        <p className="font-medium">{member.fullName}</p>
-                        <p className="text-sm text-muted-foreground">{member.email}</p>
+              <ScrollArea className="h-[400px] pr-4">
+                <div className="space-y-2">
+                  {verifiedMembers.length === 0 ? (
+                    <p className="text-sm text-muted-foreground text-center py-8">No verified members yet.</p>
+                  ) : (
+                    verifiedMembers.map((member) => (
+                      <div key={member.id} className="flex items-center justify-between p-3 border rounded-lg">
+                        <div>
+                          <p className="font-medium">{member.fullName}</p>
+                          <p className="text-sm text-muted-foreground">{member.email}</p>
+                        </div>
+                        <Button size="sm" variant={member.status === "active" ? "outline" : "default"} onClick={() => handleToggleMemberStatus(member.id, member.status)}>
+                          {member.status === "active" ? "Disable" : "Enable"}
+                        </Button>
                       </div>
-                      <Button size="sm" variant={member.status === "active" ? "outline" : "default"} onClick={() => handleToggleMemberStatus(member.id, member.status)}>
-                        {member.status === "active" ? "Disable" : "Enable"}
-                      </Button>
-                    </div>
-                  ))
-                )}
-              </div>
+                    ))
+                  )}
+                </div>
+              </ScrollArea>
             </CardContent>
           </Card>
 
@@ -465,23 +537,25 @@ export default function AdminDashboard() {
               <CardDescription>Manage user accounts</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2">
-                {registeredUsers.length === 0 ? (
-                  <p className="text-sm text-muted-foreground text-center py-8">No registered users yet.</p>
-                ) : (
-                  registeredUsers.map((user) => (
-                    <div key={user.id} className="flex items-center justify-between p-3 border rounded-lg">
-                      <div>
-                        <p className="font-medium">{user.email}</p>
-                        <p className="text-sm text-muted-foreground">Registered: {new Date(user.createdAt).toLocaleDateString()}</p>
+              <ScrollArea className="h-[400px] pr-4">
+                <div className="space-y-2">
+                  {registeredUsers.length === 0 ? (
+                    <p className="text-sm text-muted-foreground text-center py-8">No registered users yet.</p>
+                  ) : (
+                    registeredUsers.map((user) => (
+                      <div key={user.id} className="flex items-center justify-between p-3 border rounded-lg">
+                        <div>
+                          <p className="font-medium">{user.email}</p>
+                          <p className="text-sm text-muted-foreground">Registered: {new Date(user.createdAt).toLocaleDateString()}</p>
+                        </div>
+                        <Button size="sm" variant={user.status === "active" ? "outline" : "default"} onClick={() => handleToggleUserStatus(user.id, user.status)}>
+                          {user.status === "active" ? "Disable" : "Enable"}
+                        </Button>
                       </div>
-                      <Button size="sm" variant={user.status === "active" ? "outline" : "default"} onClick={() => handleToggleUserStatus(user.id, user.status)}>
-                        {user.status === "active" ? "Disable" : "Enable"}
-                      </Button>
-                    </div>
-                  ))
-                )}
-              </div>
+                    ))
+                  )}
+                </div>
+              </ScrollArea>
             </CardContent>
           </Card>
         </div>
