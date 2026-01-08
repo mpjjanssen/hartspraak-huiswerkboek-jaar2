@@ -12,6 +12,7 @@ import { AdminProtectedRoute } from "./components/AdminProtectedRoute";
 import Home from "./pages/Home";
 import Aandachtspunten from "./pages/Aandachtspunten";
 import Workshop1 from "./pages/Workshop1";
+import Workshop1Day2 from "./pages/Workshop1Day2";
 import Workshop2 from "./pages/Workshop2";
 import Workshop3 from "./pages/Workshop3";
 import Workshop4 from "./pages/Workshop4";
@@ -46,6 +47,11 @@ function MemberRouter() {
           <Route path="/workshop/1" component={() => (
             <ProtectedRoute>
               <Workshop1 />
+            </ProtectedRoute>
+          )} />
+          <Route path="/workshop/1/dag-2" component={() => (
+            <ProtectedRoute>
+              <Workshop1Day2 />
             </ProtectedRoute>
           )} />
           <Route path="/workshop/2" component={() => (
