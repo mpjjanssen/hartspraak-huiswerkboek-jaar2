@@ -455,6 +455,24 @@ export default function Workshop1() {
           </CardContent>
         </Card>
 
+        {/* Navigation Menu */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center my-8">
+          <Button 
+            asChild 
+            variant="outline" 
+            className="text-base font-semibold px-6 py-3 hover:bg-primary/10"
+          >
+            <a href="#schizoid-structure">📍 Dag 1: Schizoïde Structuur</a>
+          </Button>
+          <Button 
+            asChild 
+            variant="outline" 
+            className="text-base font-semibold px-6 py-3 hover:bg-primary/10"
+          >
+            <a href="#oral-structure">📍 Dag 2: Orale Structuur</a>
+          </Button>
+        </div>
+
         <div id="schizoid-structure">
           <h1 className="text-4xl font-bold text-center mb-2 text-primary/90">Dag 1: De Schizoïde Structuur</h1>
           <p className="text-center text-lg text-foreground/70 mb-12">Thema: Het Recht om te Bestaan & De Dans van Nabijheid en Afstand</p>
