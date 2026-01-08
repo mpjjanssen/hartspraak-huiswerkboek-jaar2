@@ -49,7 +49,7 @@ function MemberRouter() {
               <Workshop1 />
             </ProtectedRoute>
           )} />
-          <Route path="/workshop/1/dag-2" component={() => (
+          <Route path="/workshop/1-dag-2" component={() => (
             <ProtectedRoute>
               <Workshop1Day2 />
             </ProtectedRoute>
