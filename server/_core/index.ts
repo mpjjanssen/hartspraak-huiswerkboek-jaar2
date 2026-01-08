@@ -59,7 +59,13 @@ async function startServer() {
   // Workshop reminders API routes
   const workshopRemindersRouter = (await import("../routes/workshop-reminders.js")).default;
   app.use("/api/admin", workshopRemindersRouter);
-  
+
+  // Shared homework API routes
+  const sharedHomeworkRouter = (await import("../routes/shared-homework.js")).default;
+  app.use("/api/shared-homework", sharedHomeworkRouter);
+
+  const adminSharedRouter = (await import("../routes/admin-shared.js")).default;
+  app.use("/api/admin/shared-homework", adminSharedRouter);
 
   // tRPC API
   app.use(
