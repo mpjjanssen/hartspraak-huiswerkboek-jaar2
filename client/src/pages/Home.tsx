@@ -1,227 +1,127 @@
-import { Link } from "wouter";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Heart, Sparkles, ExternalLink, Quote, Download, FileText, Shield } from "lucide-react";
+import { Download, BookOpen, GraduationCap, Heart } from "lucide-react";
 
 export default function Home() {
-  const workshops = [
-    {
-      id: 1,
-      title: "Fundament en bestaansrecht",
-      date: "18-19 april 2026",
-      description: "De schizoïde en orale structuur: Op aarde komen en de innerlijke bron voeden",
-      available: true,
-      infoUrl: "https://www.hartspraak.com/blank-5",
-    },
-    {
-      id: 2,
-      title: "Relatie en Autonomie",
-      date: "20-21 juni 2026",
-      description: "De symbiotische en masochistische structuur: De kunst van het begrenzen en de vrijheid om gelukkig te zijn",
-      available: true,
-      infoUrl: "https://www.hartspraak.com/blank-5-1",
-    },
-    {
-      id: 3,
-      title: "Wil, Overgave en Vorm",
-      date: "19-20 september 2026",
-      description: "De psychopathische en rigide structuur: Vertrouwen wagen en de liefde durven aangaan",
-      available: true,
-      infoUrl: "https://www.hartspraak.com/blank-5-2",
-    },
-    {
-      id: 4,
-      title: "Integratie en Transformatie",
-      date: "5-6 december 2026",
-      description: "Het Meesterstuk: De dans van de maskers en leven vanuit essentie",
-      available: true,
-      infoUrl: "https://www.hartspraak.com/blank-5-1-1",
-    },
-  ];
+  const handleDownload = (filename: string) => {
+    // We gebruiken de API route die we in de server hebben aangemaakt
+    const downloadUrl = `/api/download-book/${filename}`;
+    
+    // Maak een tijdelijke link om de download te starten
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-b from-accent/30 to-background py-16 md:py-24">
-        <div className="container">
-          <div className="max-w-3xl mx-auto text-center space-y-6">
-            <div className="space-y-2">
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground">
-                Welkom
-              </h1>
-              <p className="text-2xl md:text-3xl lg:text-4xl text-foreground/70">
-                bij het tweede jaar Hartspraak
+    <div className="container mx-auto px-4 py-8 max-w-5xl">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-primary mb-4 flex items-center justify-center gap-3">
+          <Heart className="text-destructive fill-destructive" />
+          Welkom bij Hartspraak Jaar 2
+        </h1>
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          Jouw persoonlijke reis naar verdieping, verbinding en innerlijke groei gaat hier verder.
+        </p>
+      </div>
+
+      <div className="grid gap-8 md:grid-cols-2 mb-12">
+        <Card className="border-primary/20 hover:border-primary/50 transition-colors">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BookOpen className="text-primary" />
+              Jouw Huiswerkboek
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground mb-6">
+              Hier vind je alle opdrachten, reflecties en oefeningen voor het tweede jaar. 
+              Gebruik de navigatie om naar de specifieke workshops te gaan.
+            </p>
+            <Button className="w-full" asChild>
+              <a href="/workshop-1">Start met Workshop 1</a>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="border-primary/20 hover:border-primary/50 transition-colors">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <GraduationCap className="text-primary" />
+              Belangrijke Informatie
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground mb-6">
+              Bekijk de algemene aandachtspunten en richtlijnen voor dit jaar om het 
+              maximale uit jouw proces te halen.
+            </p>
+            <Button variant="outline" className="w-full" asChild>
+              <a href="/aandachtspunten">Bekijk Aandachtspunten</a>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Studiemateriaal Sectie */}
+      <div className="mt-16">
+        <h2 className="text-3xl font-bold text-center mb-8">Studiemateriaal</h2>
+        <div className="grid gap-8 md:grid-cols-2">
+          {/* Boek 1: De Maskermaker */}
+          <Card className="overflow-hidden border-primary/20">
+            <div className="bg-primary/5 p-6 flex justify-center">
+              <BookOpen size={80} className="text-primary/40" />
+            </div>
+            <CardHeader>
+              <CardTitle>De Maskermaker deel 1</CardTitle>
+              <p className="text-sm text-muted-foreground italic">Wibe Veenbaas</p>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-6">
+                Een essentieel naslagwerk over karakterstructuren, maskers en de weg naar heelwording.
               </p>
-            </div>
-            <h2 className="text-xl md:text-2xl lg:text-3xl font-medium text-primary mt-4">
-              ‘De Maskers Meesteren’
-            </h2>
-            
-            {/* Privacy Badge */}
-            <div className="flex justify-center pt-4">
-              <Link href="/privacy">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-full hover:bg-green-100 transition-colors cursor-pointer">
-                  <Shield className="h-4 w-4 text-green-600" />
-                  <span className="text-sm font-medium text-green-800">
-                    Je antwoorden zijn end-to-end versleuteld
-                  </span>
-                </div>
-              </Link>
-            </div>
-            
-            <div className="flex justify-center pt-6">
               <Button 
-                size="lg" 
-                onClick={( ) => {
-                  const workshopsSection = document.getElementById('workshops-overview');
-                  workshopsSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }}
-                className="text-lg px-8 py-6"
+                onClick={() => handleDownload("De Maskermaker deel 1.pdf")}
+                className="w-full flex items-center gap-2"
               >
-                <BookOpen className="mr-2 h-5 w-5" />
-                Verken de workshops
+                <Download size={18} />
+                Download PDF
               </Button>
+            </CardContent>
+          </Card>
+
+          {/* Boek 2: Van Wond naar Wonder */}
+          <Card className="overflow-hidden border-primary/20">
+            <div className="bg-primary/5 p-6 flex justify-center">
+              <BookOpen size={80} className="text-primary/40" />
             </div>
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-              In dit verdiepingsjaar gaan we dieper in op de onbewuste overlevingsstrategieën die we als reactie op vroege kwetsingen hebben ontwikkeld. 
-              Een reis naar binnen: een liefdevolle ontmoeting met ons schaduwkind om het te helen en te integreren.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Workshops Overview */}
-      <section id="workshops-overview" className="py-16 md:py-20">
-        <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              De Workshops van 2026
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Vier weekenden van transformatie en verdieping
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            {workshops.map((workshop) => (
-              <Card key={workshop.id} className="hover:shadow-md transition-shadow">
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div className="space-y-1">
-                      <CardTitle className="text-xl">Workshop {workshop.id}: {workshop.title}</CardTitle>
-                      <CardDescription className="font-medium text-primary">{workshop.date}</CardDescription>
-                    </div>
-                    <div className="bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded">
-                      2026
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-muted-foreground">{workshop.description}</p>
-                  <div className="flex gap-3">
-                    <Link href={`/workshop/${workshop.id}`} className="flex-1">
-                      <Button className="w-full">Naar Huiswerk</Button>
-                    </Link>
-                    <a href={workshop.infoUrl} target="_blank" rel="noopener noreferrer">
-                      <Button variant="outline" size="icon">
-                        <ExternalLink className="h-4 w-4" />
-                      </Button>
-                    </a>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Book Downloads Section */}
-      <section className="py-16 md:py-20 bg-gradient-to-b from-primary/5 to-background">
-        <div className="container">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                Studiemateriaal
-              </h2>
-              <p className="text-lg text-muted-foreground">
-                Essentiële literatuur voor dit verdiepingsjaar
+            <CardHeader>
+              <CardTitle>Van Wond naar Wonder</CardTitle>
+              <p className="text-sm text-muted-foreground italic">Jaar 2 Studiemateriaal</p>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-6">
+                Verdiepende teksten en inzichten die aansluiten bij de thema's van het tweede jaar.
               </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {/* De Maskermaker */}
-              <Card className="border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-xl flex flex-col">
-                <CardHeader className="space-y-4">
-                  <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mx-auto">
-                    <FileText className="h-8 w-8 text-primary" />
-                  </div>
-                  <CardTitle className="text-2xl text-center">
-                    De Maskermaker
-                  </CardTitle>
-                  <CardDescription className="text-center text-base">
-                    Wibe Veenbaas - Deel 1
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4 text-center flex-1 flex flex-col justify-between">
-                  <p className="text-muted-foreground">
-                    Dit boek dient als leidraad voor ons onderzoek naar de zes fundamentele karakterstructuren.
-                  </p>
-                  <Button 
-                    className="w-full mt-4" 
-                    size="lg"
-                    onClick={() => {
-                      const link = document.createElement('a');
-                      link.href = '/api/download-book/DeMaskermakerdeel1.pdf';
-                      link.download = 'De Maskermaker - Deel 1.pdf';
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                    }}
-                  >
-                    <Download className="mr-2 h-5 w-5" />
-                    Download PDF
-                  </Button>
-                </CardContent>
-              </Card>
-
-              {/* Van Wond naar Wonder */}
-              <Card className="border-2 border-emerald-200 hover:border-emerald-400 transition-all hover:shadow-xl flex flex-col">
-                <CardHeader className="space-y-4">
-                  <div className="flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 mx-auto">
-                    <Sparkles className="h-8 w-8 text-emerald-600" />
-                  </div>
-                  <CardTitle className="text-2xl text-center">
-                    Van Wond naar Wonder
-                  </CardTitle>
-                  <CardDescription className="text-center text-base">
-                    Begeleidend boek bij het tweede jaar
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4 text-center flex-1 flex flex-col justify-between">
-                  <p className="text-muted-foreground">
-                    Een verdiepend werk over heling, transformatie en het meesteren van je eigen maskers.
-                  </p>
-                  <Button 
-                    className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700" 
-                    size="lg"
-                    onClick={() => {
-                      const link = document.createElement('a');
-                      link.href = '/api/download-book/Vanwondnaarwonderv82-2-26.pdf';
-                      link.download = 'Van Wond naar Wonder.pdf';
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                    }}
-                  >
-                    <Download className="mr-2 h-5 w-5" />
-                    Download PDF
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+              <Button 
+                onClick={() => handleDownload("Van wond naar wonder v8 2-2-26.pdf")}
+                className="w-full flex items-center gap-2"
+              >
+                <Download size={18} />
+                Download PDF
+              </Button>
+            </CardContent>
+          </Card>
         </div>
-      </section>
+      </div>
+
+      <div className="mt-16 p-8 bg-primary/5 rounded-2xl border border-primary/10 text-center">
+        <h3 className="text-xl font-semibold mb-4 italic">"De kortste weg naar jezelf is een reis om de wereld."</h3>
+        <p className="text-muted-foreground italic">- Hermann Keyserling</p>
+      </div>
     </div>
   );
 }
