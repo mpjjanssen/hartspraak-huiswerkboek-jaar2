@@ -22,6 +22,18 @@ async function startServer() {
 
   const adminSharedRouter = (await import("./routes/admin-shared.js")).default;
   app.use("/api/admin/shared-homework", adminSharedRouter);
+  // Route to serve books directly from the public/books folder
+  app.get("/api/download-book/:filename", (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.resolve(__dirname, "..", "public", "books", filename);
+    console.log(`[API] Attempting to download book: ${filename} from ${filePath}`);
+    res.download(filePath, filename, (err) => {
+      if (err) {
+        console.error(`[API] Error downloading book ${filename}:`, err);
+        res.status(404).send("Bestand niet gevonden");
+      }
+    });
+  });
 
   // Serve static files from dist/public in production
   const staticPath =
