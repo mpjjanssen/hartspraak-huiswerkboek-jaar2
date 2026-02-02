@@ -134,10 +134,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+        <section className="py-16 md:py-20 bg-gradient-to-b from-primary/5 to-background">
 
-      {/* Book Downloads Section */}
-      <section className="py-16 md:py-20 bg-gradient-to-b from-primary/5 to-background">
-        <div className="container">
+      <div className="container">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
@@ -148,8 +147,9 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-1 gap-8 max-w-2xl mx-auto">
-              <Card className="border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-xl">
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              {/* De Maskermaker */}
+              <Card className="border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-xl flex flex-col">
                 <CardHeader className="space-y-4">
                   <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mx-auto">
                     <FileText className="h-8 w-8 text-primary" />
@@ -158,23 +158,69 @@ export default function Home() {
                     De Maskermaker
                   </CardTitle>
                   <CardDescription className="text-center text-base">
-                    Wibe Veenbaas - Systemisch werk en lichaamswerk
+                    Wibe Veenbaas - Deel 1
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4 text-center">
+                <CardContent className="space-y-4 text-center flex-1 flex flex-col justify-between">
                   <p className="text-muted-foreground">
                     Dit boek dient als leidraad voor ons onderzoek naar de zes fundamentele karakterstructuren.
                   </p>
-                  <Button className="w-full" size="lg" disabled>
+                  <Button 
+                    className="w-full mt-4" 
+                    size="lg"
+                    onClick={() => {
+                      const link = document.createElement('a');
+                      link.href = '/books/DeMaskermakerdeel1.pdf';
+                      link.download = 'De Maskermaker - Deel 1.pdf';
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                    }}
+                  >
                     <Download className="mr-2 h-5 w-5" />
-                    PDF volgt per e-mail
+                    Download PDF
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Van Wond naar Wonder */}
+              <Card className="border-2 border-emerald-200 hover:border-emerald-400 transition-all hover:shadow-xl flex flex-col">
+                <CardHeader className="space-y-4">
+                  <div className="flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 mx-auto">
+                    <Sparkles className="h-8 w-8 text-emerald-600" />
+                  </div>
+                  <CardTitle className="text-2xl text-center">
+                    Van Wond naar Wonder
+                  </CardTitle>
+                  <CardDescription className="text-center text-base">
+                    Begeleidend boek bij het tweede jaar
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4 text-center flex-1 flex flex-col justify-between">
+                  <p className="text-muted-foreground">
+                    Een verdiepend werk over heling, transformatie en het meesteren van je eigen maskers.
+                  </p>
+                  <Button 
+                    className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700" 
+                    size="lg"
+                    onClick={() => {
+                      const link = document.createElement('a');
+                      link.href = '/books/Vanwondnaarwonderv82-2-26.pdf';
+                      link.download = 'Van Wond naar Wonder.pdf';
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                    }}
+                  >
+                    <Download className="mr-2 h-5 w-5" />
+                    Download PDF
                   </Button>
                 </CardContent>
               </Card>
             </div>
           </div>
         </div>
-      </section>
+
     </div>
   );
 }
