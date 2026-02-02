@@ -359,6 +359,56 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
         </div>
+        {/* Books Download Section */}
+        <Card className="border-emerald-200 shadow-md">
+          <CardHeader className="bg-emerald-50">
+            <CardTitle className="flex items-center gap-2">
+              <FileDown className="h-5 w-5 text-emerald-600" />
+              Beschikbare Boeken
+            </CardTitle>
+            <CardDescription>Download de ondersteunende materialen</CardDescription>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Button 
+                variant="outline" 
+                className="h-auto py-4 px-6 flex flex-col items-start gap-2 justify-start"
+                onClick={() => {
+                  const link = document.createElement('a');
+                  link.href = '/books/DeMaskermakerdeel1.pdf';
+                  link.download = 'De Maskermaker - Deel 1.pdf';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <Download className="h-4 w-4" />
+                  <span className="font-semibold">De Maskermaker - Deel 1</span>
+                </div>
+                <span className="text-xs text-muted-foreground">PDF Document</span>
+              </Button>
+              <Button 
+                variant="outline" 
+                className="h-auto py-4 px-6 flex flex-col items-start gap-2 justify-start"
+                onClick={() => {
+                  const link = document.createElement('a');
+                  link.href = '/books/Vanwondnaarwonderv82-2-26.pdf';
+                  link.download = 'Van Wond naar Wonder.pdf';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <Download className="h-4 w-4" />
+                  <span className="font-semibold">Van Wond naar Wonder</span>
+                </div>
+                <span className="text-xs text-muted-foreground">PDF Document</span>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Shared Homework Section */}
         <Card className="border-primary/20 shadow-md">
