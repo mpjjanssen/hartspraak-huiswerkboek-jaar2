@@ -171,7 +171,7 @@ export default function Home() {
                     size="lg"
                     onClick={() => {
                       const link = document.createElement('a');
-                      link.href = '/books/DeMaskermakerdeel1.pdf';
+                      link.href = '/api/download-book/DeMaskermakerdeel1.pdf';
                       link.download = 'De Maskermaker - Deel 1.pdf';
                       document.body.appendChild(link);
                       link.click();
@@ -206,7 +206,7 @@ export default function Home() {
                     size="lg"
                     onClick={() => {
                       const link = document.createElement('a');
-                      link.href = '/books/Vanwondnaarwonderv82-2-26.pdf';
+                      link.href = '/api/download-book/Vanwondnaarwonderv82-2-26.pdf';
                       link.download = 'Van Wond naar Wonder.pdf';
                       document.body.appendChild(link);
                       link.click();
