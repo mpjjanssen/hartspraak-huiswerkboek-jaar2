@@ -1,20 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, BookOpen, GraduationCap, Heart } from "lucide-react";
+import { Download, BookOpen, GraduationCap, Heart, ExternalLink } from "lucide-react";
 
 export default function Home() {
-  const handleDownload = (filename: string) => {
-    // We gebruiken de API route die we in de server hebben aangemaakt
-    const downloadUrl = `/api/download-book/${filename}`;
-    
-    // Maak een tijdelijke link om de download te starten
-    const link = document.createElement('a');
-    link.href = downloadUrl;
-    link.setAttribute('download', filename);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const googleDriveUrl = "https://drive.google.com/drive/folders/1gLqoQ4TzDxosB2i7w9L2iT6gmjVs2qR1?usp=sharing";
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
@@ -39,7 +28,6 @@ export default function Home() {
           <CardContent>
             <p className="text-muted-foreground mb-6">
               Hier vind je alle opdrachten, reflecties en oefeningen voor het tweede jaar. 
-              Gebruik de navigatie om naar de specifieke workshops te gaan.
             </p>
             <Button className="w-full" asChild>
               <a href="/workshop-1">Start met Workshop 1</a>
@@ -56,8 +44,7 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground mb-6">
-              Bekijk de algemene aandachtspunten en richtlijnen voor dit jaar om het 
-              maximale uit jouw proces te halen.
+              Bekijk de algemene aandachtspunten en richtlijnen voor dit jaar.
             </p>
             <Button variant="outline" className="w-full" asChild>
               <a href="/aandachtspunten">Bekijk Aandachtspunten</a>
@@ -66,7 +53,6 @@ export default function Home() {
         </Card>
       </div>
 
-      {/* Studiemateriaal Sectie */}
       <div className="mt-16">
         <h2 className="text-3xl font-bold text-center mb-8">Studiemateriaal</h2>
         <div className="grid gap-8 md:grid-cols-2">
@@ -83,12 +69,11 @@ export default function Home() {
               <p className="text-sm text-muted-foreground mb-6">
                 Een essentieel naslagwerk over karakterstructuren, maskers en de weg naar heelwording.
               </p>
-              <Button 
-                onClick={() => handleDownload("De Maskermaker deel 1.pdf")}
-                className="w-full flex items-center gap-2"
-              >
-                <Download size={18} />
-                Download PDF
+              <Button className="w-full" asChild>
+                <a href={googleDriveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                  <ExternalLink size={18} />
+                  Openen in Google Drive
+                </a>
               </Button>
             </CardContent>
           </Card>
@@ -106,22 +91,16 @@ export default function Home() {
               <p className="text-sm text-muted-foreground mb-6">
                 Verdiepende teksten en inzichten die aansluiten bij de thema's van het tweede jaar.
               </p>
-              <Button 
-                onClick={() => handleDownload("Van wond naar wonder v8 2-2-26.pdf")}
-                className="w-full flex items-center gap-2"
-              >
-                <Download size={18} />
-                Download PDF
+              <Button className="w-full" asChild>
+                <a href={googleDriveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                  <ExternalLink size={18} />
+                  Openen in Google Drive
+                </a>
               </Button>
             </CardContent>
           </Card>
         </div>
       </div>
-
-      <div className="mt-16 p-8 bg-primary/5 rounded-2xl border border-primary/10 text-center">
-        <h3 className="text-xl font-semibold mb-4 italic">"De kortste weg naar jezelf is een reis om de wereld."</h3>
-        <p className="text-muted-foreground italic">- Hermann Keyserling</p>
-      </div>
     </div>
-  );
+   );
 }
