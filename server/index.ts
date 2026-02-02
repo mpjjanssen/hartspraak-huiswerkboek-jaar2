@@ -22,7 +22,7 @@ async function startServer() {
   const adminSharedRouter = (await import("./routes/admin-shared.js")).default;
   app.use("/api/admin/shared-homework", adminSharedRouter);
   
-  // DEZE ROUTE MOET HIER STAAN (VOOR DE STATISCHE BESTANDEN)
+  // ⭐ DEZE ROUTE MOET HIER STAAN (VOOR DE STATISCHE BESTANDEN)
   app.get("/api/download-book/:filename", async (req, res) => {
     const filename = req.params.filename;
     const fs = await import("fs");
@@ -38,7 +38,7 @@ async function startServer() {
     if (foundPath) {
       res.download(foundPath, filename);
     } else {
-      res.status(404).send("Bestand niet gevonden.");
+      res.status(404).send("Bestand niet gevonden op de server.");
     }
   });
 
