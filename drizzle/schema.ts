@@ -27,6 +27,7 @@ export const authUsers = mysqlTable("auth_users", {
   passwordHash: varchar("passwordHash", { length: 255 }).notNull(),
   verifiedMemberId: int("verifiedMemberId").notNull(), // Links to verified_members table
   status: mysqlEnum("status", ["active", "disabled"]).default("active").notNull(),
+  shareConsent: boolean("shareConsent").default(false), // Whether user consents to share answers with team
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn"),
@@ -94,6 +95,7 @@ export const userAnswers = mysqlTable("user_answers", {
   questionId: varchar("questionId", { length: 100 }).notNull(), // e.g., "q1-moment1"
   answerEncrypted: text("answerEncrypted").notNull(), // Encrypted answer content
   encryptionIv: varchar("encryptionIv", { length: 255 }).notNull(), // Initialization vector for decryption
+  answerPlaintext: text("answerPlaintext"), // Plaintext copy when user has shareConsent enabled
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
