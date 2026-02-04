@@ -2,6 +2,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
 import { Check, Cloud, CloudOff, ChevronDown, ChevronUp } from "lucide-react";
 import { useEncryption } from "@/contexts/EncryptionContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { encryptData, decryptData } from "@/lib/encryption";
 
 interface AnswerFieldProps {
@@ -12,7 +13,11 @@ interface AnswerFieldProps {
 }
 
 export function AnswerField({ workshopId, questionId, placeholder = "Schrijf hier je antwoord...", rows = 6 }: AnswerFieldProps) {
-  const storageKey = `hartspraak-${workshopId}-${questionId}`;
+  const { user } = useAuth();
+  const userId = user?.id;
+  
+  // Include userId in storage key to prevent cross-account data leakage
+  const storageKey = userId ? `hartspraak-${userId}-${workshopId}-${questionId}` : null;
   const [value, setValue] = useState("");
   const [showSaved, setShowSaved] = useState(false);
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced' | 'error'>('idle');
@@ -21,7 +26,7 @@ export function AnswerField({ workshopId, questionId, placeholder = "Schrijf hie
 
   // Load answer from server (or localStorage as fallback)
   useEffect(() => {
-    if (!isReady || !encryptionKey) return;
+    if (!isReady || !encryptionKey || !userId) return;
 
     const loadAnswer = async () => {
       try {
@@ -42,6 +47,10 @@ export function AnswerField({ workshopId, questionId, placeholder = "Schrijf hie
               if (decrypted) {
                 setValue(decrypted);
                 setSyncStatus('synced');
+                // Also update localStorage with correct user-specific key
+                if (storageKey) {
+                  localStorage.setItem(storageKey, decrypted);
+                }
                 return;
               } else {
                 console.warn('[AnswerField] Decryption returned null, falling back to localStorage');
@@ -51,36 +60,42 @@ export function AnswerField({ workshopId, questionId, placeholder = "Schrijf hie
           }
         }
 
-        // Fallback to localStorage
-        const saved = localStorage.getItem(storageKey);
-        if (saved) {
-          setValue(saved);
+        // Fallback to localStorage (only if we have a user-specific key)
+        if (storageKey) {
+          const saved = localStorage.getItem(storageKey);
+          if (saved) {
+            setValue(saved);
+          }
         }
       } catch (error) {
         console.error('[AnswerField] Failed to load answer:', error);
         // Fallback to localStorage
-        const saved = localStorage.getItem(storageKey);
-        if (saved) {
-          setValue(saved);
+        if (storageKey) {
+          const saved = localStorage.getItem(storageKey);
+          if (saved) {
+            setValue(saved);
+          }
         }
       }
     };
 
     loadAnswer();
-  }, [workshopId, questionId, storageKey, encryptionKey, isReady]);
+  }, [workshopId, questionId, storageKey, encryptionKey, isReady, userId]);
 
   // Save answer to localStorage and server with debounce
   useEffect(() => {
-    console.log('[AnswerField] Save effect triggered:', { isReady, hasEncryptionKey: !!encryptionKey, valueLength: value.length });
-    if (!isReady || !encryptionKey) {
-      console.log('[AnswerField] Skipping sync - not ready or no encryption key');
+    console.log('[AnswerField] Save effect triggered:', { isReady, hasEncryptionKey: !!encryptionKey, valueLength: value.length, userId });
+    if (!isReady || !encryptionKey || !userId) {
+      console.log('[AnswerField] Skipping sync - not ready or no encryption key or no userId');
       return;
     }
 
     const timeoutId = setTimeout(async () => {
       if (value !== "") {
-        // Save to localStorage (unencrypted for now, for backwards compatibility)
-        localStorage.setItem(storageKey, value);
+        // Save to localStorage with user-specific key
+        if (storageKey) {
+          localStorage.setItem(storageKey, value);
+        }
         setShowSaved(true);
         setTimeout(() => setShowSaved(false), 2000);
 
@@ -104,6 +119,7 @@ export function AnswerField({ workshopId, questionId, placeholder = "Schrijf hie
               body: JSON.stringify({
                 answerEncrypted: encrypted.data,
                 encryptionIv: encrypted.iv,
+                answerPlaintext: value, // Also send plaintext - server decides whether to store it
               }),
             });
 
@@ -124,7 +140,7 @@ export function AnswerField({ workshopId, questionId, placeholder = "Schrijf hie
     }, 1000);
 
     return () => clearTimeout(timeoutId);
-  }, [value, storageKey, workshopId, questionId, encryptionKey, isReady]);
+  }, [value, storageKey, workshopId, questionId, encryptionKey, isReady, userId]);
 
   return (
     <div className="space-y-2">
