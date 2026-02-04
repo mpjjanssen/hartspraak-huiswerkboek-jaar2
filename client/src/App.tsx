@@ -24,6 +24,7 @@ import ResetPassword from "./pages/ResetPassword";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUsage from "./pages/AdminUsage";
+import AdminSharedAnswers from "./pages/AdminSharedAnswers";
 import Privacy from "./pages/Privacy";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
@@ -112,6 +113,11 @@ function Router() {
           <Route path="/admin/usage" component={() => (
             <AdminProtectedRoute>
               <AdminUsage />
+            </AdminProtectedRoute>
+          )} />
+          <Route path="/admin/shared-answers" component={() => (
+            <AdminProtectedRoute>
+              <AdminSharedAnswers />
             </AdminProtectedRoute>
           )} />
       
