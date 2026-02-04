@@ -1,6 +1,6 @@
 import express from "express";
 import { getDb } from "../db";
-import { verifiedMembers, authUsers, admins } from "../../drizzle/schema";
+import { verifiedMembers, authUsers, admins, userAnswers } from "../../drizzle/schema";
 import { eq, desc } from "drizzle-orm";
 import { hashPassword, comparePassword, generateToken, validatePassword, requireAdmin } from "../lib/auth";
 
@@ -364,7 +364,139 @@ router.get("/stats", requireAdmin, async (req, res) => {
   }
 });
 
-export default router;
+/**
+ * Get all users with shareConsent enabled and their shared answers
+ * GET /api/admin/shared-answers
+ */
+router.get("/shared-answers", requireAdmin, async (req, res) => {
+  try {
+    const db = await getDb();
+    if (!db) {
+      return res.status(500).json({ error: "Database not available" });
+    }
+
+    // Get all users with shareConsent enabled
+    const usersWithConsent = await db
+      .select({
+        userId: authUsers.id,
+        email: authUsers.email,
+        verifiedMemberId: authUsers.verifiedMemberId,
+      })
+      .from(authUsers)
+      .where(eq(authUsers.shareConsent, true));
+
+    // Get full names from verified members
+    const usersWithNames = await Promise.all(
+      usersWithConsent.map(async (user) => {
+        const [member] = await db
+          .select({ fullName: verifiedMembers.fullName })
+          .from(verifiedMembers)
+          .where(eq(verifiedMembers.id, user.verifiedMemberId))
+          .limit(1);
+
+        // Get answers for this user
+        const answers = await db
+          .select({
+            workshopId: userAnswers.workshopId,
+            questionId: userAnswers.questionId,
+            answer: userAnswers.answerPlaintext,
+            updatedAt: userAnswers.updatedAt,
+          })
+          .from(userAnswers)
+          .where(eq(userAnswers.userId, user.userId))
+          .orderBy(userAnswers.workshopId, userAnswers.questionId);
+
+        // Filter out null answers
+        const validAnswers = answers.filter((a) => a.answer !== null);
+
+        return {
+          userId: user.userId,
+          email: user.email,
+          fullName: member?.fullName || user.email,
+          answerCount: validAnswers.length,
+          answers: validAnswers,
+        };
+      })
+    );
+
+    // Filter out users with no shared answers
+    const usersWithAnswers = usersWithNames.filter((u) => u.answerCount > 0);
+
+    res.json({
+      totalUsersSharing: usersWithConsent.length,
+      users: usersWithAnswers,
+    });
+  } catch (error) {
+    console.error("Get shared answers error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+/**
+ * Get shared answers for a specific user
+ * GET /api/admin/shared-answers/:userId
+ */
+router.get("/shared-answers/:userId", requireAdmin, async (req, res) => {
+  try {
+    const db = await getDb();
+    if (!db) {
+      return res.status(500).json({ error: "Database not available" });
+    }
+
+    const userId = parseInt(req.params.userId);
+
+    // Check if user has shareConsent enabled
+    const [user] = await db
+      .select({
+        shareConsent: authUsers.shareConsent,
+        email: authUsers.email,
+        verifiedMemberId: authUsers.verifiedMemberId,
+      })
+      .from(authUsers)
+      .where(eq(authUsers.id, userId))
+      .limit(1);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (!user.shareConsent) {
+      return res.status(403).json({ error: "User has not enabled sharing" });
+    }
+
+    // Get full name
+    const [member] = await db
+      .select({ fullName: verifiedMembers.fullName })
+      .from(verifiedMembers)
+      .where(eq(verifiedMembers.id, user.verifiedMemberId))
+      .limit(1);
+
+    // Get answers
+    const answers = await db
+      .select({
+        workshopId: userAnswers.workshopId,
+        questionId: userAnswers.questionId,
+        answer: userAnswers.answerPlaintext,
+        updatedAt: userAnswers.updatedAt,
+      })
+      .from(userAnswers)
+      .where(eq(userAnswers.userId, userId))
+      .orderBy(userAnswers.workshopId, userAnswers.questionId);
+
+    // Filter out null answers
+    const validAnswers = answers.filter((a) => a.answer !== null);
+
+    res.json({
+      userId,
+      email: user.email,
+      fullName: member?.fullName || user.email,
+      answers: validAnswers,
+    });
+  } catch (error) {
+    console.error("Get user shared answers error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
 /**
  * Get usage statistics (metadata only, no encrypted content)
@@ -467,3 +599,5 @@ router.get("/usage-stats", requireAdmin, async (req, res) => {
     res.status(500).json({ error: "Failed to fetch usage statistics" });
   }
 });
+
+export default router;
