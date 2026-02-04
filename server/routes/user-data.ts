@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getDb } from "../db";
-import { userAnswers, aiConversations, aiUsageLogs } from "../../drizzle/schema";
+import { userAnswers, aiConversations, aiUsageLogs, authUsers } from "../../drizzle/schema";
 import { eq, and } from "drizzle-orm";
 import { requireAuth } from "../lib/auth";
 
@@ -8,6 +8,74 @@ const router = Router();
 
 // Apply auth middleware to all routes
 router.use(requireAuth);
+
+/**
+ * GET /api/user-data/share-consent
+ * Get user's current share consent status
+ */
+router.get("/share-consent", async (req, res) => {
+  try {
+    const userId = (req as any).user.userId;
+
+    const db = await getDb();
+    if (!db) {
+      return res.status(503).json({ error: "Database unavailable" });
+    }
+
+    const result = await db
+      .select({ shareConsent: authUsers.shareConsent })
+      .from(authUsers)
+      .where(eq(authUsers.id, userId))
+      .limit(1);
+
+    if (result.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json({ shareConsent: result[0].shareConsent ?? false });
+  } catch (error) {
+    console.error("[API] Failed to get share consent:", error);
+    res.status(500).json({ error: "Failed to get share consent" });
+  }
+});
+
+/**
+ * PUT /api/user-data/share-consent
+ * Update user's share consent status
+ */
+router.put("/share-consent", async (req, res) => {
+  try {
+    const userId = (req as any).user.userId;
+    const { shareConsent } = req.body;
+
+    if (typeof shareConsent !== "boolean") {
+      return res.status(400).json({ error: "shareConsent must be a boolean" });
+    }
+
+    const db = await getDb();
+    if (!db) {
+      return res.status(503).json({ error: "Database unavailable" });
+    }
+
+    await db
+      .update(authUsers)
+      .set({ shareConsent })
+      .where(eq(authUsers.id, userId));
+
+    // If user disables sharing, clear all plaintext answers
+    if (!shareConsent) {
+      await db
+        .update(userAnswers)
+        .set({ answerPlaintext: null })
+        .where(eq(userAnswers.userId, userId));
+    }
+
+    res.json({ success: true, shareConsent });
+  } catch (error) {
+    console.error("[API] Failed to update share consent:", error);
+    res.status(500).json({ error: "Failed to update share consent" });
+  }
+});
 
 /**
  * GET /api/user-data/answers/:workshopId/:questionId
@@ -58,7 +126,7 @@ router.get("/answers/:workshopId/:questionId", async (req, res) => {
 router.post("/answers/:workshopId/:questionId", async (req, res) => {
   try {
     const { workshopId, questionId } = req.params;
-    const { answerEncrypted, encryptionIv } = req.body;
+    const { answerEncrypted, encryptionIv, answerPlaintext } = req.body;
     const userId = (req as any).user.userId;
 
     if (!answerEncrypted || !encryptionIv) {
@@ -69,6 +137,18 @@ router.post("/answers/:workshopId/:questionId", async (req, res) => {
     if (!db) {
       return res.status(503).json({ error: "Database unavailable" });
     }
+
+    // Check user's shareConsent status
+    const userResult = await db
+      .select({ shareConsent: authUsers.shareConsent })
+      .from(authUsers)
+      .where(eq(authUsers.id, userId))
+      .limit(1);
+
+    const hasShareConsent = userResult[0]?.shareConsent ?? false;
+    
+    // Only store plaintext if user has enabled sharing
+    const plaintextToStore = hasShareConsent ? answerPlaintext : null;
 
     // Check if answer already exists
     const existing = await db
@@ -90,6 +170,7 @@ router.post("/answers/:workshopId/:questionId", async (req, res) => {
         .set({
           answerEncrypted,
           encryptionIv,
+          answerPlaintext: plaintextToStore,
           updatedAt: new Date(),
         })
         .where(eq(userAnswers.id, existing[0].id));
@@ -101,6 +182,7 @@ router.post("/answers/:workshopId/:questionId", async (req, res) => {
         questionId,
         answerEncrypted,
         encryptionIv,
+        answerPlaintext: plaintextToStore,
       });
     }
 
