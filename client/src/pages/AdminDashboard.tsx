@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Loader2, UserPlus, Shield, LogOut, RefreshCw, BarChart3, Key, FileDown, Clock, Eye, Download } from "lucide-react";
+import { Loader2, UserPlus, Shield, LogOut, RefreshCw, BarChart3, Key, FileDown, Clock, Eye, Download, FileText } from "lucide-react";
 import { useLocation } from "wouter";
 import { WorkshopReminders } from "@/components/WorkshopReminders";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -288,6 +288,10 @@ export default function AdminDashboard() {
           </div>
           <div className="flex items-center gap-4">
             <WorkshopReminders />
+            <Button variant="outline" size="sm" onClick={() => setLocation('/admin/shared-answers')}>
+              <FileText className="h-4 w-4 mr-2" />
+              Gedeelde Antwoorden
+            </Button>
             <Button variant="outline" size="sm" onClick={() => setLocation('/admin/usage')}>
               <BarChart3 className="h-4 w-4 mr-2" />
               Usage Stats
