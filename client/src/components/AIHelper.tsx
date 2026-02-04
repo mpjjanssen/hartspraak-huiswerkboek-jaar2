@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Bot, Send, Loader2, ThumbsUp, ThumbsDown, Trash2, Check, AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
 import { useEncryption } from "@/contexts/EncryptionContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { encryptData, decryptData } from "@/lib/encryption";
 
 interface AIHelperProps {
@@ -20,7 +21,11 @@ interface Message {
 }
 
 export function AIHelper({ questionTitle, questionId, workshopId, context }: AIHelperProps) {
-  const storageKey = `hartspraak-ai-${workshopId}-${questionId}`;
+  const { user } = useAuth();
+  const userId = user?.id;
+  
+  // Include userId in storage key to prevent cross-account data leakage
+  const storageKey = userId ? `hartspraak-ai-${userId}-${workshopId}-${questionId}` : null;
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -42,7 +47,7 @@ export function AIHelper({ questionTitle, questionId, workshopId, context }: AIH
 
   // Load conversation from server (or localStorage as fallback)
   useEffect(() => {
-    if (!isReady || !encryptionKey) return;
+    if (!isReady || !encryptionKey || !userId) return;
 
     const loadConversation = async () => {
       try {
@@ -62,6 +67,10 @@ export function AIHelper({ questionTitle, questionId, workshopId, context }: AIH
                 try {
                   const parsedMessages = JSON.parse(decrypted);
                   setMessages(parsedMessages);
+                  // Also update localStorage with correct user-specific key
+                  if (storageKey) {
+                    localStorage.setItem(storageKey, decrypted);
+                  }
                   return;
                 } catch (parseError) {
                   console.warn('[AIHelper] Failed to parse decrypted messages:', parseError);
@@ -71,13 +80,16 @@ export function AIHelper({ questionTitle, questionId, workshopId, context }: AIH
           }
         }
 
-        const saved = localStorage.getItem(storageKey);
-        if (saved) {
-          try {
-            const parsedMessages = JSON.parse(saved);
-            setMessages(parsedMessages);
-          } catch (error) {
-            console.error('[AIHelper] Failed to parse saved messages:', error);
+        // Fallback to localStorage (only if we have a user-specific key)
+        if (storageKey) {
+          const saved = localStorage.getItem(storageKey);
+          if (saved) {
+            try {
+              const parsedMessages = JSON.parse(saved);
+              setMessages(parsedMessages);
+            } catch (error) {
+              console.error('[AIHelper] Failed to parse saved messages:', error);
+            }
           }
         }
       } catch (error) {
@@ -86,15 +98,19 @@ export function AIHelper({ questionTitle, questionId, workshopId, context }: AIH
     };
 
     loadConversation();
-  }, [workshopId, questionId, storageKey, encryptionKey, isReady]);
+  }, [workshopId, questionId, storageKey, encryptionKey, isReady, userId]);
 
   // Save conversation to localStorage and server
   useEffect(() => {
-    if (messages.length === 0 || !isReady || !encryptionKey) return;
+    if (messages.length === 0 || !isReady || !encryptionKey || !userId) return;
 
     const saveConversation = async () => {
       setSyncStatus('syncing');
-      localStorage.setItem(storageKey, JSON.stringify(messages));
+      
+      // Save to localStorage with user-specific key
+      if (storageKey) {
+        localStorage.setItem(storageKey, JSON.stringify(messages));
+      }
 
       try {
         const authToken = sessionStorage.getItem('auth_token');
@@ -129,7 +145,7 @@ export function AIHelper({ questionTitle, questionId, workshopId, context }: AIH
     };
 
     saveConversation();
-  }, [messages, storageKey, workshopId, questionId, encryptionKey, isReady]);
+  }, [messages, storageKey, workshopId, questionId, encryptionKey, isReady, userId]);
 
   const handleFeedback = (messageIndex: number, feedback: 'positive' | 'negative') => {
     setMessages(prev => prev.map((msg, idx) => {
@@ -144,7 +160,11 @@ export function AIHelper({ questionTitle, questionId, workshopId, context }: AIH
   const clearConversation = async () => {
     if (!confirm('Weet je zeker dat je deze conversatie wilt wissen?')) return;
     setMessages([]);
-    localStorage.removeItem(storageKey);
+    
+    // Clear from localStorage with user-specific key
+    if (storageKey) {
+      localStorage.removeItem(storageKey);
+    }
 
     try {
       const authToken = sessionStorage.getItem('auth_token');
@@ -162,7 +182,8 @@ export function AIHelper({ questionTitle, questionId, workshopId, context }: AIH
   };
 
   const getUserAnswer = () => {
-    const key = `hartspraak-${workshopId}-${questionId}`;
+    if (!userId) return "";
+    const key = `hartspraak-${userId}-${workshopId}-${questionId}`;
     return localStorage.getItem(key) || "";
   };
 
@@ -316,32 +337,38 @@ Geef warme, ondersteunende begeleiding. Stel verdiepende vragen. Wees compassiev
         </div>
       )}
 
-      <div className="relative">
-        <Textarea
-          placeholder="Stel een vraag of vraag om feedback op je antwoord..."
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              sendMessage();
-            }
-          }}
-          className="pr-12 min-h-[80px] resize-none bg-background border-primary/20 focus-visible:ring-primary"
-          disabled={loading}
-        />
-        <Button
-          size="icon"
-          className="absolute right-2 bottom-2 h-8 w-8"
-          onClick={sendMessage}
-          disabled={loading || !input.trim()}
-        >
-          {loading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Send className="h-4 w-4" />
-          )}
-        </Button>
+      <div className={messages.length > 0 ? "border-t pt-4" : ""}>
+        <div className="flex items-center gap-2 mb-2">
+          <Bot className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm text-muted-foreground">De AI kan je helpen met feedback, reflectievragen of een andere invalshoek</span>
+        </div>
+        <div className="relative">
+          <Textarea
+            placeholder="Stel een vraag of vraag om feedback op je antwoord..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+              }
+            }}
+            className="pr-12 min-h-[80px] resize-none bg-background border-primary/20 focus-visible:ring-primary"
+            disabled={loading}
+          />
+          <Button
+            size="icon"
+            className="absolute right-2 bottom-2 h-8 w-8"
+            onClick={sendMessage}
+            disabled={loading || !input.trim()}
+          >
+            {loading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
+          </Button>
+        </div>
       </div>
       
       <div className="mt-2 flex items-center justify-between text-[10px] text-muted-foreground">
