@@ -22,11 +22,11 @@ interface UserWithAnswers {
 }
 
 const workshopTitles: Record<string, string> = {
-  workshop1: "Workshop 1: De Maskers Ontmaskerd",
-  "workshop1-dag2": "Workshop 1 Dag 2",
-  workshop2: "Workshop 2: Karakterstructuren",
-  workshop3: "Workshop 3: Het Innerlijk Kind",
-  workshop4: "Workshop 4: Transformatie",
+  workshop1: "Workshop 1: De Zes Karakterstructuren",
+  "workshop1-dag2": "Workshop 1 Dag 2: Verdieping",
+  workshop2: "Workshop 2: Jouw Structuur in Detail",
+  workshop3: "Workshop 3: Wie met Wie Kan",
+  workshop4: "Workshop 4: Van Wond naar Wonder",
 };
 
 export default function AdminSharedAnswers() {
