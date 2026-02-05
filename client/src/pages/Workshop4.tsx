@@ -3,6 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { AnswerField } from "@/components/AnswerField";
 import { AIHelper } from "@/components/AIHelper";
+import { DownloadButtons } from "@/components/DownloadButtons";
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Heart, Sparkles, Users, Eye, Compass, PenLine } from "lucide-react";
 import { Link } from "wouter";
@@ -72,6 +73,8 @@ export default function Workshop4() {
             <Progress value={progress} className="h-2" />
           </CardContent>
         </Card>
+
+        <DownloadButtons workshopId="workshop4" />
 
         {/* Navigation */}
         <Card className="mb-8">
@@ -787,3 +790,4 @@ Over een jaar lees je dit. Dit wil ik dat je onthoudt..."
     </div>
   );
 }
+
