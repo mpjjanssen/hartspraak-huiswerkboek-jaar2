@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Progress } from "@/components/ui/progress";
 import { CheckCircle2 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface ProgressBarProps {
   workshopId: string;
@@ -10,63 +11,41 @@ interface ProgressBarProps {
 export function ProgressBar({ workshopId, totalQuestions }: ProgressBarProps) {
   const [answeredCount, setAnsweredCount] = useState(0);
   const [percentage, setPercentage] = useState(0);
+  const { user } = useAuth();
+  const userId = user?.id;
 
-  useEffect(() => {
-    // Count how many questions have been answered
-    let count = 0;
-    for (let i = 1; i <= totalQuestions; i++) {
-      const keys = Object.keys(localStorage).filter(key => 
-        key.startsWith(`hartspraak-${workshopId}`)
-      );
-      
-      for (const key of keys) {
-        const value = localStorage.getItem(key);
-        if (value && value.trim() !== "") {
-          count++;
-        }
-      }
-      break; // We only need to count once
-    }
+  const countAnswered = useCallback(() => {
+    if (!userId) return;
     
-    // Actually count properly
-    const keys = Object.keys(localStorage).filter(key => 
-      key.startsWith(`hartspraak-${workshopId}`)
-    );
+    // Must match AnswerField's storageKey: hartspraak-${userId}-${workshopId}-${questionId}
+    const prefix = `hartspraak-${userId}-${workshopId}-`;
     
-    count = keys.filter(key => {
+    const count = Object.keys(localStorage).filter(key => {
+      if (!key.startsWith(prefix)) return false;
+      // Exclude non-answer keys (AI conversations, consent, etc.)
+      const suffix = key.replace(prefix, "");
+      if (suffix.includes("-ai-") || suffix.includes("-consent")) return false;
       const value = localStorage.getItem(key);
       return value && value.trim() !== "";
     }).length;
-    
+
     setAnsweredCount(count);
-    setPercentage(Math.round((count / totalQuestions) * 100));
-  }, [workshopId, totalQuestions]);
+    setPercentage(totalQuestions > 0 ? Math.round((count / totalQuestions) * 100) : 0);
+  }, [userId, workshopId, totalQuestions]);
 
-  // Listen for storage changes
   useEffect(() => {
-    const handleStorageChange = () => {
-      const keys = Object.keys(localStorage).filter(key => 
-        key.startsWith(`hartspraak-${workshopId}`)
-      );
-      
-      const count = keys.filter(key => {
-        const value = localStorage.getItem(key);
-        return value && value.trim() !== "";
-      }).length;
-      
-      setAnsweredCount(count);
-      setPercentage(Math.round((count / totalQuestions) * 100));
-    };
+    countAnswered();
+  }, [countAnswered]);
 
-    window.addEventListener('storage', handleStorageChange);
-    // Also listen for custom event when answer is saved
-    window.addEventListener('answerSaved', handleStorageChange);
-    
+  useEffect(() => {
+    window.addEventListener("storage", countAnswered);
+    window.addEventListener("answerSaved", countAnswered);
+
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('answerSaved', handleStorageChange);
+      window.removeEventListener("storage", countAnswered);
+      window.removeEventListener("answerSaved", countAnswered);
     };
-  }, [workshopId, totalQuestions]);
+  }, [countAnswered]);
 
   return (
     <div className="bg-accent/20 border border-primary/20 rounded-lg p-6 space-y-4">
