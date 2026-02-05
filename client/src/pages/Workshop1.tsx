@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
@@ -455,6 +454,9 @@ export default function Workshop1() {
           </CardContent>
         </Card>
 
+        <ProgressBar workshopId="ws1" totalQuestions={36} />
+        <DownloadButtons workshopId="ws1" />
+
         {/* Navigation Menu */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center my-8">
           <Button 
@@ -502,9 +504,8 @@ export default function Workshop1() {
           </CardContent>
         </Card>
       </div>
-      <ProgressBar workshopId="ws1" totalQuestions={schizoidPairs.length * 2 + oralPairs.length * 2} />
     </div>
   );
 }
 
-// Forced cache refresh comment: 
+// Forced cache refresh comment:
