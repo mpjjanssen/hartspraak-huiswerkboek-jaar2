@@ -5,14 +5,23 @@ import { Document, Packer, Paragraph, TextRun, HeadingLevel } from "docx";
 import { saveAs } from "file-saver";
 import { useAuth } from "@/contexts/AuthContext";
 
+interface QuestionInfo {
+  id: string;
+  title: string;
+  fullText?: string;
+}
+
 interface DownloadButtonsProps {
   workshopId: string;
   workshopTitle?: string;
   workshopDate?: string;
+  questions?: QuestionInfo[];
 }
 
 interface AnswerEntry {
   questionId: string;
+  questionTitle: string;
+  questionText: string;
   answer: string;
 }
 
@@ -26,12 +35,17 @@ const defaultTitles: Record<string, string> = {
   "workshop3": "Workshop 3: Wie met Wie Kan",
   "ws4": "Workshop 4: Van Wond naar Wonder",
   "workshop4": "Workshop 4: Van Wond naar Wonder",
+  "workshop1_jaar2": "Workshop 1: Schizoïde & Orale Structuur",
+  "workshop2_jaar2": "Workshop 2: Symbiotische & Masochistische Structuur",
+  "workshop3_jaar2": "Workshop 3: Macht, Controle en Perfectie",
+  "workshop4_jaar2": "Workshop 4: Van Wond naar Wonder - Integratie",
 };
 
 export function DownloadButtons({ 
   workshopId, 
   workshopTitle,
   workshopDate,
+  questions,
 }: DownloadButtonsProps) {
   const { user } = useAuth();
   const userId = user?.id;
@@ -39,9 +53,16 @@ export function DownloadButtons({
   const title = workshopTitle || defaultTitles[workshopId] || `Workshop ${workshopId}`;
   const date = workshopDate || new Date().toLocaleDateString('nl-NL');
 
+  // Build a lookup map from questionId to title/fullText
+  const questionMap = new Map<string, QuestionInfo>();
+  if (questions) {
+    questions.forEach(q => questionMap.set(q.id, q));
+  }
+
   const getAnswers = (): AnswerEntry[] => {
     if (!userId) return [];
     const answers: AnswerEntry[] = [];
+    // Must match AnswerField's storageKey: hartspraak-${userId}-${workshopId}-${questionId}
     const prefix = `hartspraak-${userId}-${workshopId}-`;
     
     for (let i = 0; i < localStorage.length; i++) {
@@ -50,16 +71,29 @@ export function DownloadButtons({
         const value = localStorage.getItem(key);
         if (value && value.trim()) {
           const questionId = key.replace(prefix, "");
+          const questionInfo = questionMap.get(questionId);
           answers.push({
             questionId,
+            questionTitle: questionInfo?.title || formatQuestionId(questionId),
+            questionText: questionInfo?.fullText || "",
             answer: value,
           });
         }
       }
     }
     
-    // Sort by questionId for consistent ordering
-    answers.sort((a, b) => a.questionId.localeCompare(b.questionId));
+    // Sort by the order in the questions array if available, otherwise alphabetically
+    if (questions && questions.length > 0) {
+      const orderMap = new Map(questions.map((q, idx) => [q.id, idx]));
+      answers.sort((a, b) => {
+        const orderA = orderMap.get(a.questionId) ?? 999;
+        const orderB = orderMap.get(b.questionId) ?? 999;
+        return orderA - orderB;
+      });
+    } else {
+      answers.sort((a, b) => a.questionId.localeCompare(b.questionId));
+    }
+    
     return answers;
   };
 
@@ -90,12 +124,14 @@ export function DownloadButtons({
         yPosition = 20;
       }
       
+      // Question title
       doc.setFontSize(13);
       doc.setFont('helvetica', 'bold');
-      const questionLines = doc.splitTextToSize(`${index + 1}. ${formatQuestionId(item.questionId)}`, maxWidth);
+      const questionLines = doc.splitTextToSize(`${index + 1}. ${item.questionTitle}`, maxWidth);
       doc.text(questionLines, margin, yPosition);
       yPosition += questionLines.length * 7 + 5;
       
+      // Answer
       doc.setFontSize(11);
       doc.setFont('helvetica', 'normal');
       const answerLines = doc.splitTextToSize(item.answer, maxWidth);
@@ -130,11 +166,12 @@ export function DownloadButtons({
     ];
     
     answers.forEach((item, index) => {
+      // Question title
       children.push(
         new Paragraph({
           children: [
             new TextRun({
-              text: `${index + 1}. ${formatQuestionId(item.questionId)}`,
+              text: `${index + 1}. ${item.questionTitle}`,
               bold: true,
               size: 28
             })
@@ -143,6 +180,7 @@ export function DownloadButtons({
         })
       );
       
+      // Answer text
       const lines = item.answer.split('\n');
       lines.forEach(line => {
         children.push(
