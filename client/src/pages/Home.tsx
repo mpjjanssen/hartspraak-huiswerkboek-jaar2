@@ -150,7 +150,7 @@ export default function Home() {
             <p className="text-muted-foreground mb-6">
               Bekijk de algemene aandachtspunten en richtlijnen voor dit jaar.
             </p>
-            <Button variant="outline" className="w-full" asChild>
+            <Button className="w-full" asChild>
               <a href="/aandachtspunten">Bekijk Aandachtspunten</a>
             </Button>
           </CardContent>
