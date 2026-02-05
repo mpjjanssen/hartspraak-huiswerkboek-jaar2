@@ -5,85 +5,79 @@ import { Document, Packer, Paragraph, TextRun, HeadingLevel } from "docx";
 import { saveAs } from "file-saver";
 import { useAuth } from "@/contexts/AuthContext";
 
-interface Question {
-  id: string;
-  title: string;
-}
-
 interface DownloadButtonsProps {
   workshopId: string;
-  workshopTitle: string;
-  workshopDate: string;
-  questions: Question[];
+  workshopTitle?: string;
+  workshopDate?: string;
 }
 
-interface AnswerWithAI {
-  question: string;
+interface AnswerEntry {
+  questionId: string;
   answer: string;
-  aiConversation?: Message[];
 }
 
-interface Message {
-  role: "system" | "user" | "assistant";
-  content: string;
-}
+const defaultTitles: Record<string, string> = {
+  "ws1": "Workshop 1: De Zes Karakterstructuren",
+  "workshop1": "Workshop 1: De Zes Karakterstructuren",
+  "workshop1-dag2": "Workshop 1 Dag 2: Verdieping",
+  "ws2": "Workshop 2: Jouw Structuur in Detail",
+  "workshop2": "Workshop 2: Jouw Structuur in Detail",
+  "ws3": "Workshop 3: Wie met Wie Kan",
+  "workshop3": "Workshop 3: Wie met Wie Kan",
+  "ws4": "Workshop 4: Van Wond naar Wonder",
+  "workshop4": "Workshop 4: Van Wond naar Wonder",
+};
 
 export function DownloadButtons({ 
   workshopId, 
-  workshopTitle, 
+  workshopTitle,
   workshopDate,
-  questions,
 }: DownloadButtonsProps) {
   const { user } = useAuth();
   const userId = user?.id;
 
-  const getAnswersWithAI = (): AnswerWithAI[] => {
+  const title = workshopTitle || defaultTitles[workshopId] || `Workshop ${workshopId}`;
+  const date = workshopDate || new Date().toLocaleDateString('nl-NL');
+
+  const getAnswers = (): AnswerEntry[] => {
     if (!userId) return [];
-    const answers: AnswerWithAI[] = [];
+    const answers: AnswerEntry[] = [];
+    const prefix = `hartspraak-${userId}-${workshopId}-`;
     
-    questions.forEach(q => {
-      const answerKey = `hartspraak-${userId}-${workshopId}-${q.id}`;
-      const aiKey = `hartspraak-ai-${workshopId}-${q.id}`;
-      
-      const answer = localStorage.getItem(answerKey) || "";
-      const aiDataRaw = localStorage.getItem(aiKey);
-      
-      if (answer.trim()) {
-        let aiConversation: Message[] | undefined;
-        
-        if (aiDataRaw) {
-          try {
-            const aiData = JSON.parse(aiDataRaw);
-            if (Array.isArray(aiData)) {
-              aiConversation = aiData.filter(
-                (msg: Message) => msg.role === "user" || msg.role === "assistant"
-              );
-            }
-          } catch (e) {
-            console.error("Failed to parse AI data:", e);
-          }
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith(prefix)) {
+        const value = localStorage.getItem(key);
+        if (value && value.trim()) {
+          const questionId = key.replace(prefix, "");
+          answers.push({
+            questionId,
+            answer: value,
+          });
         }
-        
-        answers.push({
-          question: q.title,
-          answer: answer,
-          aiConversation: aiConversation
-        });
       }
-    });
+    }
     
+    // Sort by questionId for consistent ordering
+    answers.sort((a, b) => a.questionId.localeCompare(b.questionId));
     return answers;
+  };
+
+  const formatQuestionId = (id: string): string => {
+    return id
+      .replace(/-/g, " ")
+      .replace(/\b\w/g, c => c.toUpperCase());
   };
 
   const downloadPDF = () => {
     const doc = new jsPDF();
-    const answers = getAnswersWithAI();
+    const answers = getAnswers();
     
     doc.setFontSize(20);
-    doc.text(workshopTitle, 20, 20);
+    doc.text(title, 20, 20);
     
     doc.setFontSize(12);
-    doc.text(workshopDate, 20, 30);
+    doc.text(date, 20, 30);
     
     let yPosition = 45;
     const pageHeight = doc.internal.pageSize.height;
@@ -96,68 +90,41 @@ export function DownloadButtons({
         yPosition = 20;
       }
       
-      doc.setFontSize(14);
+      doc.setFontSize(13);
       doc.setFont('helvetica', 'bold');
-      const questionLines = doc.splitTextToSize(`${index + 1}. ${item.question}`, maxWidth);
+      const questionLines = doc.splitTextToSize(`${index + 1}. ${formatQuestionId(item.questionId)}`, maxWidth);
       doc.text(questionLines, margin, yPosition);
       yPosition += questionLines.length * 7 + 5;
       
       doc.setFontSize(11);
       doc.setFont('helvetica', 'normal');
       const answerLines = doc.splitTextToSize(item.answer, maxWidth);
-      doc.text(answerLines, margin, yPosition);
-      yPosition += answerLines.length * 6 + 10;
       
-      if (item.aiConversation && item.aiConversation.length > 0) {
-        if (yPosition > pageHeight - 60) {
-          doc.addPage();
-          yPosition = 20;
-        }
-        
-        doc.setFontSize(12);
-        doc.setFont('helvetica', 'bold');
-        doc.text("AI Coaching Gesprek", margin, yPosition);
-        yPosition += 10;
-        
-        doc.setFontSize(10);
-        item.aiConversation.forEach((msg) => {
-          if (yPosition > pageHeight - 40) {
-            doc.addPage();
-            yPosition = 20;
-          }
-          
-          doc.setFont('helvetica', 'bold');
-          const roleLabel = msg.role === "user" ? "Jij:" : "AI Coach:";
-          doc.text(roleLabel, margin, yPosition);
-          yPosition += 6;
-          
-          doc.setFont('helvetica', 'normal');
-          const messageLines = doc.splitTextToSize(msg.content, maxWidth - 5);
-          doc.text(messageLines, margin + 5, yPosition);
-          yPosition += messageLines.length * 5 + 8;
-        });
-        
-        yPosition += 5;
+      const answerHeight = answerLines.length * 6;
+      if (yPosition + answerHeight > pageHeight - 20) {
+        doc.addPage();
+        yPosition = 20;
       }
       
-      yPosition += 10;
+      doc.text(answerLines, margin, yPosition);
+      yPosition += answerHeight + 15;
     });
     
-    const filename = `${workshopTitle.replace(/\s+/g, '_')}_Antwoorden.pdf`;
+    const filename = `${title.replace(/[^a-zA-Z0-9]/g, '_')}_Antwoorden.pdf`;
     doc.save(filename);
   };
 
   const downloadWord = async () => {
-    const answers = getAnswersWithAI();
+    const answers = getAnswers();
     
     const children: Paragraph[] = [
       new Paragraph({
-        text: workshopTitle,
+        text: title,
         heading: HeadingLevel.HEADING_1,
         spacing: { after: 200 }
       }),
       new Paragraph({
-        text: workshopDate,
+        text: date,
         spacing: { after: 400 }
       })
     ];
@@ -167,7 +134,7 @@ export function DownloadButtons({
         new Paragraph({
           children: [
             new TextRun({
-              text: `${index + 1}. ${item.question}`,
+              text: `${index + 1}. ${formatQuestionId(item.questionId)}`,
               bold: true,
               size: 28
             })
@@ -176,51 +143,15 @@ export function DownloadButtons({
         })
       );
       
-      children.push(
-        new Paragraph({
-          text: item.answer,
-          spacing: { after: 300 }
-        })
-      );
-      
-      if (item.aiConversation && item.aiConversation.length > 0) {
+      const lines = item.answer.split('\n');
+      lines.forEach(line => {
         children.push(
           new Paragraph({
-            children: [
-              new TextRun({
-                text: "AI Coaching Gesprek",
-                bold: true,
-                size: 24
-              })
-            ],
-            spacing: { before: 200, after: 150 }
+            text: line,
+            spacing: { after: 100 }
           })
         );
-        
-        item.aiConversation.forEach((msg) => {
-          const roleLabel = msg.role === "user" ? "Jij:" : "AI Coach:";
-          
-          children.push(
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: roleLabel,
-                  bold: true,
-                  size: 22
-                })
-              ],
-              spacing: { before: 100, after: 50 }
-            })
-          );
-          
-          children.push(
-            new Paragraph({
-              text: msg.content,
-              spacing: { after: 150 }
-            })
-          );
-        });
-      }
+      });
       
       children.push(
         new Paragraph({
@@ -238,11 +169,11 @@ export function DownloadButtons({
     });
     
     const blob = await Packer.toBlob(doc);
-    const filename = `${workshopTitle.replace(/\s+/g, '_')}_Antwoorden.docx`;
+    const filename = `${title.replace(/[^a-zA-Z0-9]/g, '_')}_Antwoorden.docx`;
     saveAs(blob, filename);
   };
 
-  const hasAnswers = getAnswersWithAI().length > 0;
+  const hasAnswers = getAnswers().length > 0;
 
   return (
     <div className="flex flex-wrap gap-3">
