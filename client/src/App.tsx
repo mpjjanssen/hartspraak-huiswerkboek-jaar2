@@ -1,3 +1,8 @@
+import TestIntro from "@/pages/TestIntro";
+import TestPart1 from "@/pages/TestPart1";
+import TestPart2 from "@/pages/TestPart2";
+import TestResults from "@/pages/TestResults";
+import { TestProvider } from "@/contexts/TestContext";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
