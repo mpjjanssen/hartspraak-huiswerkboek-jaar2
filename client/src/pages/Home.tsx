@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Download, BookOpen, GraduationCap, Heart, ExternalLink, Share2, Loader2 } from "lucide-react";
+import { Download, BookOpen, GraduationCap, Heart, ExternalLink, Share2, Loader2, ClipboardList } from "lucide-react";
 import { toast } from "sonner";
 
 export default function Home() {
@@ -156,6 +156,24 @@ export default function Home() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Karakterstructuren Test */}
+      <Card className="mb-12 border-primary/30 bg-gradient-to-br from-primary/5 to-secondary/5 hover:border-primary/50 transition-colors">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <ClipboardList className="text-primary" />
+            Karakterstructuren Test
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground mb-6">
+            Ontdek welke karakterstructuren bij jou het sterkst aanwezig zijn. De test bestaat uit twee delen: 25 scenariovragen en 100 stellingen.
+          </p>
+          <Button className="w-full" asChild>
+            <a href="/test">Start de Test</a>
+          </Button>
+        </CardContent>
+      </Card>
 
       <div className="mt-16">
         <h2 className="text-3xl font-bold text-center mb-8">Studiemateriaal</h2>
