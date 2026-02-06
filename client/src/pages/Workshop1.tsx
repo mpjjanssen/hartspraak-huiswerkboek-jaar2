@@ -6,7 +6,6 @@ import { AnswerField } from "@/components/AnswerField";
 import { ProgressBar } from "@/components/ProgressBar";
 import { DownloadButtons } from "@/components/DownloadButtons";
 import { AIHelper } from "@/components/AIHelper";
-
 interface QuestionPair {
   id: string;
   section: string;
@@ -25,7 +24,6 @@ interface QuestionPair {
     source: string;
   };
 }
-
 export default function Workshop1() {
   const schizoidPairs: QuestionPair[] = [
     {
@@ -33,12 +31,12 @@ export default function Workshop1() {
       section: "ONDERDEEL 1: DE OORSPRONG (ACHTERGROND)",
       mainQuestion: {
         id: "ws1-q1-main",
-        title: "Het Eerste Welkom",
+        title: "Het eerste welkom",
         fullText: "Als je stilstaat bij je eigen begin (zwangerschap, geboorte), wat is dan het verhaal dat je lichaam je vertelt? Voelde je je welkom, of was er een sensatie van kou, stress of 'verkeerd' zijn?"
       },
       deepQuestion: {
         id: "ws1-q1-deep",
-        title: "Het Eerste Welkom - Verdiepende Vraag",
+        title: "Het eerste welkom - verdiepende vraag",
         fullText: "Als je lichaam zou kunnen spreken over het allereerste moment dat het 'besloot' om zich terug te trekken of te beschermen, wat zou het dan zeggen? En wat had het nodig gehad om die beslissing niet te hoeven nemen?"
       },
       citation: {
@@ -51,12 +49,12 @@ export default function Workshop1() {
       section: "ONDERDEEL 1: DE OORSPRONG (ACHTERGROND)",
       mainQuestion: {
         id: "ws1-q2-main",
-        title: "De Ladder naar de Hemel",
+        title: "De ladder naar de hemel",
         fullText: "Herken jij bij jezelf de neiging om een \"ladder naar de hemel\" uit te zetten? Heb je het gevoel dat je hier op aarde 'te gast' bent, of dat je eigenlijk ergens anders thuishoort?"
       },
       deepQuestion: {
         id: "ws1-q2-deep",
-        title: "De Ladder naar de Hemel - Verdiepende Vraag",
+        title: "De ladder naar de hemel - verdiepende vraag",
         fullText: "Wat zou er veranderen als je die ladder niet meer nodig had? Wat zou je moeten voelen, ervaren of onder ogen zien als je volledig op aarde zou landen?"
       },
       citation: {
@@ -69,12 +67,12 @@ export default function Workshop1() {
       section: "ONDERDEEL 1: DE OORSPRONG (ACHTERGROND)",
       mainQuestion: {
         id: "ws1-q3-main",
-        title: "De Systemische Blik",
+        title: "De systemische blik",
         fullText: "Soms kijken we niet naar het leven, maar naar de dood of naar iemand die er niet meer is. Is er in jouw familiesysteem sprake van 'dubbele werkelijkheid' (geheimen, verzwegen familieleden of onverwerkte rouw) waardoor jouw aandacht onbewust naar 'de andere kant' wordt getrokken?"
       },
       deepQuestion: {
         id: "ws1-q3-deep",
-        title: "De Systemische Blik - Verdiepende Vraag",
+        title: "De systemische blik - verdiepende vraag",
         fullText: "Als je zou ontdekken dat je onbewust trouw bent aan iemand die niet meer leeft of die uit het systeem is gestoten, wat zou je tegen die persoon willen zeggen? En wat zou je nodig hebben om je blik volledig naar het leven te kunnen richten?"
       },
       citation: {
@@ -87,12 +85,12 @@ export default function Workshop1() {
       section: "ONDERDEEL 2: DYNAMIEK IN RELATIES (ZELF EN ANDER)",
       mainQuestion: {
         id: "ws1-q4-main",
-        title: "De Glazen Muur",
+        title: "De glazen muur",
         fullText: "Herken je het patroon dat je relaties kiest die 'veilig' zijn omdat ze niet écht dichtbij komen (lange afstand, emotioneel onbereikbaar)? Of dat je zelf een onzichtbare muur optrekt zodra iemand te dichtbij komt?"
       },
       deepQuestion: {
         id: "ws1-q4-deep",
-        title: "De Glazen Muur - Verdiepende Vraag",
+        title: "De glazen muur - verdiepende vraag",
         fullText: "Wat is de ergste angst die je hebt over wat er zou gebeuren als iemand je werkelijk zou zien en kennen? En wat zou je kunnen winnen als je dat risico toch zou nemen?"
       },
       citation: {
@@ -105,12 +103,12 @@ export default function Workshop1() {
       section: "ONDERDEEL 2: DYNAMIEK IN RELATIES (ZELF EN ANDER)",
       mainQuestion: {
         id: "ws1-q5-main",
-        title: "Contactbreuk en Terugtrekking",
+        title: "Contactbreuk en terugtrekking",
         fullText: "Wanneer in een contact haak jij af? Wat doe je precies als je afhaakt? (Bijvoorbeeld: oogcontact verbreken, intellectueel gaan praten, of fysiek de kamer verlaten)."
       },
       deepQuestion: {
         id: "ws1-q5-deep",
-        title: "Contactbreuk en Terugtrekking - Verdiepende Vraag",
+        title: "Contactbreuk en terugtrekking - verdiepende vraag",
         fullText: "Kun je het exacte moment herkennen waarop de 'schakelaar' omgaat? Wat voelde je net vóór dat moment, en wat probeer je te ontwijken door weg te gaan?"
       },
       citation: {
@@ -123,12 +121,12 @@ export default function Workshop1() {
       section: "ONDERDEEL 2: DYNAMIEK IN RELATIES (ZELF EN ANDER)",
       mainQuestion: {
         id: "ws1-q6-main",
-        title: "Angst voor Versmelting",
+        title: "Angst voor versmelting",
         fullText: "Heb je wel eens ervaren dat liefde of intimiteit voelde alsof je zou verdwijnen, of alsof je 'opgeslokt' zou worden?"
       },
       deepQuestion: {
         id: "ws1-q6-deep",
-        title: "Angst voor Versmelting - Verdiepende Vraag",
+        title: "Angst voor versmelting - verdiepende vraag",
         fullText: "Als liefde niet zou betekenen dat je verdwijnt, maar dat je juist méér jezelf zou kunnen zijn, hoe zou dat er dan uitzien? Wat zou de eerste kleine stap zijn om dat te onderzoeken?"
       },
       citation: {
@@ -141,12 +139,12 @@ export default function Workshop1() {
       section: "ONDERDEEL 3: HET LICHAAM EN DE ENERGIE",
       mainQuestion: {
         id: "ws1-q7-main",
-        title: "De Vier Linkervoeten",
+        title: "De vier linkervoeten",
         fullText: "Ga voor de spiegel staan en beweeg. Voel je je lichaam als één soepel geheel, of voelt het soms mechanisch, of alsof je lichaamsdelen niet goed met elkaar verbonden zijn?"
       },
       deepQuestion: {
         id: "ws1-q7-deep",
-        title: "De Vier Linkervoeten - Verdiepende Vraag",
+        title: "De vier linkervoeten - verdiepende vraag",
         fullText: "Als je de verschillende delen van je lichaam stem zou geven, welk deel voelt zich het meest 'buitengesloten' of 'niet thuis'? Wat zou dat deel nodig hebben om weer deel van het geheel te worden?"
       },
       citation: {
@@ -159,12 +157,12 @@ export default function Workshop1() {
       section: "ONDERDEEL 3: HET LICHAAM EN DE ENERGIE",
       mainQuestion: {
         id: "ws1-q8-main",
-        title: "De Koude Kern",
+        title: "De koude kern",
         fullText: "Scan je lichaam op temperatuur en aanwezigheid. Zijn je handen en voeten vaak koud? Voel je een spanning rond je middenrif of je nekbasis die dient om gevoelens (en energie) af te splitsen van je hoofd?"
       },
       deepQuestion: {
         id: "ws1-o8-deep",
-        title: "De Koude Kern - Verdiepende Vraag",
+        title: "De koude kern - verdiepende vraag",
         fullText: "Als je je voorstelt dat warmte en levensenergie door je hele lichaam zouden stromen tot in je vingertoppen en tenen, wat zou er dan anders voelen? Welke emotie of sensatie zou dan misschien bovenkomen?"
       },
       citation: {
@@ -177,12 +175,12 @@ export default function Workshop1() {
       section: "ONDERDEEL 4: DE KWALITEIT (HET GOUD)",
       mainQuestion: {
         id: "ws1-q9-main",
-        title: "De Dromer / De Ziener",
+        title: "De dromer / de ziener",
         fullText: "Jouw vermogen om je terug te trekken heeft je ook iets gebracht. Welke creatieve, spirituele of visionaire kwaliteiten heb jij ontwikkeld in je binnenwereld, die je nu als een geschenk aan de wereld kunt geven?"
       },
       deepQuestion: {
         id: "ws1-q9-deep",
-        title: "De Dromer / De Ziener - Verdiepende Vraag",
+        title: "De dromer / de ziener - verdiepende vraag",
         fullText: "Hoe zou je deze kwaliteiten kunnen delen terwijl je tegelijkertijd geaard blijft? Welke concrete stap zou je kunnen zetten om je innerlijke rijkdom te verbinden met de aardse werkelijkheid?"
       },
       citation: {
@@ -191,19 +189,18 @@ export default function Workshop1() {
       }
     }
   ];
-
   const oralPairs: QuestionPair[] = [
     {
       id: "pair-o1",
       section: "ONDERDEEL 1: DE OORSPRONG (ACHTERGROND)",
       mainQuestion: {
         id: "ws1-o1-main",
-        title: "Het Eerste Tekort",
+        title: "Het eerste tekort",
         fullText: "Als je terugvoelt naar je vroege kindertijd, of de verhalen daarover: was er sprake van fysieke of emotionele schaarste? Was je moeder (of vader) écht beschikbaar, of was ze er wel fysiek maar niet emotioneel?"
       },
       deepQuestion: {
         id: "ws1-o1-deep",
-        title: "Het Eerste Tekort - Verdiepende Vraag",
+        title: "Het eerste tekort - verdiepende vraag",
         fullText: "Als je je voorstelt dat je als baby volledig gevoed en gezien was, hoe zou je leven er dan nu anders uitzien? Welk deel van jezelf zou dan meer ruimte hebben gekregen om te groeien?"
       },
       citation: {
@@ -216,12 +213,12 @@ export default function Workshop1() {
       section: "ONDERDEEL 1: DE OORSPRONG (ACHTERGROND)",
       mainQuestion: {
         id: "ws1-o2-main",
-        title: "Systemische Leegte",
+        title: "Systemische leegte",
         fullText: "Is er in jouw familiesysteem sprake van onverwerkt verlies of een generatielange 'tekortkoming' (armoede, oorlog, jong gestorven ouders)? Heb jij onbewust geprobeerd de leegte van je ouders te vullen?"
       },
       deepQuestion: {
         id: "ws1-o2-deep",
-        title: "Systemische Leegte - Verdiepende Vraag",
+        title: "Systemische leegte - verdiepende vraag",
         fullText: "Als je de honger van eerdere generaties zou kunnen teruggeven aan wie het toebehoort, wat zou je dan tegen hen zeggen? En wat zou er in jou vrijkomen als je die last neerlegt?"
       },
       citation: {
@@ -234,12 +231,12 @@ export default function Workshop1() {
       section: "ONDERDEEL 1: DE OORSPRONG (ACHTERGROND)",
       mainQuestion: {
         id: "ws1-o3-main",
-        title: "Het Gevoel van 'Niet Genoeg'",
+        title: "Het gevoel van 'niet genoeg'",
         fullText: "Op welke gebieden in je huidige leven voel je de pijnlijke overtuiging dat je tekortkomt, of dat je moet vechten voor kruimels? (Denk aan aandacht, geld, liefde)."
       },
       deepQuestion: {
         id: "ws1-o3-deep",
-        title: "Het Gevoel van 'Niet Genoeg' - Verdiepende Vraag",
+        title: "Het gevoel van 'niet genoeg' - verdiepende vraag",
         fullText: "Welke innerlijke stem herhaalt dit verhaal van tekort? Van wie heb je die stem geleerd, en wat zou je tegen die stem willen zeggen vanuit het deel van jou dat wél weet dat je genoeg bent?"
       },
       citation: {
@@ -252,12 +249,12 @@ export default function Workshop1() {
       section: "ONDERDEEL 2: DYNAMIEK IN RELATIES (ZELF EN ANDER)",
       mainQuestion: {
         id: "ws1-o4-main",
-        title: "De Emotionele Vampier",
+        title: "De emotionele vampier",
         fullText: "Herken je bij jezelf (of je partner) het patroon dat hoeveel aandacht er ook wordt gegeven, het nooit genoeg voelt? Dat er na een fijn moment direct weer een gevoel van leegte of claim ontstaat?"
       },
       deepQuestion: {
         id: "ws1-o4-deep",
-        title: "De Emotionele Vampier - Verdiepende Vraag",
+        title: "De emotionele vampier - verdiepende vraag",
         fullText: "Wat zou er gebeuren als je na een moment van ontvangen even zou pauzeren en het werkelijk zou laten binnenkomen? Wat maakt het zo moeilijk om te geloven dat het genoeg is?"
       },
       citation: {
@@ -270,12 +267,12 @@ export default function Workshop1() {
       section: "ONDERDEEL 2: DYNAMIEK IN RELATIES (ZELF EN ANDER)",
       mainQuestion: {
         id: "ws1-o5-main",
-        title: "Ruilhandel in Aandacht",
+        title: "Ruilhandel in aandacht",
         fullText: "Geef jij vaak aan anderen wat je eigenlijk zélf zo graag zou willen ontvangen? En voel je wrok als dit niet 'terugbetaald' wordt?"
       },
       deepQuestion: {
         id: "ws1-o5-deep",
-        title: "Ruilhandel in Aandacht - Verdiepende Vraag",
+        title: "Ruilhandel in aandacht - verdiepende vraag",
         fullText: "Stel je voor dat je zou kunnen geven zonder iets terug te verwachten. Wat zou er dan veranderen in hoe je geeft? En durf je ook te ontvangen zonder daar iets voor 'terug te hoeven doen'?"
       },
       citation: {
@@ -288,12 +285,12 @@ export default function Workshop1() {
       section: "ONDERDEEL 2: DYNAMIEK IN RELATIES (ZELF EN ANDER)",
       mainQuestion: {
         id: "ws1-o6-main",
-        title: "Destructief Recht",
+        title: "Destructief recht",
         fullText: "Herken je momenten waarop je vindt dat je recht hebt op compensatie voor wat je hebt gemist? Uit zich dit in eisen, claimen, of boos worden als de ander niet levert?"
       },
       deepQuestion: {
         id: "ws1-o6-deep",
-        title: "Destructief Recht - Verdiepende Vraag",
+        title: "Destructief recht - verdiepende vraag",
         fullText: "Als je het kleine kind in jou dat tekort is gekomen zou kunnen troosten, wat zou je tegen dat kind zeggen? En wat zou het werkelijk nodig hebben – niet van de ander, maar van jou?"
       },
       citation: {
@@ -306,12 +303,12 @@ export default function Workshop1() {
       section: "ONDERDEEL 3: HET LICHAAM EN DE ENERGIE",
       mainQuestion: {
         id: "ws1-o7-main",
-        title: "De Ingestorte Houding",
+        title: "De ingestorte houding",
         fullText: "Ga voor de spiegel staan en laat je schouders en borstkas hangen zoals je doet als je moe of verdrietig bent. Wat zie je? Herken je de fysieke kenmerken van de 'ondervoeding'?"
       },
       deepQuestion: {
         id: "ws1-o7-deep",
-        title: "De Ingestorte Houding - Verdiepende Vraag",
+        title: "De ingestorte houding - verdiepende vraag",
         fullText: "Als je je borstkas zou openen en je schouders naar achteren zou brengen, welke emotie komt er dan naar boven? Wat zou je dan moeten voelen dat je nu niet voelt?"
       },
       citation: {
@@ -324,12 +321,12 @@ export default function Workshop1() {
       section: "ONDERDEEL 3: HET LICHAAM EN DE ENERGIE",
       mainQuestion: {
         id: "ws1-o8-main",
-        title: "Het Hongergat",
+        title: "Het hongergat",
         fullText: "Voel eens in het centrum van je borstkas, ter hoogte van het hart. Voelt het daar vol en krachtig, of is er een sensatie van een 'gat', een inzinking of een zuigende leegte?"
       },
       deepQuestion: {
         id: "ws1-o8-deep",
-        title: "Het Hongergat - Verdiepende Vraag",
+        title: "Het hongergat - verdiepende vraag",
         fullText: "Als je adem en liefde naar die plek zou kunnen sturen, wat zou die leegte dan nodig hebben om langzaam gevuld te raken? En van wie zou die vulling moeten komen?"
       },
       citation: {
@@ -342,12 +339,12 @@ export default function Workshop1() {
       section: "ONDERDEEL 4: DE KWALITEIT (HET GOUD)",
       mainQuestion: {
         id: "ws1-o9-main",
-        title: "De Voedster / De Bron",
+        title: "De voedster / de bron",
         fullText: "Als jij je niet leeg en behoeftig voelt, maar 'gevuld', wat heb jij de wereld dan te bieden? Wat is jouw specifieke kwaliteit in het aanvoelen van wat anderen nodig hebben?"
       },
       deepQuestion: {
         id: "ws1-o9-deep",
-        title: "De Voedster / De Bron - Verdiepende Vraag",
+        title: "De voedster / de bron - verdiepende vraag",
         fullText: "Kun je een moment herinneren waarop je gaf vanuit overvloed in plaats van uit hoop op terugkrijgen? Hoe voelde dat anders, en hoe zou je meer van die momenten kunnen creëren?"
       },
       citation: {
@@ -356,7 +353,6 @@ export default function Workshop1() {
       }
     }
   ];
-
   const renderPairs = (pairs: QuestionPair[], workshopId: string) => (
     <div className="space-y-12">
       {pairs.map((pair, pairIndex) => (
@@ -369,7 +365,6 @@ export default function Workshop1() {
               </h2>
             </div>
           )}
-
           {/* Main Question */}
           <Card className="border-primary/10 shadow-sm hover:shadow-md transition-shadow">
             <CardHeader className="pb-3">
@@ -391,7 +386,6 @@ export default function Workshop1() {
               />
             </CardContent>
           </Card>
-
           {/* Deep Question */}
           <Card className="border-primary/10 shadow-sm hover:shadow-md transition-shadow ml-4 md:ml-8">
             <CardHeader className="pb-3">
@@ -413,7 +407,6 @@ export default function Workshop1() {
               />
             </CardContent>
           </Card>
-
           {/* Citation */}
           {pair.citation && pair.citation.text && (
             <Card className="border-primary/20 bg-primary/5 italic">
@@ -427,11 +420,10 @@ export default function Workshop1() {
               </CardContent>
             </Card>
           )}
-
           {/* AI Feedback Box after each pair */}
           <div className="mt-8 pt-8 border-t border-primary/10">
             <AIHelper 
-              questionTitle={`${pair.mainQuestion.title} & ${pair.deepQuestion.title}`}
+              questionTitle=`${pair.mainQuestion.title} & ${pair.deepQuestion.title}`}
               questionId={pair.id}
               workshopId={workshopId}
             />
@@ -440,23 +432,20 @@ export default function Workshop1() {
       ))}
     </div>
   );
-
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
       <div className="space-y-12">
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle className="text-3xl font-bold text-center text-primary">Workshop 1: De Fundamenten</CardTitle>
+            <CardTitle className="text-3xl font-bold text-center text-primary">Workshop 1: De fundamenten</CardTitle>
           </CardHeader>
           <CardContent className="text-center text-foreground/80">
             <p className="mb-4">We beginnen onze reis bij het absolute fundament: het bestaansrecht en de eerste verbinding. De schizoïde en orale structuren zijn de eerste verdedigingen die we als mens ontwikkelen. Ze raken aan de oervragen: Mag ik er zijn? En: Wordt er voor mij gezorgd?</p>
             <p>We dragen allemaal stukjes van deze vroege patronen in ons. Laten we ze met zachtheid en nieuwsgierigheid onderzoeken.</p>
           </CardContent>
         </Card>
-
         <ProgressBar workshopId="ws1" totalQuestions={36} />
         <DownloadButtons workshopId="ws1" />
-
         {/* Navigation Menu */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center my-8">
           <Button 
@@ -464,29 +453,26 @@ export default function Workshop1() {
             variant="outline" 
             className="text-base font-semibold px-6 py-3 hover:bg-primary/10"
           >
-            <a href="#schizoid-structure">📍 Dag 1: Schizoïde Structuur</a>
+            <a href="#schizoid-structure">📍 Dag 1: Schizoïde structuur</a>
           </Button>
           <Button 
             asChild 
             variant="outline" 
             className="text-base font-semibold px-6 py-3 hover:bg-primary/10"
           >
-            <a href="#oral-structure">📍 Dag 2: Orale Structuur</a>
+            <a href="#oral-structure">📍 Dag 2: Orale structuur</a>
           </Button>
         </div>
-
         <div id="schizoid-structure">
-          <h1 className="text-4xl font-bold text-center mb-2 text-primary/90">Dag 1: De Schizoïde Structuur</h1>
-          <p className="text-center text-lg text-foreground/70 mb-12">Thema: Het Recht om te Bestaan & De Dans van Nabijheid en Afstand</p>
+          <h1 className="text-4xl font-bold text-center mb-2 text-primary/90">Dag 1: De schizoïde structuur</h1>
+          <p className="text-center text-lg text-foreground/70 mb-12">Thema: Het recht om te bestaan & de dans van nabijheid en afstand</p>
           {renderPairs(schizoidPairs, "ws1")}
         </div>
-
         <div id="oral-structure" className="mt-24 pt-12 border-t-4 border-primary/30">
-          <h1 className="text-4xl font-bold text-center mb-2 text-primary/90">Dag 2: De Orale Structuur</h1>
-          <p className="text-center text-lg text-foreground/70 mb-12">Thema: De Honger die Nooit Stilt & De Weg naar de Bron</p>
+          <h1 className="text-4xl font-bold text-center mb-2 text-primary/90">Dag 2: De orale structuur</h1>
+          <p className="text-center text-lg text-foreground/70 mb-12">Thema: De honger die nooit stilt & de weg naar de bron</p>
           {renderPairs(oralPairs, "ws1")}
         </div>
-
         <Card className="shadow-lg mt-24">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-center">Klaar met Workshop 1?</CardTitle>
@@ -507,5 +493,5 @@ export default function Workshop1() {
     </div>
   );
 }
-
 // Forced cache refresh comment:
+
