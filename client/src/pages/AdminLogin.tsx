@@ -54,7 +54,7 @@ export default function AdminLogin() {
               <Shield className="h-8 w-8 text-primary" />
             </div>
           </div>
-          <CardTitle className="text-2xl text-center">Admin Portaal</CardTitle>
+          <CardTitle className="text-2xl text-center">Admin portaal</CardTitle>
           <CardDescription className="text-center">
             Inloggen om Hartspraak Huiswerkboek te beheren
           </CardDescription>
@@ -62,7 +62,7 @@ export default function AdminLogin() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Admin E-mail</Label>
+              <Label htmlFor="email">Admin e-mail</Label>
               <Input
                 id="email"
                 type="email"
@@ -105,7 +105,7 @@ export default function AdminLogin() {
               ) : (
                 <>
                   <Shield className="mr-2 h-4 w-4" />
-                  Admin Inloggen
+                  Admin inloggen
                 </>
               )}
             </Button>
