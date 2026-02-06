@@ -290,7 +290,7 @@ export default function AdminDashboard() {
             <WorkshopReminders />
             <Button variant="outline" size="sm" onClick={() => setLocation('/admin/shared-answers')}>
               <FileText className="h-4 w-4 mr-2" />
-              Gedeelde Antwoorden
+              Gedeelde antwoorden
             </Button>
             <Button variant="outline" size="sm" onClick={() => setLocation('/admin/usage')}>
               <BarChart3 className="h-4 w-4 mr-2" />
@@ -356,7 +356,7 @@ export default function AdminDashboard() {
           </Card>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground uppercase">Gedeeld Huiswerk</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground uppercase">Gedeeld huiswerk</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">{sharedSubmissions.length}</div>
@@ -368,7 +368,7 @@ export default function AdminDashboard() {
           <CardHeader className="bg-emerald-50">
             <CardTitle className="flex items-center gap-2">
               <FileDown className="h-5 w-5 text-emerald-600" />
-              Beschikbare Boeken
+              Beschikbare boeken
             </CardTitle>
             <CardDescription>Download de ondersteunende materialen</CardDescription>
           </CardHeader>
@@ -388,7 +388,7 @@ export default function AdminDashboard() {
               >
                 <div className="flex items-center gap-2">
                   <Download className="h-4 w-4" />
-                  <span className="font-semibold">De Maskermaker - Deel 1</span>
+                  <span className="font-semibold">De maskermaker - deel 1</span>
                 </div>
                 <span className="text-xs text-muted-foreground">PDF Document</span>
               </Button>
@@ -406,7 +406,7 @@ export default function AdminDashboard() {
               >
                 <div className="flex items-center gap-2">
                   <Download className="h-4 w-4" />
-                  <span className="font-semibold">Van Wond naar Wonder</span>
+                  <span className="font-semibold">Van wond naar wonder</span>
                 </div>
                 <span className="text-xs text-muted-foreground">PDF Document</span>
               </Button>
@@ -419,7 +419,7 @@ export default function AdminDashboard() {
           <CardHeader className="bg-primary/5">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Ingeleverd Huiswerk</CardTitle>
+                <CardTitle>Ingeleverd huiswerk</CardTitle>
                 <CardDescription>Bekijk en download huiswerk dat door cliënten is gedeeld</CardDescription>
               </div>
               <Button size="sm" variant="outline" onClick={fetchData}>
@@ -469,7 +469,7 @@ export default function AdminDashboard() {
                               <DialogHeader>
                                 <div className="flex items-center justify-between">
                                   <div>
-                                    <DialogTitle className="text-2xl">Huiswerk Preview: {submission.userEmail}</DialogTitle>
+                                    <DialogTitle className="text-2xl">Huiswerk preview: {submission.userEmail}</DialogTitle>
                                     <DialogDescription className="text-base">
                                       {submission.workshopTitle} - {submission.workshopDate}
                                     </DialogDescription>
