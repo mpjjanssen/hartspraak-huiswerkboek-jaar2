@@ -94,7 +94,7 @@ export default function TestResults() {
 
     // Title
     doc.setFontSize(22);
-    doc.text("Karakterstructuren Test - Resultaten", margin, y);
+    doc.text("Karakterstructurentest - Resultaten", margin, y);
     y += 12;
 
     doc.setFontSize(12);
@@ -153,7 +153,7 @@ export default function TestResults() {
       y += lines.length * 5 + 4;
     });
 
-    doc.save("Karakterstructuren_Test_Resultaten.pdf");
+    doc.save("Karakterstructurentest_Resultaten.pdf");
   };
 
   if (!isComplete || results.length === 0) return null;
@@ -164,7 +164,7 @@ export default function TestResults() {
         <div className="max-w-5xl mx-auto space-y-8">
           {/* Header */}
           <div className="text-center space-y-2">
-            <h1 className="text-4xl font-bold text-foreground">Jouw Resultaten</h1>
+            <h1 className="text-4xl font-bold text-foreground">Jouw resultaten</h1>
             <p className="text-lg text-muted-foreground">Totaal aantal punten: {totalScore}</p>
           </div>
 
@@ -254,7 +254,7 @@ export default function TestResults() {
             </Button>
             <Button variant="outline" onClick={handleReset} className="gap-2">
               <RotateCcw className="h-4 w-4" />
-              Test Opnieuw Doen
+              Test opnieuw doen
             </Button>
           </div>
 
@@ -263,7 +263,7 @@ export default function TestResults() {
             <Link href="/">
               <Button variant="ghost" className="gap-2">
                 <ChevronLeft className="h-4 w-4" />
-                Terug naar Home
+                Terug naar home
               </Button>
             </Link>
           </div>
