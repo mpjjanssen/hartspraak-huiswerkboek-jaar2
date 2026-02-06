@@ -12,7 +12,7 @@ export default function Workshop5() {
   const [showOptional, setShowOptional] = useState(false);
   
   const workshopId = "workshop5";
-  const workshopTitle = "Workshop 5: Authentieke Verbinding & Autonomie";
+  const workshopTitle = "Workshop 5: Authentieke verbinding & autonomie";
   const workshopDate = "30.01.2027 - 31.01.2027";
   const workshopSubtitle = "Tweedaagse verdieping in intimiteit en authenticiteit";
   
@@ -76,7 +76,7 @@ export default function Workshop5() {
               <div>
                 <h2 className="text-2xl font-bold text-primary mb-4 flex items-center gap-2">
                   <Heart className="h-6 w-6" />
-                  De Universele Taal van Het Lichaam
+                  De universele taal van het lichaam
                 </h2>
                 <div className="space-y-4 text-foreground/90 leading-relaxed">
                   <p>
@@ -92,7 +92,7 @@ export default function Workshop5() {
               </div>
 
               <div className="border-t pt-6">
-                <h3 className="text-xl font-semibold text-primary mb-3">De Balans tussen Hechting en Autonomie</h3>
+                <h3 className="text-xl font-semibold text-primary mb-3">De balans tussen hechting en autonomie</h3>
                 <div className="space-y-4 text-foreground/90 leading-relaxed">
                   <p>
                     In intieme relaties bewegen we voortdurend tussen twee fundamentele behoeften: de behoefte aan verbinding (hechting) en de behoefte aan eigenheid (autonomie). Voor veel van ons is deze dans uit balans geraakt. Misschien leerden we als kind dat onze eigen wil gevaarlijk was, dat "nee" zeggen tot afwijzing leidde, of dat de ander gelukkig maken belangrijker was dan onze eigen behoeften.
@@ -107,7 +107,7 @@ export default function Workshop5() {
               </div>
 
               <div className="border-t pt-6">
-                <h3 className="text-xl font-semibold text-primary mb-3">Wat Deze Workshop Jou Biedt</h3>
+                <h3 className="text-xl font-semibold text-primary mb-3">Wat deze workshop jou biedt</h3>
                 <div className="space-y-4 text-foreground/90 leading-relaxed">
                   <p>
                     In deze tweedaagse workshop gaan we op drie niveaus werken:
@@ -169,7 +169,7 @@ export default function Workshop5() {
               </div>
 
               <div className="border-t pt-6">
-                <h3 className="text-xl font-semibold text-primary mb-3">Een Verhaal van Moed en Healing</h3>
+                <h3 className="text-xl font-semibold text-primary mb-3">Een verhaal van moed en healing</h3>
                 <div className="space-y-4 text-foreground/90 leading-relaxed">
                   <p>
                     Op dag 2 zullen we kennismaken met het verhaal van Jane Steckbeck. Jane begreep zeventien jaar lang niet waarom haar lichaam een taal sprak die ze zelf niet kon vertalen. Zeventien jaar van terugtrekking, van wegduwen, van een stem die zei "ga weg" tegen de man van wie ze hield.
@@ -184,7 +184,7 @@ export default function Workshop5() {
               </div>
 
               <div className="border-t pt-6">
-                <h3 className="text-xl font-semibold text-primary mb-3">Veiligheid en Zelfcompassie</h3>
+                <h3 className="text-xl font-semibold text-primary mb-3">Veiligheid en zelfcompassie</h3>
                 <div className="space-y-4 text-foreground/90 leading-relaxed">
                   <p>
                     Deze workshop raakt aan gevoelige thema's. Het is belangrijk dat je weet:
@@ -214,7 +214,7 @@ export default function Workshop5() {
               </div>
 
               <div className="border-t pt-6">
-                <h3 className="text-xl font-semibold text-primary mb-3">Jouw Reis Begint Nu</h3>
+                <h3 className="text-xl font-semibold text-primary mb-3">Jouw reis begint nu</h3>
                 <div className="space-y-4 text-foreground/90 leading-relaxed">
                   <p>
                     De komende twee dagen zijn een uitnodiging tot zelfontdekking. We gaan niet alleen Jane's verhaal beluisteren, maar vooral onderzoeken wat haar verhaal in ons wakker maakt. Welke deuren het opent. Welke muren het afbreekt. En vooral: welke permissie het ons geeft om onze eigen waarheid onder ogen te zien.
