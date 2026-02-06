@@ -23,7 +23,7 @@ export default function Privacy() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Lock className="w-5 h-5" />
-              End-to-End Encryptie
+              End-to-end encryptie
             </CardTitle>
             <CardDescription>
               Je antwoorden en AI conversaties zijn volledig versleuteld
@@ -61,7 +61,7 @@ export default function Privacy() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Eye className="w-5 h-5" />
-              Wat Beheerders Wel en Niet Kunnen Zien
+              Wat beheerders wel en niet kunnen zien
             </CardTitle>
             <CardDescription>
               Transparantie over toegang tot je data
@@ -73,7 +73,7 @@ export default function Privacy() {
               <div className="space-y-2">
                 <h4 className="font-semibold text-green-600 flex items-center gap-2">
                   <Eye className="w-4 h-4" />
-                  Wel Zichtbaar
+                  Wel zichtbaar
                 </h4>
                 <ul className="list-disc list-inside space-y-1 text-sm">
                   <li>Je email adres</li>
@@ -88,7 +88,7 @@ export default function Privacy() {
               <div className="space-y-2">
                 <h4 className="font-semibold text-red-600 flex items-center gap-2">
                   <EyeOff className="w-4 h-4" />
-                  Niet Zichtbaar
+                  Niet zichtbaar
                 </h4>
                 <ul className="list-disc list-inside space-y-1 text-sm">
                   <li>De inhoud van je antwoorden</li>
@@ -115,7 +115,7 @@ export default function Privacy() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Server className="w-5 h-5" />
-              Data Opslag
+              Data opslag
             </CardTitle>
             <CardDescription>
               Waar en hoe je data wordt bewaard
@@ -146,7 +146,7 @@ export default function Privacy() {
             </div>
 
             <div className="space-y-2">
-              <h4 className="font-semibold">Data Verwijdering</h4>
+              <h4 className="font-semibold">Data verwijdering</h4>
               <p className="text-sm">
                 Je kunt op elk moment je account en alle bijbehorende data verwijderen. Dit is onomkeerbaar.
               </p>
@@ -157,7 +157,7 @@ export default function Privacy() {
         {/* FAQ */}
         <Card>
           <CardHeader>
-            <CardTitle>Veelgestelde Vragen</CardTitle>
+            <CardTitle>Veelgestelde vragen</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
