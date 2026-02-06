@@ -16,12 +16,12 @@ export default function Workshop4() {
 
   const sections = [
     { id: "intro", title: "Inleiding", icon: Heart },
-    { id: "terugblik", title: "Terugblik op je Reis", icon: Eye },
-    { id: "relaties", title: "Wie met Wie Kan", icon: Users },
+    { id: "terugblik", title: "Terugblik op je reis", icon: Eye },
+    { id: "relaties", title: "Wie met wie kan", icon: Users },
     { id: "integratie", title: "Integratie", icon: Sparkles },
-    { id: "groep", title: "De Groep als Spiegel", icon: Users },
+    { id: "groep", title: "De groep als spiegel", icon: Users },
     { id: "vooruit", title: "Vooruitblik", icon: Compass },
-    { id: "ritueel", title: "Rituele Afsluiting", icon: PenLine },
+    { id: "ritueel", title: "Rituele afsluiting", icon: PenLine },
   ];
 
   useEffect(() => {
@@ -53,13 +53,13 @@ export default function Workshop4() {
         {/* Header */}
         <div className="mb-8">
           <Link href="/" className="text-primary hover:underline text-sm mb-4 inline-block">
-            ← Terug naar Home
+            ← Terug naar home
           </Link>
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-            Workshop 4: Van Wond naar Wonder
+            Workshop 4: Van wond naar wonder
           </h1>
           <p className="text-lg text-muted-foreground">
-            Integratie en Afsluiting van Jaar 2
+            Integratie en afsluiting van jaar 2
           </p>
         </div>
 
@@ -102,7 +102,7 @@ export default function Workshop4() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Heart className="h-6 w-6 text-primary" />
-                Welkom bij de Afsluiting
+                Welkom bij de afsluiting
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-foreground/90">
@@ -129,14 +129,14 @@ export default function Workshop4() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Eye className="h-6 w-6 text-primary" />
-                Deel 1: Terugblik op je Reis
+                Deel 1: Terugblik op je reis
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-8">
               {/* 1.1 De Structuren in Mij */}
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-foreground border-b pb-2">
-                  1.1 De Structuren in Mij
+                  1.1 De structuren in mij
                 </h3>
                 <p className="text-muted-foreground">
                   Aan het begin van dit jaar deed je de lichaamstypentest. Nu, na een jaar van verdieping:
@@ -205,7 +205,7 @@ export default function Workshop4() {
               {/* 1.2 De Wijsheid van je Verdediging */}
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-foreground border-b pb-2">
-                  1.2 De Wijsheid van je Verdediging
+                  1.2 De wijsheid van je verdediging
                 </h3>
                 <p className="text-muted-foreground">
                   Reich en Lowen spraken over karakterstructuren als 'pantser'. Maar in dit jaar hebben 
@@ -263,7 +263,7 @@ export default function Workshop4() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Users className="h-6 w-6 text-primary" />
-                Deel 2: Wie met Wie Kan
+                Deel 2: Wie met wie kan
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-8">
@@ -274,7 +274,7 @@ export default function Workshop4() {
               {/* 2.1 Jouw Relationele Patronen */}
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-foreground border-b pb-2">
-                  2.1 Jouw Relationele Patronen
+                  2.1 Jouw relationele patronen
                 </h3>
 
                 <div className="space-y-4">
@@ -322,7 +322,7 @@ export default function Workshop4() {
               {/* 2.2 De Moeilijke Dans */}
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-foreground border-b pb-2">
-                  2.2 De Moeilijke Dans
+                  2.2 De moeilijke dans
                 </h3>
 
                 <div className="space-y-4">
@@ -375,14 +375,14 @@ export default function Workshop4() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Sparkles className="h-6 w-6 text-primary" />
-                Deel 3: Integratie — Het Masker en het Gezicht
+                Deel 3: Integratie — het masker en het gezicht
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-8">
               {/* 3.1 Voorbij het Masker */}
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-foreground border-b pb-2">
-                  3.1 Voorbij het Masker
+                  3.1 Voorbij het masker
                 </h3>
                 <p className="text-muted-foreground">
                   In "De Maskermaker" lazen we dat het masker niet het probleem is — het probleem is 
@@ -433,7 +433,7 @@ export default function Workshop4() {
               {/* 3.2 Het Lichaam Herinnert */}
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-foreground border-b pb-2">
-                  3.2 Het Lichaam Herinnert
+                  3.2 Het lichaam herinnert
                 </h3>
                 <p className="text-muted-foreground">
                   Dit werk gaat niet alleen over inzicht, maar over belichaming.
@@ -489,14 +489,14 @@ export default function Workshop4() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Users className="h-6 w-6 text-primary" />
-                Deel 4: De Groep als Spiegel
+                Deel 4: De groep als spiegel
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-8">
               {/* 4.1 Gezien Worden */}
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-foreground border-b pb-2">
-                  4.1 Gezien Worden
+                  4.1 Gezien worden
                 </h3>
 
                 <div className="space-y-4">
@@ -543,7 +543,7 @@ export default function Workshop4() {
               {/* 4.2 Jouw Bijdrage */}
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-foreground border-b pb-2">
-                  4.2 Jouw Bijdrage
+                  4.2 Jouw bijdrage
                 </h3>
 
                 <div className="p-4 bg-muted/30 rounded-lg">
@@ -575,14 +575,14 @@ export default function Workshop4() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Compass className="h-6 w-6 text-primary" />
-                Deel 5: Vooruitblik — Van Wond naar Wonder
+                Deel 5: Vooruitblik — van wond naar wonder
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-8">
               {/* 5.1 Wat Nog Niet Af Is */}
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-foreground border-b pb-2">
-                  5.1 Wat Nog Niet Af Is
+                  5.1 Wat nog niet af is
                 </h3>
 
                 <div className="space-y-4">
@@ -629,7 +629,7 @@ export default function Workshop4() {
               {/* 5.2 Intentie voor de Toekomst */}
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-foreground border-b pb-2">
-                  5.2 Intentie voor de Toekomst
+                  5.2 Intentie voor de toekomst
                 </h3>
 
                 <div className="space-y-4">
@@ -682,7 +682,7 @@ export default function Workshop4() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <PenLine className="h-6 w-6 text-primary" />
-                Deel 6: Rituele Afsluiting
+                Deel 6: Rituele afsluiting
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-8">
@@ -732,7 +732,7 @@ export default function Workshop4() {
               {/* 6.3 Brief aan Jezelf */}
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold text-foreground border-b pb-2">
-                  6.3 Brief aan Jezelf
+                  6.3 Brief aan jezelf
                 </h3>
 
                 <div className="p-4 bg-muted/30 rounded-lg">
@@ -782,7 +782,7 @@ Over een jaar lees je dit. Dit wil ik dat je onthoudt..."
           </Button>
           <Button asChild>
             <Link href="/">
-              Terug naar Home
+              Terug naar home
             </Link>
           </Button>
         </div>
