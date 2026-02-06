@@ -94,7 +94,7 @@ export default function ResetPassword() {
                 <img src={APP_LOGO} alt="Logo" className="h-16 w-16" />
               </div>
             )}
-            <CardTitle className="text-2xl">Wachtwoord Reset Voltooid</CardTitle>
+            <CardTitle className="text-2xl">Wachtwoord reset voltooid</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-center space-y-4">
@@ -108,7 +108,7 @@ export default function ResetPassword() {
               </p>
               <div className="pt-4">
                 <Link href="/login">
-                  <Button className="w-full">Ga naar Inloggen</Button>
+                  <Button className="w-full">Ga naar inloggen</Button>
                 </Link>
               </div>
             </div>
@@ -135,7 +135,7 @@ export default function ResetPassword() {
               <img src={APP_LOGO} alt="Logo" className="h-16 w-16" />
             </div>
           )}
-          <CardTitle className="text-2xl">Maak Nieuw Wachtwoord</CardTitle>
+          <CardTitle className="text-2xl">Maak nieuw wachtwoord</CardTitle>
           <p className="text-muted-foreground mt-2">
             Vul je email, reset code en nieuwe wachtwoord in
           </p>
@@ -155,7 +155,7 @@ export default function ResetPassword() {
               />
             </div>
             <div>
-              <Label htmlFor="token">Reset Code</Label>
+              <Label htmlFor="token">Reset code</Label>
               <Input
                 id="token"
                 type="text"
@@ -171,7 +171,7 @@ export default function ResetPassword() {
               </p>
             </div>
             <div>
-              <Label htmlFor="password">Nieuw Wachtwoord</Label>
+              <Label htmlFor="password">Nieuw wachtwoord</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -194,7 +194,7 @@ export default function ResetPassword() {
               </div>
             </div>
             <div>
-              <Label htmlFor="confirmPassword">Bevestig Wachtwoord</Label>
+              <Label htmlFor="confirmPassword">Bevestig wachtwoord</Label>
               <div className="relative">
                 <Input
                   id="confirmPassword"
@@ -238,7 +238,7 @@ export default function ResetPassword() {
                   Resetten...
                 </>
               ) : (
-                "Reset Wachtwoord"
+                "Reset wachtwoord"
               )}
             </Button>
           </form>
