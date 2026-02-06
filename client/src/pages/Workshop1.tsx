@@ -423,7 +423,7 @@ export default function Workshop1() {
           {/* AI Feedback Box after each pair */}
           <div className="mt-8 pt-8 border-t border-primary/10">
             <AIHelper 
-              questionTitle=`${pair.mainQuestion.title} & ${pair.deepQuestion.title}`}
+              questionTitle={`${pair.mainQuestion.title} & ${pair.deepQuestion.title}`}
               questionId={pair.id}
               workshopId={workshopId}
             />
@@ -494,4 +494,3 @@ export default function Workshop1() {
   );
 }
 // Forced cache refresh comment:
-
