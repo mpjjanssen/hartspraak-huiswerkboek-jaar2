@@ -33,12 +33,12 @@ export default function Workshop1Day2() {
       section: "ONDERDEEL 1: DE OORSPRONG (ACHTERGROND)",
       mainQuestion: {
         id: "ws1d2-q1-main",
-        title: "Het Eerste Tekort",
+        title: "Het eerste tekort",
         fullText: "Als je terugvoelt naar je vroege kindertijd, of de verhalen daarover: was er sprake van fysieke of emotionele schaarste? Was je moeder (of vader) écht beschikbaar, of was ze er wel fysiek maar niet emotioneel?"
       },
       deepQuestion: {
         id: "ws1d2-q1-deep",
-        title: "Het Eerste Tekort - Verdiepende Vraag",
+        title: "Het eerste tekort - verdiepende vraag",
         fullText: "Als je je voorstelt dat je als baby volledig gevoed en gezien was, hoe zou je leven er dan nu anders uitzien? Welk deel van jezelf zou dan meer ruimte hebben gekregen om te groeien?"
       },
       citation: {
@@ -51,12 +51,12 @@ export default function Workshop1Day2() {
       section: "ONDERDEEL 1: DE OORSPRONG (ACHTERGROND)",
       mainQuestion: {
         id: "ws1d2-q2-main",
-        title: "Systemische Leegte",
+        title: "Systemische leegte",
         fullText: "Is er in jouw familiesysteem sprake van onverwerkt verlies of een generatielange 'tekortkoming' (armoede, oorlog, jong gestorven ouders)? Heb jij onbewust geprobeerd de leegte van je ouders te vullen?"
       },
       deepQuestion: {
         id: "ws1d2-q2-deep",
-        title: "Systemische Leegte - Verdiepende Vraag",
+        title: "Systemische leegte - verdiepende vraag",
         fullText: "Als je de honger van eerdere generaties zou kunnen teruggeven aan wie het toebehoort, wat zou je dan tegen hen zeggen? En wat zou er in jou vrijkomen als je die last neerlegt?"
       },
       citation: {
@@ -69,12 +69,12 @@ export default function Workshop1Day2() {
       section: "ONDERDEEL 1: DE OORSPRONG (ACHTERGROND)",
       mainQuestion: {
         id: "ws1d2-q3-main",
-        title: "Het Gevoel van 'Niet Genoeg'",
+        title: "Het gevoel van 'niet genoeg'",
         fullText: "Op welke gebieden in je huidige leven voel je de pijnlijke overtuiging dat je tekortkomt, of dat je moet vechten voor kruimels? (Denk aan aandacht, geld, liefde)."
       },
       deepQuestion: {
         id: "ws1d2-q3-deep",
-        title: "Het Gevoel van 'Niet Genoeg' - Verdiepende Vraag",
+        title: "Het gevoel van 'niet genoeg' - verdiepende vraag",
         fullText: "Welke innerlijke stem herhaalt dit verhaal van tekort? Van wie heb je die stem geleerd, en wat zou je tegen die stem willen zeggen vanuit het deel van jou dat wél weet dat je genoeg bent?"
       },
       citation: {
@@ -87,12 +87,12 @@ export default function Workshop1Day2() {
       section: "ONDERDEEL 2: DYNAMIEK IN RELATIES (ZELF EN ANDER)",
       mainQuestion: {
         id: "ws1d2-q4-main",
-        title: "De Emotionele Vampier",
+        title: "De emotionele vampier",
         fullText: "Herken je bij jezelf (of je partner) het patroon dat hoeveel aandacht er ook wordt gegeven, het nooit genoeg voelt? Dat er na een fijn moment direct weer een gevoel van leegte of claim ontstaat?"
       },
       deepQuestion: {
         id: "ws1d2-q4-deep",
-        title: "De Emotionele Vampier - Verdiepende Vraag",
+        title: "De emotionele vampier - verdiepende vraag",
         fullText: "Wat zou er gebeuren als je na een moment van ontvangen even zou pauzeren en het werkelijk zou laten binnenkomen? Wat maakt het zo moeilijk om te geloven dat het genoeg is?"
       },
       citation: {
@@ -105,12 +105,12 @@ export default function Workshop1Day2() {
       section: "ONDERDEEL 2: DYNAMIEK IN RELATIES (ZELF EN ANDER)",
       mainQuestion: {
         id: "ws1d2-q5-main",
-        title: "Ruilhandel in Aandacht",
+        title: "Ruilhandel in aandacht",
         fullText: "Geef jij vaak aan anderen wat je eigenlijk zélf zo graag zou willen ontvangen? En voel je wrok als dit niet 'terugbetaald' wordt?"
       },
       deepQuestion: {
         id: "ws1d2-q5-deep",
-        title: "Ruilhandel in Aandacht - Verdiepende Vraag",
+        title: "Ruilhandel in aandacht - verdiepende vraag",
         fullText: "Stel je voor dat je zou kunnen geven zonder iets terug te verwachten. Wat zou er dan veranderen in hoe je geeft? En durf je ook te ontvangen zonder daar iets voor 'terug te hoeven doen'?"
       },
       citation: {
@@ -123,12 +123,12 @@ export default function Workshop1Day2() {
       section: "ONDERDEEL 2: DYNAMIEK IN RELATIES (ZELF EN ANDER)",
       mainQuestion: {
         id: "ws1d2-q6-main",
-        title: "Destructief Recht",
+        title: "Destructief recht",
         fullText: "Herken je momenten waarop je vindt dat je recht hebt op compensatie voor wat je hebt gemist? Uit zich dit in eisen, claimen, of boos worden als de ander niet levert?"
       },
       deepQuestion: {
         id: "ws1d2-q6-deep",
-        title: "Destructief Recht - Verdiepende Vraag",
+        title: "Destructief recht - verdiepende vraag",
         fullText: "Als je het kleine kind in jou dat tekort is gekomen zou kunnen troosten, wat zou je tegen dat kind zeggen? En wat zou het werkelijk nodig hebben – niet van de ander, maar van jou?"
       },
       citation: {
@@ -141,12 +141,12 @@ export default function Workshop1Day2() {
       section: "ONDERDEEL 3: HET LICHAAM EN DE ENERGIE",
       mainQuestion: {
         id: "ws1d2-q7-main",
-        title: "De Ingestorte Houding",
+        title: "De ingestorte houding",
         fullText: "Ga voor de spiegel staan en laat je schouders en borstkas hangen zoals je doet als je moe of verdrietig bent. Wat zie je? Herken je de fysieke kenmerken van de 'ondervoeding'?"
       },
       deepQuestion: {
         id: "ws1d2-q7-deep",
-        title: "De Ingestorte Houding - Verdiepende Vraag",
+        title: "De ingestorte houding - verdiepende vraag",
         fullText: "Als je je borstkas zou openen en je schouders naar achteren zou brengen, welke emotie komt er dan naar boven? Wat zou je dan moeten voelen dat je nu niet voelt?"
       },
       citation: {
@@ -159,12 +159,12 @@ export default function Workshop1Day2() {
       section: "ONDERDEEL 3: HET LICHAAM EN DE ENERGIE",
       mainQuestion: {
         id: "ws1d2-q8-main",
-        title: "Het Hongergat",
+        title: "Het hongergat",
         fullText: "Voel eens in het centrum van je borstkas, ter hoogte van het hart. Voelt het daar vol en krachtig, of is er een sensatie van een 'gat', een inzinking of een zuigende leegte?"
       },
       deepQuestion: {
         id: "ws1d2-q8-deep",
-        title: "Het Hongergat - Verdiepende Vraag",
+        title: "Het hongergat - verdiepende vraag",
         fullText: "Als je adem en liefde naar die plek zou kunnen sturen, wat zou die leegte dan nodig hebben om langzaam gevuld te raken? En van wie zou die vulling moeten komen?"
       },
       citation: {
@@ -177,12 +177,12 @@ export default function Workshop1Day2() {
       section: "ONDERDEEL 4: DE KWALITEIT (HET GOUD)",
       mainQuestion: {
         id: "ws1d2-q9-main",
-        title: "De Voedster / De Bron",
+        title: "De voedster / de bron",
         fullText: "Als jij je niet leeg en behoeftig voelt, maar 'gevuld', wat heb jij de wereld dan te bieden? Wat is jouw specifieke kwaliteit in het aanvoelen van wat anderen nodig hebben?"
       },
       deepQuestion: {
         id: "ws1d2-q9-deep",
-        title: "De Voedster / De Bron - Verdiepende Vraag",
+        title: "De voedster / de bron - verdiepende vraag",
         fullText: "Kun je een moment herinneren waarop je gaf vanuit overvloed in plaats van uit hoop op terugkrijgen? Hoe voelde dat anders, en hoe zou je meer van die momenten kunnen creëren?"
       },
       citation: {
@@ -215,10 +215,10 @@ export default function Workshop1Day2() {
                 18-19 april 2026
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-foreground">
-                De Honger die Nooit Stilt
+                De honger die nooit stilt
               </h1>
               <p className="text-xl text-muted-foreground">
-                De Orale Structuur
+                De orale structuur
               </p>
             </div>
           </div>
@@ -228,7 +228,7 @@ export default function Workshop1Day2() {
           <div className="flex flex-col sm:flex-row gap-4 justify-between items-end">
             <DownloadButtons 
               workshopId="workshop1_dag2_jaar2"
-              workshopTitle="Workshop 1 - Dag 2: De Honger die Nooit Stilt"
+              workshopTitle="Workshop 1 - Dag 2: De honger die nooit stilt"
               workshopDate="18-19 april 2026"
               questions={allQuestions}
             />
@@ -239,7 +239,7 @@ export default function Workshop1Day2() {
             <CardContent className="pt-6">
               <div className="space-y-4 text-foreground/90 leading-relaxed">
                 <p>
-                  <strong>Thema: De Honger die Nooit Stilt & De Weg naar de Bron</strong>
+                  <strong>Thema: De honger die nooit stilt & de weg naar de bron</strong>
                 </p>
                 <p>
                   Beste deelnemer,
@@ -375,9 +375,9 @@ export default function Workshop1Day2() {
 
           <div className="flex justify-between items-center pt-8 border-t border-border">
             <Link href="/workshop/1">
-              <Button variant="ghost">Terug naar Dag 1</Button>
+              <Button variant="ghost">Terug naar dag 1</Button>
             </Link>
-            <Link href="/workshop/2"><Button className="gap-2">Volgende Workshop <ChevronRight className="h-4 w-4" /></Button></Link>
+            <Link href="/workshop/2"><Button className="gap-2">Volgende workshop <ChevronRight className="h-4 w-4" /></Button></Link>
           </div>
         </div>
       </div>
