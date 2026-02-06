@@ -151,7 +151,7 @@ export default function Home() {
               Bekijk de algemene aandachtspunten en richtlijnen voor dit jaar.
             </p>
             <Button className="w-full" asChild>
-              <a href="/aandachtspunten">Bekijk Aandachtspunten</a>
+              <a href="/aandachtspunten">Bekijk aandachtspunten</a>
             </Button>
           </CardContent>
         </Card>
@@ -170,7 +170,7 @@ export default function Home() {
             Ontdek welke karakterstructuren bij jou het sterkst aanwezig zijn. De test bestaat uit twee delen: 25 scenariovragen en 100 stellingen.
           </p>
           <Button className="w-full" asChild>
-            <a href="/test">Start de Test</a>
+            <a href="/test">Start de test</a>
           </Button>
         </CardContent>
       </Card>
@@ -207,7 +207,7 @@ export default function Home() {
             </div>
             <CardHeader>
               <CardTitle>Van Wond naar Wonder</CardTitle>
-              <p className="text-sm text-muted-foreground italic">Jaar 2 Studiemateriaal</p>
+              <p className="text-sm text-muted-foreground italic">Jaar 2 studiemateriaal</p>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground mb-6">
