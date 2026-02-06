@@ -53,7 +53,7 @@ export default function AdminUsage() {
   const exportToCSV = () => {
     if (!stats) return;
 
-    const headers = ['Email', 'Aantal Antwoorden', 'Aantal AI Conversaties', 'Laatste Activiteit'];
+    const headers = ['Email', 'Aantal antwoorden', 'Aantal AI conversaties', 'Laatste activiteit'];
     const rows = stats.users.map(user => [
       user.email,
       user.answerCount.toString(),
@@ -128,7 +128,7 @@ export default function AdminUsage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-blue-900">
               <Shield className="h-5 w-5" />
-              Privacy Garantie
+              Privacy garantie
             </CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-blue-800">
@@ -146,7 +146,7 @@ export default function AdminUsage() {
         <div className="grid gap-4 md:grid-cols-4 mb-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Totaal Gebruikers</CardTitle>
+              <CardTitle className="text-sm font-medium">Totaal gebruikers</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -156,7 +156,7 @@ export default function AdminUsage() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Totaal Antwoorden</CardTitle>
+              <CardTitle className="text-sm font-medium">Totaal antwoorden</CardTitle>
               <FileText className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -166,7 +166,7 @@ export default function AdminUsage() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Totaal AI Conversaties</CardTitle>
+              <CardTitle className="text-sm font-medium">Totaal AI conversaties</CardTitle>
               <MessageSquare className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -176,7 +176,7 @@ export default function AdminUsage() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Totaal AI Calls</CardTitle>
+              <CardTitle className="text-sm font-medium">Totaal AI calls</CardTitle>
               <MessageSquare className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -189,7 +189,7 @@ export default function AdminUsage() {
         {/* User Statistics Table */}
         <Card>
           <CardHeader>
-            <CardTitle>Gebruikers Statistieken</CardTitle>
+            <CardTitle>Gebruikersstatistieken</CardTitle>
             <CardDescription>
               Overzicht van gebruikersactiviteit (metadata only - geen inhoud)
             </CardDescription>
@@ -200,8 +200,8 @@ export default function AdminUsage() {
                 <TableRow>
                   <TableHead>Email</TableHead>
                   <TableHead className="text-right">Antwoorden</TableHead>
-                  <TableHead className="text-right">AI Conversaties</TableHead>
-                  <TableHead className="text-right">Laatste Activiteit</TableHead>
+                  <TableHead className="text-right">AI conversaties</TableHead>
+                  <TableHead className="text-right">Laatste activiteit</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
