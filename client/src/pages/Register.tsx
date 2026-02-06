@@ -117,7 +117,7 @@ export default function Register() {
           <div className="flex justify-center">
             <img src={APP_LOGO} alt={APP_TITLE} className="h-16" />
           </div>
-          <CardTitle className="text-2xl text-center">Account Aanmaken</CardTitle>
+          <CardTitle className="text-2xl text-center">Account aanmaken</CardTitle>
           <CardDescription className="text-center">
             {step === "email"
               ? "Voer je e-mailadres in om te beginnen"
@@ -179,7 +179,7 @@ export default function Register() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Bevestig Wachtwoord</Label>
+                <Label htmlFor="confirmPassword">Bevestig wachtwoord</Label>
                 <div className="relative">
                   <Input
                     id="confirmPassword"
@@ -276,7 +276,7 @@ export default function Register() {
                       Aanmaken...
                     </>
                   ) : (
-                    "Account Aanmaken"
+                    "Account aanmaken"
                   )}
                 </Button>
               </div>
