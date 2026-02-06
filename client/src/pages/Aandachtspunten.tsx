@@ -104,7 +104,7 @@ export default function Aandachtspunten() {
           {/* Header */}
           <div className="text-center space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground">
-              Aandachtspunten voor je Reis
+              Aandachtspunten voor je reis
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Zorg goed voor jezelf tijdens dit proces. Deze pagina is je anker, een plek waar je altijd kunt terugkeren om jezelf te herinneren aan de belangrijkste principes van deze reis.
@@ -126,7 +126,7 @@ export default function Aandachtspunten() {
           <div className="space-y-6">
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground flex items-center gap-2">
               <Sparkles className="h-6 w-6 text-primary" />
-              Acht Belangrijke Aandachtspunten
+              Acht belangrijke aandachtspunten
             </h2>
             <div className="grid gap-6">
               {aandachtspunten.map((punt, index) => (
@@ -149,7 +149,7 @@ export default function Aandachtspunten() {
           <div className="space-y-6">
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground flex items-center gap-2">
               <Bot className="h-6 w-6 text-primary" />
-              Je AI-Coach: Eerlijke Spiegel, Geen Vleierij
+              Je AI-coach: eerlijke spiegel, geen vleierij
             </h2>
             
             <Card className="bg-accent/30 border-primary/20">
@@ -159,7 +159,7 @@ export default function Aandachtspunten() {
                 </p>
                 
                 <div className="pt-2">
-                  <h3 className="font-semibold text-lg text-foreground mb-2">Pas Op Voor de "Lieve" AI</h3>
+                  <h3 className="font-semibold text-lg text-foreground mb-2">Pas op voor de "lieve" AI</h3>
                   <p className="text-foreground/80 leading-relaxed">
                     Wanneer je de AI wel gebruikt, is er iets belangrijks dat je moet weten over hoe AI werkt. AI-systemen zijn getraind om behulpzaam en vriendelijk te zijn. Dat klinkt fijn, maar het heeft een keerzijde: ze hebben de neiging om je in watten te pakken. Ze zeggen "wat een mooi inzicht" terwijl je eigenlijk nodig hebt te horen waar je jezelf voor de gek houdt. Ze beschermen je ego in plaats van je groei te dienen.
                   </p>
@@ -172,7 +172,7 @@ export default function Aandachtspunten() {
             </Card>
 
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-foreground">Hoe Je De AI Uitnodigt Tot Eerlijkheid</h3>
+              <h3 className="text-xl font-semibold text-foreground">Hoe je de AI uitnodigt tot eerlijkheid</h3>
               <p className="text-muted-foreground">Je kunt de AI sturen naar meer diepgang. Probeer vragen zoals:</p>
               <div className="grid md:grid-cols-2 gap-4">
                 {aiTips.map((tip, index) => (
@@ -193,7 +193,7 @@ export default function Aandachtspunten() {
 
             <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-secondary/5">
               <CardContent className="pt-6 space-y-4">
-                <h3 className="font-semibold text-lg text-foreground">Waarom Dit Ertoe Doet</h3>
+                <h3 className="font-semibold text-lg text-foreground">Waarom dit ertoe doet</h3>
                 <p className="text-foreground/80 leading-relaxed">
                   De echte waarde van werken met AI in dit huiswerkboek ligt niet in bevestiging, maar in uitdaging. Wanneer de AI een blinde vlek blootlegt of een vraag stelt die je liever ontwijkt, dán gebeurt er iets. Dát zijn de momenten van potentiële doorbraak.
                 </p>
@@ -208,7 +208,7 @@ export default function Aandachtspunten() {
               <CardContent className="pt-6 space-y-4">
                 <h3 className="font-semibold text-lg text-foreground flex items-center gap-2">
                   <span>⚠️</span>
-                  Belangrijke Kanttekeningen
+                  Belangrijke kanttekeningen
                 </h3>
                 
                 <div className="space-y-3 text-foreground/80">
@@ -234,7 +234,7 @@ export default function Aandachtspunten() {
           <div className="space-y-6">
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground flex items-center gap-2">
               <Share2 className="h-6 w-6 text-primary" />
-              Delen van je Antwoorden
+              Delen van je antwoorden
             </h2>
             
             <Card className="bg-accent/30 border-primary/20">
@@ -263,7 +263,7 @@ export default function Aandachtspunten() {
 
             <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-secondary/5">
               <CardContent className="pt-6 space-y-4">
-                <h3 className="font-semibold text-lg text-foreground">Waarom Delen Waardevol Kan Zijn</h3>
+                <h3 className="font-semibold text-lg text-foreground">Waarom delen waardevol kan zijn</h3>
                 <p className="text-foreground/80 leading-relaxed">
                   Hoe meer je met ons deelt, hoe beter wij kunnen aansluiten bij jouw proces. Wanneer wij je antwoorden vooraf kennen, kunnen we:
                 </p>
@@ -291,7 +291,7 @@ export default function Aandachtspunten() {
           {/* Praktische Tips */}
           <div className="space-y-6">
             <h2 className="text-2xl md:text-3xl font-semibold text-foreground">
-              Praktische Tips voor je Voorbereiding
+              Praktische tips voor je voorbereiding
             </h2>
             <div className="grid md:grid-cols-2 gap-4">
               {praktischeTips.map((tip, index) => (
