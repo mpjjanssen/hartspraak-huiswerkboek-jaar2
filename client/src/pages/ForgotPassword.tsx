@@ -57,7 +57,7 @@ export default function ForgotPassword() {
                 <img src={APP_LOGO} alt="Logo" className="h-16 w-16" />
               </div>
             )}
-            <CardTitle className="text-2xl">Je Reset Code</CardTitle>
+            <CardTitle className="text-2xl">Je reset code</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -71,7 +71,7 @@ export default function ForgotPassword() {
               </div>
               
               <div className="space-y-2">
-                <Label>Reset Code voor {email}</Label>
+                <Label>Reset code voor {email}</Label>
                 <div className="flex gap-2">
                   <Input
                     value={resetToken}
@@ -99,7 +99,7 @@ export default function ForgotPassword() {
                 </p>
                 <ol className="text-xs text-blue-700 space-y-1 list-decimal list-inside">
                   <li>Kopieer de reset code hierboven</li>
-                  <li>Ga naar de "Wachtwoord Resetten" pagina</li>
+                  <li>Ga naar de "Wachtwoord resetten" pagina</li>
                   <li>Vul je email, de reset code en je nieuwe wachtwoord in</li>
                 </ol>
               </div>
@@ -107,7 +107,7 @@ export default function ForgotPassword() {
               <div className="flex gap-2">
                 <Link href="/reset-password" className="flex-1">
                   <Button className="w-full">
-                    Ga naar Wachtwoord Resetten
+                    Ga naar wachtwoord resetten
                   </Button>
                 </Link>
               </div>
@@ -133,7 +133,7 @@ export default function ForgotPassword() {
               <img src={APP_LOGO} alt="Logo" className="h-16 w-16" />
             </div>
           )}
-          <CardTitle className="text-2xl">Wachtwoord Resetten</CardTitle>
+          <CardTitle className="text-2xl">Wachtwoord resetten</CardTitle>
           <p className="text-muted-foreground mt-2">
             Voer je e-mailadres in om een reset code te genereren
           </p>
@@ -159,7 +159,7 @@ export default function ForgotPassword() {
                   Genereren...
                 </>
               ) : (
-                "Genereer Reset Code"
+                "Genereer reset code"
               )}
             </Button>
           </form>
