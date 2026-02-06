@@ -12,7 +12,7 @@ export default function Workshop6() {
   const [showOptional, setShowOptional] = useState(false);
   
   const workshopId = "workshop6";
-  const workshopTitle = "Workshop 6: Integratie: Je Nieuwe Zelf Leven";
+  const workshopTitle = "Workshop 6: Integratie: Je nieuwe zelf leven";
   const workshopDate = "20.02.2027 - 21.02.2027";
   
   const questionIds = [
@@ -72,7 +72,7 @@ export default function Workshop6() {
 
           {/* Wat Deze Workshop Jou Biedt */}
           <div className="space-y-4 mt-8">
-            <h3 className="text-xl font-semibold text-primary mb-3">Wat Deze Workshop Jou Biedt</h3>
+            <h3 className="text-xl font-semibold text-primary mb-3">Wat deze workshop jou biedt</h3>
             <p className="text-foreground/90 leading-relaxed">
               In deze afsluitende workshop gaan we op drie niveaus werken:
             </p>
@@ -314,7 +314,7 @@ export default function Workshop6() {
             </Link>
             <Link href="/">
               <Button className="gap-2">
-                Terug naar Home
+                Terug naar home
               </Button>
             </Link>
           </div>
