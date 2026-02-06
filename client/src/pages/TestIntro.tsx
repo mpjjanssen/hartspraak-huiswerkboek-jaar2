@@ -19,42 +19,42 @@ export default function TestIntro() {
 
   const structureInfo = [
     {
-      title: "1. De Schizoïde Structuur",
+      title: "1. De schizoïde structuur",
       question: "Mag ik er zijn?",
       description: "Dit is de structuur van de zwerver, het kind dat de wereld als te overweldigend ervoer om volledig te landen. De existentiële angst – het gevoel niet welkom te zijn op deze aarde – drijft naar binnen, naar de veiligheid van het denken, weg van het lichaam.",
       mask: "de buitenstaander, die observeert maar niet echt deelneemt.",
       quality: "de dromer, die vanuit die afstand visioenen ziet die anderen ontgaan."
     },
     {
-      title: "2. De Orale Structuur",
+      title: "2. De orale structuur",
       question: "Mag ik behoeftig zijn?",
       description: "Het kind dat te vroeg te veel moest missen – voeding, warmte, aanwezigheid. Niet per se fysiek, maar emotioneel. Er ontstaat een diepe honger, een verlangen dat nooit helemaal gestild lijkt te worden.",
       mask: "de innerlijke verliezer, die het tekort al verwacht voordat het er is.",
       quality: "de voedster, die vanuit doorleefde honger anderen kan voeden."
     },
     {
-      title: "3. De Symbiotische Structuur",
+      title: "3. De symbiotische structuur",
       question: "Wie ben ik, los van jou?",
       description: "Dit is de verwarring op de grens tussen zelf en ander. Het kind dat nooit veilig kon ontdekken waar het zelf begon en de ander ophield. Autonomie voelt als verlating; verbinding als versmelting.",
       mask: "de kameleon, die zichzelf verliest in de ander.",
       quality: "de mediator, die grenzen kan bewaken én verbinding kan maken."
     },
     {
-      title: "4. De Masochistische Structuur",
+      title: "4. De masochistische structuur",
       question: "Mag ik vrij zijn?",
       description: "Het kind dat leerde dat eigenheid gevaarlijk was. Elke beweging naar buiten werd afgeremd, elke uitdrukking van kracht werd onderdrukt. Wat rest is een diepe overtuiging: ik mag er zijn, maar alleen als ik me klein maak.",
       mask: "de drager, die het lijden van de hele wereld op zich neemt.",
       quality: "de bevrijder, die vanuit doorleefde onderdrukking anderen helpt hun stem te vinden."
     },
     {
-      title: "5. De Psychopathische Structuur",
+      title: "5. De psychopathische structuur",
       question: "Kan ik je vertrouwen?",
       description: "Het kind dat verraden werd door degene die het moest beschermen. Het leerde vroeg: de wereld is verdeeld in roofdieren en prooi, en ik zal nooit meer prooi zijn. Controle werd de enige veiligheid.",
       mask: "de manipulator, die charme inzet als wapen.",
       quality: "de krijger van het hart, die kracht inzet voor bescherming in plaats van dominantie."
     },
     {
-      title: "6. De Rigide Structuur",
+      title: "6. De rigide structuur",
       question: "Mag ik voelen?",
       description: "Het kind dat leerde dat spontaniteit niet welkom was. Dat vitaliteit, wildheid en het open hart afgeremd moesten worden. Het antwoord: perfectie. Als ik alles goed doe, kan niemand me pijn doen.",
       mask: "de perfectionist, die controle houdt over elke emotie.",
@@ -72,7 +72,7 @@ export default function TestIntro() {
               <span className="hover:text-primary cursor-pointer">Home</span>
             </Link>
             <ChevronRight className="h-4 w-4" />
-            <span>Karakterstructuren Test</span>
+            <span>Karakterstructurentest</span>
           </div>
 
           {/* Header */}
@@ -82,10 +82,10 @@ export default function TestIntro() {
               Zelfreflectie
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-foreground">
-              Karakterstructuren Test
+              Karakterstructurentest
             </h1>
             <p className="text-xl text-muted-foreground">
-              De Taal van Onze Vroege Wonden
+              De taal van onze vroege wonden
             </p>
           </div>
 
@@ -103,14 +103,14 @@ export default function TestIntro() {
                   <div className="flex gap-3">
                     {isComplete ? (
                       <Link href="/test/resultaten">
-                        <Button>Bekijk Resultaten</Button>
+                        <Button>Bekijk resultaten</Button>
                       </Link>
                     ) : (
                       <Link href={Object.keys(part1Answers).length < part1Questions.length ? "/test/deel1" : "/test/deel2"}>
-                        <Button>Verder Gaan</Button>
+                        <Button>Verder gaan</Button>
                       </Link>
                     )}
-                    <Button variant="outline" onClick={handleReset}>Opnieuw Beginnen</Button>
+                    <Button variant="outline" onClick={handleReset}>Opnieuw beginnen</Button>
                   </div>
                 </div>
               </CardContent>
@@ -172,13 +172,13 @@ export default function TestIntro() {
               <p>De test bestaat uit twee delen:</p>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="bg-accent/30 rounded-lg p-4">
-                  <h4 className="font-semibold mb-1">Deel I: Multiple Choice</h4>
+                  <h4 className="font-semibold mb-1">Deel I: Multiple choice</h4>
                   <p className="text-sm text-muted-foreground">
                     25 scenariovragen met 6 antwoordmogelijkheden. Kies het antwoord dat het beste bij je past.
                   </p>
                 </div>
                 <div className="bg-accent/30 rounded-lg p-4">
-                  <h4 className="font-semibold mb-1">Deel II: Ja/Nee Stellingen</h4>
+                  <h4 className="font-semibold mb-1">Deel II: Ja/nee stellingen</h4>
                   <p className="text-sm text-muted-foreground">
                     100 stellingen die je met ja of nee beantwoordt. Ga af op je eerste gevoel.
                   </p>
@@ -199,12 +199,12 @@ export default function TestIntro() {
             <Link href="/">
               <Button variant="ghost" className="gap-2">
                 <ChevronLeft className="h-4 w-4" />
-                Terug naar Home
+                Terug naar home
               </Button>
             </Link>
             <Link href="/test/deel1">
               <Button size="lg" className="gap-2">
-                Start de Test
+                Start de test
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </Link>
