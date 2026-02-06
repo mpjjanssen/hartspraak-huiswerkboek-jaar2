@@ -52,15 +52,15 @@ export default function TestPart2() {
               <Button variant="ghost" size="sm" className="shrink-0">Inleiding</Button>
             </Link>
             <Link href="/test/deel1">
-              <Button variant="ghost" size="sm" className="shrink-0">Deel I: Multiple Choice</Button>
+              <Button variant="ghost" size="sm" className="shrink-0">Deel I: Multiple choice</Button>
             </Link>
-            <Button size="sm" className="shrink-0">Deel II: Ja/Nee Vragen</Button>
+            <Button size="sm" className="shrink-0">Deel II: Ja/nee vragen</Button>
           </div>
 
           {/* Header */}
           <div>
             <h1 className="text-3xl font-bold text-foreground mb-2">
-              Deel II: Ja/Nee Stellingen
+              Deel II: Ja/nee stellingen
             </h1>
             <p className="text-muted-foreground">
               Beantwoord elke stelling met 'Ja' of 'Nee'. Ga af op je eerste gevoel – denk er niet te lang over na.
@@ -154,13 +154,13 @@ export default function TestPart2() {
           <div className="flex justify-between items-center pt-4">
             <Button variant="outline" onClick={goPrev} className="gap-2">
               <ChevronLeft className="h-4 w-4" />
-              {currentPage === 0 ? "Terug naar Deel I" : "Vorige Pagina"}
+              {currentPage === 0 ? "Terug naar deel I" : "Vorige pagina"}
             </Button>
             {currentPage === totalPages - 1 ? (
               allComplete ? (
                 <Link href="/test/resultaten">
                   <Button className="gap-2">
-                    Bekijk Resultaten
+                    Bekijk resultaten
                     <ChevronRight className="h-4 w-4" />
                   </Button>
                 </Link>
@@ -171,7 +171,7 @@ export default function TestPart2() {
               )
             ) : (
               <Button onClick={goNext} className="gap-2">
-                Volgende Pagina
+                Volgende pagina
                 <ChevronRight className="h-4 w-4" />
               </Button>
             )}
