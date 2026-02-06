@@ -48,16 +48,16 @@ export default function TestPart1() {
             <Link href="/test">
               <Button variant="ghost" size="sm" className="shrink-0">Inleiding</Button>
             </Link>
-            <Button size="sm" className="shrink-0">Deel I: Multiple Choice</Button>
+            <Button size="sm" className="shrink-0">Deel I: Multiple choice</Button>
             <Link href="/test/deel2">
-              <Button variant="ghost" size="sm" className="shrink-0">Deel II: Ja/Nee Vragen</Button>
+              <Button variant="ghost" size="sm" className="shrink-0">Deel II: Ja/nee vragen</Button>
             </Link>
           </div>
 
           {/* Header */}
           <div>
             <h1 className="text-3xl font-bold text-foreground mb-2">
-              Deel I: Multiple Choice Vragen
+              Deel I: Multiple choice vragen
             </h1>
             <p className="text-muted-foreground">
               Kies bij elke vraag het antwoord dat het beste bij je past. Er zijn geen goede of foute antwoorden.
@@ -131,10 +131,10 @@ export default function TestPart1() {
           <div className="flex justify-between items-center pt-4">
             <Button variant="outline" onClick={goPrev} className="gap-2">
               <ChevronLeft className="h-4 w-4" />
-              {currentPage === 0 ? "Terug naar Inleiding" : "Vorige Pagina"}
+              {currentPage === 0 ? "Terug naar inleiding" : "Vorige pagina"}
             </Button>
             <Button onClick={goNext} className="gap-2">
-              {currentPage === totalPages - 1 ? "Naar Deel II" : "Volgende Pagina"}
+              {currentPage === totalPages - 1 ? "Naar deel II" : "Volgende pagina"}
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
