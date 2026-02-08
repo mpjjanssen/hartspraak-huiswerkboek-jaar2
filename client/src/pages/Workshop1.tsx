@@ -25,7 +25,7 @@ interface QuestionPair {
   };
 }
 export default function Workshop1() {
-  const schizoidPairs: QuestionPair[] = [
+  const teruggetrokkenPairs: QuestionPair[] = [
     {
       id: "pair-1",
       section: "ONDERDEEL 1: DE OORSPRONG (ACHTERGROND)",
@@ -40,7 +40,7 @@ export default function Workshop1() {
         fullText: "Als je lichaam zou kunnen spreken over het allereerste moment dat het 'besloot' om zich terug te trekken of te beschermen, wat zou het dan zeggen? En wat had het nodig gehad om die beslissing niet te hoeven nemen?"
       },
       citation: {
-        text: "In mijn jaren van werken met trauma heb ik geleerd dat de schizoïde structuur zich ontwikkelt in een zeer specifieke periode: voor, tijdens en direct na de geboorte. Het is de tijd waarin we het meest kwetsbaar zijn [...] Een cliënt vertelde me eens: 'Ik wist vanaf het begin dat ik een vergissing was. Niet in woorden natuurlijk, maar mijn lichaam wist het.'",
+        text: "In mijn jaren van werken met trauma heb ik geleerd dat de teruggetrokken structuur zich ontwikkelt in een zeer specifieke periode: voor, tijdens en direct na de geboorte. Het is de tijd waarin we het meest kwetsbaar zijn [...] Een cliënt vertelde me eens: 'Ik wist vanaf het begin dat ik een vergissing was. Niet in woorden natuurlijk, maar mijn lichaam wist het.'",
         source: "Van wond naar wonder, Hoofdstuk 1, Blz. 19"
       }
     },
@@ -94,7 +94,7 @@ export default function Workshop1() {
         fullText: "Wat is de ergste angst die je hebt over wat er zou gebeuren als iemand je werkelijk zou zien en kennen? En wat zou je kunnen winnen als je dat risico toch zou nemen?"
       },
       citation: {
-        text: "Een partner van een schizoïde cliënt zei me eens: 'Het is alsof ik verliefd ben geworden op iemand achter een glazen muur. Ik kan hem zien, soms zelfs voelen, maar er is altijd die barrière tussen ons.'",
+        text: "Een partner van een teruggetrokken cliënt zei me eens: 'Het is alsof ik verliefd ben geworden op iemand achter een glazen muur. Ik kan hem zien, soms zelfs voelen, maar er is altijd die barrière tussen ons.'",
         source: "Van wond naar wonder, Hoofdstuk 1"
       }
     },
@@ -189,7 +189,7 @@ export default function Workshop1() {
       }
     }
   ];
-  const oralPairs: QuestionPair[] = [
+  const zoekendePairs: QuestionPair[] = [
     {
       id: "pair-o1",
       section: "ONDERDEEL 1: DE OORSPRONG (ACHTERGROND)",
@@ -258,7 +258,7 @@ export default function Workshop1() {
         fullText: "Wat zou er gebeuren als je na een moment van ontvangen even zou pauzeren en het werkelijk zou laten binnenkomen? Wat maakt het zo moeilijk om te geloven dat het genoeg is?"
       },
       citation: {
-        text: "Een partner van een orale man vertelde me uitgeput: 'Het is alsof ik met een vampier leef, maar dan een emotionele vampier. Hij zuigt alle energie uit me.'",
+        text: "Een partner van een zoekende man vertelde me uitgeput: 'Het is alsof ik met een vampier leef, maar dan een emotionele vampier. Hij zuigt alle energie uit me.'",
         source: "Van wond naar wonder, Hoofdstuk 2"
       }
     },
@@ -312,7 +312,7 @@ export default function Workshop1() {
         fullText: "Als je je borstkas zou openen en je schouders naar achteren zou brengen, welke emotie komt er dan naar boven? Wat zou je dan moeten voelen dat je nu niet voelt?"
       },
       citation: {
-        text: "Het orale lichaam vertelt het verhaal van ondervoeding. Lang en mager vaak, met spieren die als slappe touwtjes aan het skelet hangen.",
+        text: "Het zoekende lichaam vertelt het verhaal van ondervoeding. Lang en mager vaak, met spieren die als slappe touwtjes aan het skelet hangen.",
         source: "Van wond naar wonder, Hoofdstuk 2"
       }
     },
@@ -348,7 +348,7 @@ export default function Workshop1() {
         fullText: "Kun je een moment herinneren waarop je gaf vanuit overvloed in plaats van uit hoop op terugkrijgen? Hoe voelde dat anders, en hoe zou je meer van die momenten kunnen creëren?"
       },
       citation: {
-        text: "Orale mensen die hun eigen bron hebben gevonden, kunnen geven zoals niemand anders kan geven. Ze kennen de honger, ze kennen de leegte, dus ze weten precies wat anderen nodig hebben.",
+        text: "Zoekende mensen die hun eigen bron hebben gevonden, kunnen geven zoals niemand anders kan geven. Ze kennen de honger, ze kennen de leegte, dus ze weten precies wat anderen nodig hebben.",
         source: "Van wond naar wonder, Hoofdstuk 2"
       }
     }
@@ -440,7 +440,7 @@ export default function Workshop1() {
             <CardTitle className="text-3xl font-bold text-center text-primary">Workshop 1: De fundamenten</CardTitle>
           </CardHeader>
           <CardContent className="text-center text-foreground/80">
-            <p className="mb-4">We beginnen onze reis bij het absolute fundament: het bestaansrecht en de eerste verbinding. De schizoïde en orale structuren zijn de eerste verdedigingen die we als mens ontwikkelen. Ze raken aan de oervragen: Mag ik er zijn? En: Wordt er voor mij gezorgd?</p>
+            <p className="mb-4">We beginnen onze reis bij het absolute fundament: het bestaansrecht en de eerste verbinding. De teruggetrokken en zoekende structuren zijn de eerste verdedigingen die we als mens ontwikkelen. Ze raken aan de oervragen: Mag ik er zijn? En: Wordt er voor mij gezorgd?</p>
             <p>We dragen allemaal stukjes van deze vroege patronen in ons. Laten we ze met zachtheid en nieuwsgierigheid onderzoeken.</p>
           </CardContent>
         </Card>
@@ -453,25 +453,25 @@ export default function Workshop1() {
             variant="outline" 
             className="text-base font-semibold px-6 py-3 hover:bg-primary/10"
           >
-            <a href="#schizoid-structure">📍 Dag 1: Schizoïde structuur</a>
+            <a href="#schizoid-structure">📍 Dag 1: Teruggetrokken structuur</a>
           </Button>
           <Button 
             asChild 
             variant="outline" 
             className="text-base font-semibold px-6 py-3 hover:bg-primary/10"
           >
-            <a href="#oral-structure">📍 Dag 2: Orale structuur</a>
+            <a href="#oral-structure">📍 Dag 2: Zoekende structuur</a>
           </Button>
         </div>
         <div id="schizoid-structure">
-          <h1 className="text-4xl font-bold text-center mb-2 text-primary/90">Dag 1: De schizoïde structuur</h1>
+          <h1 className="text-4xl font-bold text-center mb-2 text-primary/90">Dag 1: De teruggetrokken structuur</h1>
           <p className="text-center text-lg text-foreground/70 mb-12">Thema: Het recht om te bestaan & de dans van nabijheid en afstand</p>
-          {renderPairs(schizoidPairs, "ws1")}
+          {renderPairs(teruggetrokkenPairs, "ws1")}
         </div>
         <div id="oral-structure" className="mt-24 pt-12 border-t-4 border-primary/30">
-          <h1 className="text-4xl font-bold text-center mb-2 text-primary/90">Dag 2: De orale structuur</h1>
+          <h1 className="text-4xl font-bold text-center mb-2 text-primary/90">Dag 2: De zoekende structuur</h1>
           <p className="text-center text-lg text-foreground/70 mb-12">Thema: De honger die nooit stilt & de weg naar de bron</p>
-          {renderPairs(oralPairs, "ws1")}
+          {renderPairs(zoekendePairs, "ws1")}
         </div>
         <Card className="shadow-lg mt-24">
           <CardHeader>
@@ -494,3 +494,4 @@ export default function Workshop1() {
   );
 }
 // Forced cache refresh comment:
+
