@@ -7,6 +7,7 @@ import {
   PolarRadiusAxis,
   ResponsiveContainer,
 } from "recharts";
+import PortraitSection from "../components/PortraitSection";
 
 // ═══════════════════════════════════════════════════════════
 // TYPES
@@ -570,6 +571,7 @@ function FinalResults({ scoresI, scoresII, likertAnswers }: { scoresI: Scores; s
             </table>
           </div>
         </div>
+      <PortraitSection normI={normI} normII={normII} normIII={normIII} />
         <p style={{ fontSize: 13, color: S.subtle, fontFamily: S.fontBody, fontStyle: "italic", textAlign: "center" }}>Dit profiel is een uitnodiging tot zelfonderzoek, geen diagnose. Bespreek de resultaten met je therapeut voor verdere verdieping.</p>
       </div>
     </div>
