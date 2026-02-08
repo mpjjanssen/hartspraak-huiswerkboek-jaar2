@@ -35,8 +35,8 @@ const defaultTitles: Record<string, string> = {
   "workshop3": "Workshop 3: Wie met Wie Kan",
   "ws4": "Workshop 4: Van Wond naar Wonder",
   "workshop4": "Workshop 4: Van Wond naar Wonder",
-  "workshop1_jaar2": "Workshop 1: Schizoïde & Orale Structuur",
-  "workshop2_jaar2": "Workshop 2: Symbiotische & Masochistische Structuur",
+  "workshop1_jaar2": "Workshop 1: Teruggetrokken & zoekende structuur",
+  "workshop2_jaar2": "Workshop 2: Versmeltende & dragende structuur",
   "workshop3_jaar2": "Workshop 3: Macht, Controle en Perfectie",
   "workshop4_jaar2": "Workshop 4: Van Wond naar Wonder - Integratie",
 };
