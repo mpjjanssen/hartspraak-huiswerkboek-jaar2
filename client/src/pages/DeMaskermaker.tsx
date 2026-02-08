@@ -268,12 +268,12 @@ const LIKERT_OPTIONS = [
 // ═══════════════════════════════════════════════════════════
 
 const STRUCTURE_INFO: Record<StructureKey, { name: string; color: string; fullName: string }> = {
-  A: { name: "De teruggetrokkene", color: "#5B7B9A", fullName: "Schizoïde structuur" },
-  B: { name: "De zoeker", color: "#C4836A", fullName: "Orale structuur" },
-  S: { name: "De versmelter", color: "#8B6F8E", fullName: "Symbiotische structuur" },
-  C: { name: "De strateeg", color: "#6A8E6B", fullName: "Psychopathische structuur" },
-  D: { name: "De drager", color: "#A68B5B", fullName: "Masochistische structuur" },
-  E: { name: "De performer", color: "#7A8BA0", fullName: "Rigide structuur" },
+  A: { name: "De teruggetrokkene", color: "#5B7B9A", fullName: "Teruggetrokken structuur" },
+  B: { name: "De zoeker", color: "#C4836A", fullName: "Zoekende structuur" },
+  S: { name: "De versmelter", color: "#8B6F8E", fullName: "Versmeltende structuur" },
+  C: { name: "De strateeg", color: "#6A8E6B", fullName: "Strategische structuur" },
+  D: { name: "De drager", color: "#A68B5B", fullName: "Dragende structuur" },
+  E: { name: "De performer", color: "#7A8BA0", fullName: "Performende structuur" },
 };
 
 const STRUCTURE_ORDER: StructureKey[] = ["A", "B", "S", "C", "D", "E"];
@@ -644,3 +644,4 @@ export default function DeMaskermaker() {
     </div>
   );
 }
+
