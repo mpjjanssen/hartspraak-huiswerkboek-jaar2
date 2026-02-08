@@ -18,7 +18,7 @@ const anthropic = new Anthropic();
 const STRUCTURE_INFO: Record<string, { name: string; fullName: string; description: string; wound: string; gift: string; challenge: string }> = {
   A: {
     name: "De teruggetrokkene",
-    fullName: "Schizoïde structuur",
+    fullName: "Teruggetrokken structuur",
     description: "Trekt zich terug uit contact en het lichaam wanneer de wereld overweldigend is. Leeft veel in het hoofd, in verbeelding en abstractie.",
     wound: "Het basale recht om te bestaan werd bedreigd — vaak prenataal of in de eerste levensmaanden. De wereld voelde onveilig nog voordat er woorden waren.",
     gift: "Diep innerlijk leven, creativiteit, spirituele gevoeligheid, vermogen om voorbij het gewone te kijken.",
@@ -26,7 +26,7 @@ const STRUCTURE_INFO: Record<string, { name: string; fullName: string; descripti
   },
   B: {
     name: "De zoeker",
-    fullName: "Orale structuur",
+    fullName: "Zoekende structuur",
     description: "Zoekt voeding, erkenning en verbinding. Ervaart een basisgevoel van tekort — alsof er nooit genoeg is.",
     wound: "Emotionele of fysieke ondervoeding in de vroege kindertijd. Het kind kreeg niet genoeg — niet genoeg melk, niet genoeg warmte, niet genoeg aanwezigheid.",
     gift: "Empathie, warmte, vermogen om te verbinden, generositeit, gevoeligheid voor de behoeften van anderen.",
@@ -34,7 +34,7 @@ const STRUCTURE_INFO: Record<string, { name: string; fullName: string; descripti
   },
   S: {
     name: "De versmelter",
-    fullName: "Symbiotische structuur",
+    fullName: "Versmeltende structuur",
     description: "Stemt zich af op de ander tot het punt waar de grens tussen zelf en ander vervaagt. Voelt wat de ander voelt, vaak nog voordat de ander het zelf weet.",
     wound: "De ouder (meestal de moeder) had het kind nodig voor eigen emotionele regulatie. Het kind leerde: mijn taak is voelen wat jij voelt en daarvoor zorgen.",
     gift: "Buitengewone gevoeligheid, diep inlevingsvermogen, vermogen om sfeer en onderstroom te lezen.",
@@ -42,7 +42,7 @@ const STRUCTURE_INFO: Record<string, { name: string; fullName: string; descripti
   },
   C: {
     name: "De strateeg",
-    fullName: "Psychopathische structuur",
+    fullName: "Strategische structuur",
     description: "Neemt de regie, denkt strategisch, positioneert zich boven de situatie. Controle is veiligheid.",
     wound: "Het kind werd gemanipuleerd of verraden door een ouder die macht misbruikte. De les was: als je niet controleert, word je gecontroleerd.",
     gift: "Leiderschap, strategisch denken, daadkracht, vermogen om grote lijnen te zien en anderen te inspireren.",
@@ -50,7 +50,7 @@ const STRUCTURE_INFO: Record<string, { name: string; fullName: string; descripti
   },
   D: {
     name: "De drager",
-    fullName: "Masochistische structuur",
+    fullName: "Dragende structuur",
     description: "Draagt het gewicht van anderen — emotioneel, relationeel, soms letterlijk. Geeft meer dan er terugkomt, vaak zonder het te merken.",
     wound: "Het kind leerde dat eigen behoeften er niet toe deden, of dat het veiliger was te geven dan te vragen. Autonomie werd onderdrukt door overbescherming of beschaming.",
     gift: "Uithoudingsvermogen, loyaliteit, betrouwbaarheid, vermogen om anderen te dragen en vast te houden.",
@@ -58,7 +58,7 @@ const STRUCTURE_INFO: Record<string, { name: string; fullName: string; descripti
   },
   E: {
     name: "De performer",
-    fullName: "Rigide structuur",
+    fullName: "Performende structuur",
     description: "Functioneert, presteert, laat zien dat het goed gaat. Houdt de boel bij elkaar door te doen.",
     wound: "Het kind ervoer dat liefde voorwaardelijk was — gekoppeld aan presteren, braaf zijn, voldoen aan verwachtingen. Het hart werd beschermd achter competentie.",
     gift: "Discipline, competentie, doorzettingsvermogen, vermogen om structuur te bieden en doelen te bereiken.",
@@ -111,7 +111,7 @@ STRUCTUUR VAN HET PORTRET:
 Als er discrepanties zijn (verschil ≥25% tussen meetmethoden), verwerk dit in het portret als informatie over het verschil tussen onbewust patroon en zelfbeeld.
 
 BELANGRIJK:
-- Gebruik NOOIT de klinische termen (schizoïd, oraal, etc.) in de lopende tekst. Alleen de nieuwe namen.
+- Gebruik NOOIT de klinische termen (schizoïd, oraal, symbiotisch, psychopathisch, masochistisch, rigide) in de lopende tekst. Alleen de nieuwe namen (teruggetrokken, zoekend, versmeltend, strategisch, dragend, performend).
 - Schrijf minimaal 800 woorden, maximaal 1200 woorden
 - Elk portret moet uniek zijn — geen standaardtekst, maar echt afgestemd op de specifieke scorecombinatie
 - Het portret is bedoeld als therapeutisch instrument, niet als entertainment`;
@@ -238,3 +238,4 @@ router.post("/portrait", async (req, res) => {
 });
 
 export default router;
+
