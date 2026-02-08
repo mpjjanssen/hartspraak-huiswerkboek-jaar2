@@ -55,7 +55,9 @@ async function startServer() {
   // AI helper API routes
   const aiHelperRouter = (await import("../routes/ai-helper.js")).default;
   app.use("/api/ai-helper", aiHelperRouter);
-  
+  // Maskermaker portrait API routes
+  const maskermakerRouter = (await import("../routes/maskermaker-portrait.js")).default;
+  app.use("/api/maskermaker", maskermakerRouter);
   // Workshop reminders API routes
   const workshopRemindersRouter = (await import("../routes/workshop-reminders.js")).default;
   app.use("/api/admin", workshopRemindersRouter);
