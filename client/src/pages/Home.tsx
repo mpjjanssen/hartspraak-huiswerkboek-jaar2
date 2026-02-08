@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Download, BookOpen, GraduationCap, Heart, ExternalLink, Share2, Loader2, ClipboardList } from "lucide-react";
+import { Download, BookOpen, GraduationCap, Heart, ExternalLink, Share2, Loader2, ClipboardList, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 export default function Home() {
@@ -11,6 +11,7 @@ export default function Home() {
   const [shareConsent, setShareConsent] = useState(false);
   const [isLoadingConsent, setIsLoadingConsent] = useState(true);
   const [isUpdatingConsent, setIsUpdatingConsent] = useState(false);
+  const [showNamenInfo, setShowNamenInfo] = useState(false);
 
   // Load share consent status on mount
   useEffect(() => {
@@ -70,6 +71,15 @@ export default function Home() {
     }
   };
 
+  const namenData = [
+    { oud: "Schizoïd", nieuw: "De teruggetrokkene", kern: "Trok zich terug wanneer de wereld te overweldigend werd" },
+    { oud: "Oraal", nieuw: "De zoeker", kern: "Ging zoeken naar de voeding, erkenning en verbinding die het miste" },
+    { oud: "Symbiotisch", nieuw: "De versmelter", kern: "Stemde zich af op de ander tot de eigen grens vervaagde" },
+    { oud: "Psychopathisch", nieuw: "De strateeg", kern: "Nam regie omdat controle veiligheid bood" },
+    { oud: "Masochistisch", nieuw: "De drager", kern: "Droeg het gewicht van anderen op de eigen schouders" },
+    { oud: "Rigide", nieuw: "De performer", kern: "Presteerde om geliefd te zijn en toonde een verzorgd, capabel zelf" },
+  ];
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
       <div className="text-center mb-12">
@@ -81,6 +91,61 @@ export default function Home() {
           Jouw persoonlijke reis naar verdieping, verbinding en innerlijke groei gaat hier verder.
         </p>
       </div>
+
+      {/* Waarom nieuwe namen? */}
+      <Card className="mb-8 border-amber-500/30 bg-gradient-to-br from-amber-50/80 to-orange-50/50 dark:from-amber-950/20 dark:to-orange-950/10">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-amber-800 dark:text-amber-400">
+            <Sparkles className="h-5 w-5" />
+            Waarom nieuwe namen?
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            De zes karakterstructuren die we in dit jaar verkennen, zijn al meer dan vijftig jaar bekend onder klinische namen als <em>schizoïd</em>, <em>oraal</em>, <em>masochistisch</em> en <em>psychopathisch</em>. Die woorden komen uit de psychiatrie, waar ze bedoeld waren om ziektebeelden te beschrijven. Maar in ons werk gaat het niet om ziekte. Het gaat om kinderen die oplossingen vonden.
+          </p>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            Elk kind dat opgroeit in een wereld die te vroeg te veel vraagt, ontwikkelt een briljante overlevingstactiek. Het ene kind trekt zich terug om zichzelf te beschermen. Het andere gaat zoeken naar de voeding die het mist. Weer een ander leert de behoeften van anderen te dragen alsof het de zijne zijn. Dit zijn geen stoornissen — het zijn creatieve antwoorden op onmogelijke situaties.
+          </p>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            Daarom gebruiken we vanaf nu namen die dit proces beschrijven: wat het kind <em>deed</em> om te overleven, niet wat er klinisch 'mis' zou zijn. De kennis van Reich, Lowen en Pierrakos verandert niet. Alleen de woorden veranderen — zodat herkenning de plek kan innemen van schaamte.
+          </p>
+
+          <div className="pt-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowNamenInfo(!showNamenInfo)}
+              className="text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 hover:bg-amber-100/50 dark:hover:bg-amber-900/20 px-3"
+            >
+              {showNamenInfo ? "Verberg overzicht ▲" : "Bekijk alle nieuwe namen ▼"}
+            </Button>
+          </div>
+
+          {showNamenInfo && (
+            <div className="overflow-x-auto pt-2">
+              <table className="w-full text-sm border-collapse">
+                <thead>
+                  <tr className="border-b border-amber-200 dark:border-amber-800">
+                    <th className="text-left py-2 pr-4 font-semibold text-amber-800 dark:text-amber-400">Oude naam</th>
+                    <th className="text-left py-2 pr-4 font-semibold text-amber-800 dark:text-amber-400">Nieuwe naam</th>
+                    <th className="text-left py-2 font-semibold text-amber-800 dark:text-amber-400">Wat het kind deed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {namenData.map((item, index) => (
+                    <tr key={index} className="border-b border-amber-100 dark:border-amber-900/50 last:border-0">
+                      <td className="py-2 pr-4 text-muted-foreground line-through decoration-muted-foreground/40">{item.oud}</td>
+                      <td className="py-2 pr-4 font-medium text-foreground">{item.nieuw}</td>
+                      <td className="py-2 text-muted-foreground">{item.kern}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Share Consent Toggle */}
       <Card className="mb-8 border-primary/30 bg-gradient-to-br from-primary/5 to-secondary/5">
@@ -226,3 +291,4 @@ export default function Home() {
     </div>
    );
 }
+
