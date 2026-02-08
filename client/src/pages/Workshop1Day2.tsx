@@ -96,7 +96,7 @@ export default function Workshop1Day2() {
         fullText: "Wat zou er gebeuren als je na een moment van ontvangen even zou pauzeren en het werkelijk zou laten binnenkomen? Wat maakt het zo moeilijk om te geloven dat het genoeg is?"
       },
       citation: {
-        text: "Een partner van een orale man vertelde me uitgeput: 'Het is alsof ik met een vampier leef, maar dan een emotionele vampier. Hij zuigt alle energie uit me.'",
+        text: "Een partner van een zoekende man vertelde me uitgeput: 'Het is alsof ik met een vampier leef, maar dan een emotionele vampier. Hij zuigt alle energie uit me.'",
         source: "Van wond naar wonder, Hoofdstuk 2"
       }
     },
@@ -150,7 +150,7 @@ export default function Workshop1Day2() {
         fullText: "Als je je borstkas zou openen en je schouders naar achteren zou brengen, welke emotie komt er dan naar boven? Wat zou je dan moeten voelen dat je nu niet voelt?"
       },
       citation: {
-        text: "Het orale lichaam vertelt het verhaal van ondervoeding. Lang en mager vaak, met spieren die als slappe touwtjes aan het skelet hangen.",
+        text: "Het zoekende lichaam vertelt het verhaal van ondervoeding. Lang en mager vaak, met spieren die als slappe touwtjes aan het skelet hangen.",
         source: "Van wond naar wonder, Hoofdstuk 2"
       }
     },
@@ -186,7 +186,7 @@ export default function Workshop1Day2() {
         fullText: "Kun je een moment herinneren waarop je gaf vanuit overvloed in plaats van uit hoop op terugkrijgen? Hoe voelde dat anders, en hoe zou je meer van die momenten kunnen creëren?"
       },
       citation: {
-        text: "Orale mensen die hun eigen bron hebben gevonden, kunnen geven zoals niemand anders kan geven. Ze kennen de honger, ze kennen de leegte, dus ze weten precies wat anderen nodig hebben.",
+        text: "Zoekende mensen die hun eigen bron hebben gevonden, kunnen geven zoals niemand anders kan geven. Ze kennen de honger, ze kennen de leegte, dus ze weten precies wat anderen nodig hebben.",
         source: "Van wond naar wonder, Hoofdstuk 2"
       }
     }
@@ -218,7 +218,7 @@ export default function Workshop1Day2() {
                 De honger die nooit stilt
               </h1>
               <p className="text-xl text-muted-foreground">
-                De orale structuur
+                De zoekende structuur
               </p>
             </div>
           </div>
@@ -245,7 +245,7 @@ export default function Workshop1Day2() {
                   Beste deelnemer,
                 </p>
                 <p>
-                  Welkom bij de tweede stap op onze reis. Waar de schizoïde structuur gaat over het recht om te bestaan, gaat de orale structuur over het recht om nodig te hebben. Het raakt aan onze diepste, pre-verbale herinnering van afhankelijkheid.
+                  Welkom bij de tweede stap op onze reis. Waar de teruggetrokken structuur gaat over het recht om te bestaan, gaat de zoekende structuur over het recht om nodig te hebben. Het raakt aan onze diepste, pre-verbale herinnering van afhankelijkheid.
                 </p>
                 <p>
                   Velen van ons dragen een vorm van deze 'honger' met zich mee. De angst dat er niet genoeg is: niet genoeg liefde, niet genoeg tijd, niet genoeg aandacht. In mijn praktijk zie ik vaak hoe we deze leegte proberen te vullen met partners, werk of middelen, terwijl de enige echte voeding van binnenuit moet komen.
@@ -269,22 +269,22 @@ export default function Workshop1Day2() {
                     </h2>
                     {pair.section === "ONDERDEEL 1: DE OORSPRONG (ACHTERGROND)" && (
                       <p className="text-foreground/70 mt-2">
-                        De orale wond ontstaat in de vroege kinderjaren (0-2 jaar), de tijd van de mond, het zuigen en de totale afhankelijkheid van de moeder (of verzorger) voor voeding en warmte.
+                        De zoekende wond ontstaat in de vroege kinderjaren (0-2 jaar), de tijd van de mond, het zuigen en de totale afhankelijkheid van de moeder (of verzorger) voor voeding en warmte.
                       </p>
                     )}
                     {pair.section === "ONDERDEEL 2: DYNAMIEK IN RELATIES (ZELF EN ANDER)" && (
                       <p className="text-foreground/70 mt-2">
-                        De orale dynamiek in relaties is vaak uitputtend: het is de dans van de 'bodemloze put' of de 'helper' die geeft om te krijgen.
+                        De zoekende dynamiek in relaties is vaak uitputtend: het is de dans van de 'bodemloze put' of de 'helper' die geeft om te krijgen.
                       </p>
                     )}
                     {pair.section === "ONDERDEEL 3: HET LICHAAM EN DE ENERGIE" && (
                       <p className="text-foreground/70 mt-2">
-                        Het orale lichaam toont vaak de instorting, de leegte, of de wanhopige greep naar contact.
+                        Het zoekende lichaam toont vaak de instorting, de leegte, of de wanhopige greep naar contact.
                       </p>
                     )}
                     {pair.section === "ONDERDEEL 4: DE KWALITEIT (HET GOUD)" && (
                       <p className="text-foreground/70 mt-2">
-                        Als de orale mens leert zichzelf te voeden, ontstaat er een enorme capaciteit tot geven vanuit overvloed, in plaats van uit tekort.
+                        Als de zoekende mens leert zichzelf te voeden, ontstaat er een enorme capaciteit tot geven vanuit overvloed, in plaats van uit tekort.
                       </p>
                     )}
                   </div>
@@ -367,7 +367,7 @@ export default function Workshop1Day2() {
                   <strong>Ter afsluiting:</strong>
                 </p>
                 <p>
-                  De orale structuur confronteert ons met onze afhankelijkheid. Dat kan pijnlijk zijn, maar onthoud: alleen door de leegte te erkennen, kunnen we leren onszelf te vullen. Neem je bevindingen mee naar de groep. We gaan werken aan het vinden van je eigen bodem.
+                  De zoekende structuur confronteert ons met onze afhankelijkheid. Dat kan pijnlijk zijn, maar onthoud: alleen door de leegte te erkennen, kunnen we leren onszelf te vullen. Neem je bevindingen mee naar de groep. We gaan werken aan het vinden van je eigen bodem.
                 </p>
               </div>
             </CardContent>
