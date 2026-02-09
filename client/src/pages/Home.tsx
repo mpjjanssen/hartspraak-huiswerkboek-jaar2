@@ -102,10 +102,16 @@ export default function Home() {
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm leading-relaxed text-muted-foreground">
-            De zes karakterstructuren die we in dit jaar verkennen, zijn al meer dan vijftig jaar bekend onder klinische namen als <em>schizoïd</em>, <em>oraal</em>, <em>masochistisch</em> en <em>psychopathisch</em>. Die woorden komen uit de psychiatrie, waar ze bedoeld waren om ziektebeelden te beschrijven. Maar in ons werk gaat het niet om ziekte. Het gaat om kinderen die oplossingen vonden.
+            Karakterstructuren zijn patronen die we als kind ontwikkelen om om te gaan met wat er in ons vroege leven gebeurde. Wanneer een kind niet krijgt wat het nodig heeft — veiligheid, voeding, ruimte, erkenning — vindt het een manier om toch te overleven. Die manier wordt een vast patroon: een structuur die zich nestelt in ons lichaam, onze gevoelens en ons gedrag. We dragen deze patronen mee tot in ons volwassen leven, meestal zonder het te beseffen.
           </p>
           <p className="text-sm leading-relaxed text-muted-foreground">
-            Elk kind dat opgroeit in een wereld die te vroeg te veel vraagt, ontwikkelt een briljante overlevingstactiek. Het ene kind trekt zich terug om zichzelf te beschermen. Het andere gaat zoeken naar de voeding die het mist. Weer een ander leert de behoeften van anderen te dragen alsof het de zijne zijn. Dit zijn geen stoornissen — het zijn creatieve antwoorden op onmogelijke situaties.
+            Deze zes structuren zijn al meer dan vijftig jaar bekend onder klinische namen als <em>schizoïd</em>, <em>oraal</em>, <em>symbiotisch</em>, <em>masochistisch</em>, <em>psychopathisch</em> en <em>rigide</em>. Die woorden komen uit de psychiatrie, waar ze bedoeld waren om ziektebeelden te beschrijven. Maar in ons werk gaat het niet om ziekte. Het gaat om kinderen die oplossingen vonden.
+          </p>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            Elk kind dat opgroeit in een wereld die te vroeg te veel vraagt, ontwikkelt een briljante overlevingstactiek. Het ene kind trekt zich terug om zichzelf te beschermen. Het andere gaat zoeken naar de voeding die het mist. Weer een ander smelt samen met de ander om verbinding te bewaren, of leert de behoeften van anderen te dragen alsof het de zijne zijn. Dit zijn geen stoornissen — het zijn creatieve antwoorden op onmogelijke situaties.
+          </p>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            Heling begint met herkenning. Door deze patronen te zien — met mildheid en zonder oordeel — ontstaat de mogelijkheid om ze los te laten. Niet door ze te bestrijden, maar door het kind dat ze ooit nodig had te erkennen en te troosten. Dat is de kern van ons werk in dit tweede jaar.
           </p>
           <p className="text-sm leading-relaxed text-muted-foreground">
             Daarom gebruiken we vanaf nu namen die dit proces beschrijven: wat het kind <em>deed</em> om te overleven, niet wat er klinisch 'mis' zou zijn. De kennis van Reich, Lowen en Pierrakos verandert niet. Alleen de woorden veranderen — zodat herkenning de plek kan innemen van schaamte.
@@ -291,4 +297,3 @@ export default function Home() {
     </div>
    );
 }
-
