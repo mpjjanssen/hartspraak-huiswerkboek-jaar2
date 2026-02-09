@@ -83,10 +83,13 @@ export default function Home() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-primary mb-4 flex items-center justify-center gap-3">
+        <h1 className="text-4xl font-bold text-primary mb-2 flex items-center justify-center gap-3">
           <Heart className="text-destructive fill-destructive" />
-          Welkom bij Hartspraak Jaar 2
+          Hartspraak jaar 2 — Van masker naar zelf
         </h1>
+        <p className="text-lg font-medium text-muted-foreground mb-4">
+          Ontdek je karakterstructuren
+        </p>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Jouw persoonlijke reis naar verdieping, verbinding en innerlijke groei gaat hier verder.
         </p>
@@ -297,3 +300,4 @@ export default function Home() {
     </div>
    );
 }
+
