@@ -1,6 +1,12 @@
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.SMTP_USER || "info@hartspraak.com",
+    pass: process.env.SMTP_PASS || "",
+  },
+});
 
 const DIGEST_RECIPIENTS = [
   "info@hartspraak.com",
@@ -8,7 +14,7 @@ const DIGEST_RECIPIENTS = [
   "serge@regoor.nl",
 ];
 
-const FROM_ADDRESS = process.env.RESEND_FROM_EMAIL || "Hartspraak Huiswerkboek Jaar 2 <onboarding@resend.dev>";
+const FROM_ADDRESS = `Hartspraak Huiswerkboek Jaar 2 <${process.env.SMTP_USER || "info@hartspraak.com"}>`;
 
 interface DigestAnswer {
   userName: string;
@@ -35,19 +41,14 @@ export async function sendDailyDigest(answers: DigestAnswer[]): Promise<boolean>
   const html = buildDigestHtml(byUser, answers.length);
 
   try {
-    const { data, error } = await resend.emails.send({
+    const info = await transporter.sendMail({
       from: FROM_ADDRESS,
-      to: DIGEST_RECIPIENTS,
+      to: DIGEST_RECIPIENTS.join(", "),
       subject: `Hartspraak huiswerkboek jaar 2 – dagelijks overzicht (${answers.length} ${answers.length === 1 ? "antwoord" : "antwoorden"})`,
       html,
     });
 
-    if (error) {
-      console.error("[Daily Digest] Resend error:", error);
-      return false;
-    }
-
-    console.log(`[Daily Digest] Email sent successfully. ID: ${data?.id}`);
+    console.log(`[Daily Digest] Email sent successfully. ID: ${info.messageId}`);
     return true;
   } catch (err) {
     console.error("[Daily Digest] Failed to send email:", err);
