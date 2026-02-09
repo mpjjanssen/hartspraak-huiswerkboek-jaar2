@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Loader2, UserPlus, Shield, LogOut, RefreshCw, BarChart3, Key, FileDown, Clock, Eye, Download, FileText } from "lucide-react";
+import { Loader2, UserPlus, Shield, LogOut, RefreshCw, BarChart3, Key, FileDown, Clock, Eye, Download, FileText, Mail } from "lucide-react";
 import { useLocation } from "wouter";
 import { WorkshopReminders } from "@/components/WorkshopReminders";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -58,6 +58,9 @@ export default function AdminDashboard() {
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   const [previewPdfData, setPreviewPdfData] = useState<string | null>(null);
 
+  // Daily digest state
+  const [isSendingDigest, setIsSendingDigest] = useState(false);
+
   const fetchData = async () => {
     try {
       const [membersRes, usersRes, sharedRes] = await Promise.all([
@@ -96,6 +99,28 @@ export default function AdminDashboard() {
   useEffect(() => {
     fetchData();
   }, [token]);
+
+  const handleSendDigest = async () => {
+    setIsSendingDigest(true);
+    try {
+      const response = await fetch("/api/admin/send-digest", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (response.ok) {
+        toast.success(data.message);
+      } else {
+        toast.error(data.error || "Versturen mislukt");
+      }
+    } catch (error) {
+      toast.error("Er is een fout opgetreden");
+    } finally {
+      setIsSendingDigest(false);
+    }
+  };
 
   const handleDownload = async (submissionId: number, fileName: string) => {
     try {
@@ -337,7 +362,7 @@ export default function AdminDashboard() {
 
       <div className="container mx-auto px-4 py-8 space-y-8">
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground uppercase">Verified Members</CardTitle>
@@ -360,6 +385,37 @@ export default function AdminDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">{sharedSubmissions.length}</div>
+            </CardContent>
+          </Card>
+          {/* Daily Digest Card */}
+          <Card className="border-primary/20">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground uppercase flex items-center gap-2">
+                <Mail className="h-4 w-4" />
+                Dagelijkse samenvatting
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-xs text-muted-foreground mb-3">Elke dag om 20:00 per email</p>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleSendDigest}
+                disabled={isSendingDigest}
+                className="w-full"
+              >
+                {isSendingDigest ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Versturen...
+                  </>
+                ) : (
+                  <>
+                    <Mail className="mr-2 h-4 w-4" />
+                    Nu versturen
+                  </>
+                )}
+              </Button>
             </CardContent>
           </Card>
         </div>
