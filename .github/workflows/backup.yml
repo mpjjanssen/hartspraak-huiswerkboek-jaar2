@@ -24,7 +24,11 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install googleapis
+        run: |
+          mkdir -p /tmp/backup-tools
+          cd /tmp/backup-tools
+          npm init -y
+          npm install googleapis
 
       - name: Create database dump
         env:
@@ -57,6 +61,7 @@ jobs:
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           GOOGLE_DRIVE_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
+          NODE_PATH: /tmp/backup-tools/node_modules
         run: |
           node .github/scripts/upload-to-drive.js "${{ env.BACKUP_FILENAME }}"
 
@@ -64,5 +69,6 @@ jobs:
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           GOOGLE_DRIVE_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
+          NODE_PATH: /tmp/backup-tools/node_modules
         run: |
           node .github/scripts/cleanup-old-backups.js
