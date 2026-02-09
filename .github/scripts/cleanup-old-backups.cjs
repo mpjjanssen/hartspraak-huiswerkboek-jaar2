@@ -3,15 +3,16 @@ const { google } = require('googleapis');
 const MAX_BACKUPS = 4;
 
 async function cleanupOldBackups() {
-  const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
   const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
-
-  const auth = new google.auth.GoogleAuth({
-    credentials,
-    scopes: ['https://www.googleapis.com/auth/drive.file'],
+  const oauth2Client = new google.auth.OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET
+  );
+  oauth2Client.setCredentials({
+    refresh_token: process.env.GOOGLE_REFRESH_TOKEN
   });
 
-  const drive = google.drive({ version: 'v3', auth });
+  const drive = google.drive({ version: 'v3', auth: oauth2Client });
 
   const response = await drive.files.list({
     q: `'${folderId}' in parents and trashed = false`,
