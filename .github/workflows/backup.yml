@@ -1,0 +1,68 @@
+name: Weekly Database Backup
+
+on:
+  schedule:
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install MySQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mysql-client
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install googleapis
+
+      - name: Create database dump
+        env:
+          MYSQL_HOST: ${{ secrets.BACKUP_MYSQL_HOST }}
+          MYSQL_PORT: ${{ secrets.BACKUP_MYSQL_PORT }}
+          MYSQL_USER: ${{ secrets.BACKUP_MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.BACKUP_MYSQL_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.BACKUP_MYSQL_DATABASE }}
+        run: |
+          TIMESTAMP=$(date +%Y-%m-%d_%H%M)
+          FILENAME="hartspraak-jaar2-backup-${TIMESTAMP}.sql"
+          
+          mysqldump \
+            -h "$MYSQL_HOST" \
+            -P "$MYSQL_PORT" \
+            -u "$MYSQL_USER" \
+            -p"$MYSQL_PASSWORD" \
+            --single-transaction \
+            --routines \
+            --triggers \
+            "$MYSQL_DATABASE" > "$FILENAME"
+          
+          gzip "$FILENAME"
+          echo "BACKUP_FILENAME=${FILENAME}.gz" >> $GITHUB_ENV
+          
+          ls -lh "${FILENAME}.gz"
+          echo "✅ Database dump created: ${FILENAME}.gz"
+
+      - name: Upload to Google Drive
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          GOOGLE_DRIVE_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
+        run: |
+          node .github/scripts/upload-to-drive.js "${{ env.BACKUP_FILENAME }}"
+
+      - name: Cleanup old backups on Drive
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          GOOGLE_DRIVE_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
+        run: |
+          node .github/scripts/cleanup-old-backups.js
