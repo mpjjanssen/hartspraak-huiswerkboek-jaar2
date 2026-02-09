@@ -253,7 +253,7 @@ export default function Home() {
         <h2 className="text-3xl font-bold text-center mb-8">Studiemateriaal</h2>
         <div className="grid gap-8 md:grid-cols-2">
           {/* Boek 1: De Maskermaker */}
-          <Card className="overflow-hidden border-primary/20">
+          <Card className="overflow-hidden border-primary/20 flex flex-col">
             <div className="bg-primary/5 p-6 flex justify-center">
               <BookOpen size={80} className="text-primary/40" />
             </div>
@@ -261,7 +261,7 @@ export default function Home() {
               <CardTitle>De Maskermaker deel 1</CardTitle>
               <p className="text-sm text-muted-foreground italic">Wibe Veenbaas</p>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mt-auto">
               <p className="text-sm text-muted-foreground mb-6">
                 Een essentieel naslagwerk over karakterstructuren, maskers en de weg naar heelwording.
               </p>
@@ -275,15 +275,15 @@ export default function Home() {
           </Card>
 
           {/* Boek 2: Van Wond naar Wonder */}
-          <Card className="overflow-hidden border-primary/20">
+          <Card className="overflow-hidden border-primary/20 flex flex-col">
             <div className="bg-primary/5 p-6 flex justify-center">
               <BookOpen size={80} className="text-primary/40" />
             </div>
             <CardHeader>
               <CardTitle>Van Wond naar Wonder</CardTitle>
-              <p className="text-sm text-muted-foreground italic">Jaar 2 studiemateriaal</p>
+              <p className="text-sm text-muted-foreground italic">Martien Janssen</p>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mt-auto">
               <p className="text-sm text-muted-foreground mb-6">
                 Verdiepende teksten en inzichten die aansluiten bij de thema's van het tweede jaar.
               </p>
@@ -300,4 +300,5 @@ export default function Home() {
     </div>
    );
 }
+
 
