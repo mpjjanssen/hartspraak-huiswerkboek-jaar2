@@ -68,7 +68,9 @@ async function startServer() {
 
   const adminSharedRouter = (await import("../routes/admin-shared.js")).default;
   app.use("/api/admin/shared-homework", adminSharedRouter);
-
+// Daily digest API route
+  const digestRouter = (await import("../routes/digest.js")).default;
+  app.use("/api/admin", digestRouter);
   // tRPC API
   app.use(
     "/api/trpc",
@@ -90,7 +92,9 @@ async function startServer() {
   if (port !== preferredPort) {
     console.log(`Port ${preferredPort} is busy, using port ${port} instead`);
   }
-
+// Start daily digest cron job
+  const { startDailyDigestCron } = await import("../daily-digest.js");
+  startDailyDigestCron();
   server.listen(port, "0.0.0.0", () => {
     console.log(`Server running on http://0.0.0.0:${port}/`);
   });
