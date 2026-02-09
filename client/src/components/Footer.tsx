@@ -1,8 +1,9 @@
 import { Heart, Mail, Phone, MapPin } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [, setLocation] = useLocation();
   
   return (
     <footer className="bg-muted/50 border-t mt-auto">
@@ -112,9 +113,17 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-8 pt-8 border-t text-center space-y-2">
-          <Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+          <a
+            href="/privacy"
+            className="text-sm text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+            onClick={(e) => {
+              e.preventDefault();
+              setLocation("/privacy");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          >
             Privacy & Beveiliging
-          </Link>
+          </a>
           <p className="text-sm text-muted-foreground">
             © {currentYear} Hartspraak. Met liefde gemaakt voor je innerlijke reis.
           </p>
