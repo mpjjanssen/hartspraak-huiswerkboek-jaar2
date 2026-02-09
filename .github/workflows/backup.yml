@@ -63,7 +63,7 @@ jobs:
           GOOGLE_DRIVE_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
           NODE_PATH: /tmp/backup-tools/node_modules
         run: |
-          node .github/scripts/upload-to-drive.js "${{ env.BACKUP_FILENAME }}"
+          node .github/scripts/upload-to-drive.cjs "${{ env.BACKUP_FILENAME }}"
 
       - name: Cleanup old backups on Drive
         env:
@@ -71,4 +71,4 @@ jobs:
           GOOGLE_DRIVE_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
           NODE_PATH: /tmp/backup-tools/node_modules
         run: |
-          node .github/scripts/cleanup-old-backups.js
+          node .github/scripts/cleanup-old-backups.cjs
