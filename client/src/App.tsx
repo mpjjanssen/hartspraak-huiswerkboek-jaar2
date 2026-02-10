@@ -1,3 +1,4 @@
+import MijnResultaten from "./pages/MijnResultaten";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -81,6 +82,16 @@ function MemberRouter() {
               <DeMaskermaker />
             </ProtectedRoute>
           )} />
+         <Route path="/mijn-resultaten" component={() => (
+  <ProtectedRoute>
+    <MijnResultaten />
+  </ProtectedRoute>
+)} />
+```
+
+En bovenaan in het bestand, bij de andere imports, voeg je toe:
+```
+import MijnResultaten from "./pages/MijnResultaten";
           <Route path="/privacy" component={() => (
             <ProtectedRoute>
               <Privacy />
