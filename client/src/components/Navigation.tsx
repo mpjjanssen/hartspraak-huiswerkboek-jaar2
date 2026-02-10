@@ -16,6 +16,8 @@ export default function Navigation() {
     { href: "/workshop/2", label: "Workshop 2" },
     { href: "/workshop/3", label: "Workshop 3" },
     { href: "/workshop/4", label: "Workshop 4" },
+    { href: "/test", label: "Spiegelwerk" },
+    { href: "/mijn-resultaten", label: "Mijn resultaten" },
   ];
 
   const isActive = (href: string) => {
