@@ -11,7 +11,6 @@ export function startDailyDigestCron() {
   }, {
     timezone: "Europe/Berlin",
   });
-
   console.log("[Daily Digest] Cron job scheduled: daily at 20:00 Europe/Berlin");
 }
 
