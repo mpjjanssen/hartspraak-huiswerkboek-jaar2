@@ -50,6 +50,47 @@ router.post("/", requireAuth, async (req, res) => {
 });
 
 /**
+ * GET /api/spiegelwerk-results/mine
+ * Get own test results (authenticated user)
+ */
+router.get("/mine", requireAuth, async (req, res) => {
+  try {
+    const { userId } = (req as any).user;
+
+    const db = await getDb();
+    if (!db) {
+      return res.status(503).json({ error: "Database unavailable" });
+    }
+
+    const results = await db
+      .select({
+        id: spiegelwerkResults.id,
+        scoreA: spiegelwerkResults.scoreA,
+        scoreB: spiegelwerkResults.scoreB,
+        scoreS: spiegelwerkResults.scoreS,
+        scoreC: spiegelwerkResults.scoreC,
+        scoreD: spiegelwerkResults.scoreD,
+        scoreE: spiegelwerkResults.scoreE,
+        scoresNormI: spiegelwerkResults.scoresNormI,
+        scoresNormII: spiegelwerkResults.scoresNormII,
+        scoresNormIII: spiegelwerkResults.scoresNormIII,
+        profileType: spiegelwerkResults.profileType,
+        topStructures: spiegelwerkResults.topStructures,
+        portraitText: spiegelwerkResults.portraitText,
+        completedAt: spiegelwerkResults.completedAt,
+      })
+      .from(spiegelwerkResults)
+      .where(eq(spiegelwerkResults.userId, userId))
+      .orderBy(desc(spiegelwerkResults.completedAt));
+
+    res.json({ results });
+  } catch (error) {
+    console.error("[Spiegelwerk] Failed to get user results:", error);
+    res.status(500).json({ error: "Failed to get results" });
+  }
+});
+
+/**
  * GET /api/spiegelwerk-results/admin
  * Get all test results (admin only)
  */
@@ -100,3 +141,4 @@ router.get("/admin", requireAdmin, async (req, res) => {
 });
 
 export default router;
+
