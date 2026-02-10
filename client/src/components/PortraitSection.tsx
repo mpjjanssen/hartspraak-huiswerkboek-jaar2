@@ -219,7 +219,7 @@ export default function PortraitSection({ normI, normII, normIII }: PortraitSect
     setError(null);
 
     try {
-      const response = await fetch("/api/maskermaker/portrait", {
+      const response = await fetch("/api/wondwerk/portrait", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ normI, normII, normIII }),
@@ -255,7 +255,7 @@ export default function PortraitSection({ normI, normII, normIII }: PortraitSect
       <!DOCTYPE html>
       <html>
       <head>
-        <title>Mijn maskermaker-portret</title>
+        <title>Mijn Wondwerk-portret</title>
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
         <style>
           body {
