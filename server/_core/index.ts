@@ -55,9 +55,9 @@ async function startServer() {
   // AI helper API routes
   const aiHelperRouter = (await import("../routes/ai-helper.js")).default;
   app.use("/api/ai-helper", aiHelperRouter);
-  // Wondwerk portrait API routes
-  const wondwerkRouter = (await import("../routes/wondwerk-portrait.js")).default;
-  app.use("/api/wondwerk", wondwerkRouter);
+  // Spiegelwerk portrait API routes
+  const spiegelwerkRouter = (await import("../routes/spiegelwerk-portrait.js")).default;
+  app.use("/api/spiegelwerk", spiegelwerkRouter);
   // Workshop reminders API routes
   const workshopRemindersRouter = (await import("../routes/workshop-reminders.js")).default;
   app.use("/api/admin", workshopRemindersRouter);
@@ -101,4 +101,3 @@ async function startServer() {
 }
 
 startServer().catch(console.error);
-
