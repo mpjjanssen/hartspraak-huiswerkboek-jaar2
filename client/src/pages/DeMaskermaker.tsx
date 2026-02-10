@@ -474,6 +474,26 @@ function FinalResults({ scoresI, scoresII, likertAnswers }: { scoresI: Scores; s
   const top3 = sorted.slice(0, 3);
   const profileType = (combined[sorted[0]] - combined[sorted[1]] >= 15) ? "Piektype" : "Mengtype";
 
+  // Auto-save results to database
+  const hasSaved = useRef(false);
+  const { token } = useAuth();
+  useEffect(() => {
+    if (hasSaved.current || !token) return;
+    hasSaved.current = true;
+    fetch("/api/spiegelwerk-results", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({
+        combined,
+        normI,
+        normII,
+        normIII,
+        profileType,
+        topStructures: top3.join(","),
+      }),
+    }).catch(err => console.error("Auto-save failed:", err));
+  }, []);
+
   const discrepancies: { structure: StructureKey; note: string; spread: number }[] = [];
   STRUCTURE_ORDER.forEach(s => {
     const vals = [normI[s], normII[s], normIII[s]];
@@ -486,22 +506,6 @@ function FinalResults({ scoresI, scoresII, likertAnswers }: { scoresI: Scores; s
       discrepancies.push({ structure: s, note, spread: Math.round(spread) });
     }
   });
-
-  // Auto-save results to database
-  const { token } = useAuth();
-  const hasSaved = useRef(false);
-  useEffect(() => {
-    if (hasSaved.current || !token) return;
-    hasSaved.current = true;
-    const topStructures = sorted.slice(0, 3).join(",");
-    fetch("/api/spiegelwerk-results", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify({
-        combined, normI, normII, normIII, profileType, topStructures,
-      }),
-    }).catch(err => console.error("Failed to save Spiegelwerk results:", err));
-  }, []);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "40px 20px" }}>
@@ -661,6 +665,3 @@ export default function DeMaskermaker() {
     </div>
   );
 }
-
-
-
