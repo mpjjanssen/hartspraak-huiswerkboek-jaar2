@@ -58,6 +58,9 @@ async function startServer() {
   // Spiegelwerk portrait API routes
   const spiegelwerkRouter = (await import("../routes/spiegelwerk-portrait.js")).default;
   app.use("/api/spiegelwerk", spiegelwerkRouter);
+
+  const spiegelwerkResultsRouter = (await import("../routes/spiegelwerk-results.js")).default;
+  app.use("/api/spiegelwerk-results", spiegelwerkResultsRouter);
   // Workshop reminders API routes
   const workshopRemindersRouter = (await import("../routes/workshop-reminders.js")).default;
   app.use("/api/admin", workshopRemindersRouter);
@@ -101,3 +104,4 @@ async function startServer() {
 }
 
 startServer().catch(console.error);
+
