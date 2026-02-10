@@ -4,8 +4,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const DIGEST_RECIPIENTS = [
   "info@hartspraak.com",
-  "lonnekevanhouten@gmail.com",
-  "serge@regoor.nl",
+  
 ];
 
 const FROM_ADDRESS = process.env.RESEND_FROM_EMAIL || "Hartspraak Huiswerkboek <huiswerk@hartspraak.com>";
