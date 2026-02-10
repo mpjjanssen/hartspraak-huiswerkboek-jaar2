@@ -8,6 +8,10 @@
 
 import express from "express";
 import Anthropic from "@anthropic-ai/sdk";
+import { getDb } from "../db";
+import { spiegelwerkResults } from "../../drizzle/schema";
+import { eq, desc, and, isNull } from "drizzle-orm";
+import { requireAuth } from "../lib/auth";
 
 const router = express.Router();
 
@@ -164,8 +168,9 @@ ${sorted.map(s => `| ${STRUCTURE_INFO[s].name} | ${normI[s]}% | ${normII[s]}% | 
  * POST /api/spiegelwerk/portrait
  * Genereert een persoonlijk portret op basis van testscores.
  */
-router.post("/portrait", async (req, res) => {
+router.post("/portrait", requireAuth, async (req, res) => {
   try {
+    const { userId } = (req as any).user;
     const { normI, normII, normIII } = req.body;
 
     // Validatie
@@ -217,6 +222,28 @@ router.post("/portrait", async (req, res) => {
       .map(block => block.text)
       .join("\n");
 
+    // Save portrait to the most recent result for this user (that has no portrait yet)
+    try {
+      const db = await getDb();
+      if (db) {
+        const [latestResult] = await db
+          .select({ id: spiegelwerkResults.id })
+          .from(spiegelwerkResults)
+          .where(and(eq(spiegelwerkResults.userId, userId), isNull(spiegelwerkResults.portraitText)))
+          .orderBy(desc(spiegelwerkResults.completedAt))
+          .limit(1);
+
+        if (latestResult) {
+          await db.update(spiegelwerkResults)
+            .set({ portraitText })
+            .where(eq(spiegelwerkResults.id, latestResult.id));
+          console.log(`[Spiegelwerk] Portrait saved for userId ${userId}, resultId ${latestResult.id}`);
+        }
+      }
+    } catch (dbError) {
+      console.error("[Spiegelwerk] Failed to save portrait to DB (non-fatal):", dbError);
+    }
+
     res.json({
       success: true,
       portrait: portraitText,
@@ -238,4 +265,6 @@ router.post("/portrait", async (req, res) => {
 });
 
 export default router;
+
+
 
