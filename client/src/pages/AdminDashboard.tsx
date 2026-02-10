@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Loader2, UserPlus, Shield, LogOut, RefreshCw, BarChart3, Key, FileDown, Clock, Eye, Download, FileText, Mail } from "lucide-react";
+import { Loader2, UserPlus, Shield, LogOut, RefreshCw, BarChart3, Key, FileDown, Clock, Eye, Download, FileText, Mail, Activity } from "lucide-react";
 import { useLocation } from "wouter";
 import { WorkshopReminders } from "@/components/WorkshopReminders";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -37,12 +37,30 @@ interface SharedSubmission {
   status: string;
 }
 
+interface SpiegelwerkResult {
+  id: number;
+  userName: string;
+  userEmail: string;
+  scoreA: number;
+  scoreB: number;
+  scoreS: number;
+  scoreC: number;
+  scoreD: number;
+  scoreE: number;
+  profileType: string;
+  topStructures: string;
+  portraitText: string | null;
+  completedAt: string;
+}
+
 export default function AdminDashboard() {
   const { admin, token, logout } = useAdminAuth();
   const [, setLocation] = useLocation();
   const [verifiedMembers, setVerifiedMembers] = useState<VerifiedMember[]>([]);
   const [registeredUsers, setRegisteredUsers] = useState<RegisteredUser[]>([]);
   const [sharedSubmissions, setSharedSubmissions] = useState<SharedSubmission[]>([]);
+  const [spiegelwerkResults, setSpiegelwerkResults] = useState<SpiegelwerkResult[]>([]);
+  const [expandedPortrait, setExpandedPortrait] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAddingMember, setIsAddingMember] = useState(false);
   const [newMemberName, setNewMemberName] = useState("");
@@ -63,7 +81,7 @@ export default function AdminDashboard() {
 
   const fetchData = async () => {
     try {
-      const [membersRes, usersRes, sharedRes] = await Promise.all([
+      const [membersRes, usersRes, sharedRes, spiegelwerkRes] = await Promise.all([
         fetch("/api/admin/verified-members", {
           headers: { Authorization: `Bearer ${token}` },
         }),
@@ -71,6 +89,9 @@ export default function AdminDashboard() {
           headers: { Authorization: `Bearer ${token}` },
         }),
         fetch("/api/admin/shared-homework", {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch("/api/spiegelwerk-results/admin", {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -88,6 +109,11 @@ export default function AdminDashboard() {
       if (sharedRes.ok) {
         const sharedData = await sharedRes.json();
         setSharedSubmissions(sharedData.submissions);
+      }
+
+      if (spiegelwerkRes.ok) {
+        const spiegelwerkData = await spiegelwerkRes.json();
+        setSpiegelwerkResults(spiegelwerkData.results);
       }
     } catch (error) {
       toast.error("Failed to load data");
@@ -590,6 +616,82 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
+        {/* Spiegelwerk Results Section */}
+        <Card className="border-violet-200 shadow-md">
+          <CardHeader className="bg-violet-50">
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <Activity className="h-5 w-5 text-violet-600" />
+                  Spiegelwerk-resultaten
+                </CardTitle>
+                <CardDescription>Overzicht van alle ingevulde karakterstructurentests</CardDescription>
+              </div>
+              <Button size="sm" variant="outline" onClick={fetchData}>
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Vernieuwen
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <div className="space-y-4">
+              {spiegelwerkResults.length === 0 ? (
+                <p className="text-sm text-muted-foreground text-center py-8">Nog geen testresultaten ontvangen.</p>
+              ) : (
+                <div className="grid gap-4">
+                  {spiegelwerkResults.map((result) => {
+                    const NAMES: Record<string, string> = { A: "Ontwijker", B: "Zoeker", S: "Versmelter", C: "Strateeg", D: "Drager", E: "Presteerder" };
+                    const scores = { A: result.scoreA, B: result.scoreB, S: result.scoreS, C: result.scoreC, D: result.scoreD, E: result.scoreE };
+                    const sorted = (Object.keys(scores) as string[]).sort((a, b) => (scores as any)[b] - (scores as any)[a]);
+                    return (
+                      <div key={result.id} className="p-4 border rounded-lg bg-white hover:border-violet-300 transition-colors">
+                        <div className="flex items-center justify-between mb-3">
+                          <div>
+                            <p className="font-semibold text-lg">{result.userName}</p>
+                            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                              <span className="flex items-center gap-1">
+                                <Clock className="h-3 w-3" />
+                                {new Date(result.completedAt).toLocaleString('nl-NL')}
+                              </span>
+                              <span className="px-2 py-0.5 bg-violet-100 text-violet-700 text-xs rounded-full font-medium">
+                                {result.profileType}
+                              </span>
+                            </div>
+                          </div>
+                          {result.portraitText && (
+                            <Button
+                              size="sm"
+                              variant={expandedPortrait === result.id ? "default" : "outline"}
+                              className="gap-2"
+                              onClick={() => setExpandedPortrait(expandedPortrait === result.id ? null : result.id)}
+                            >
+                              <Eye className="h-4 w-4" />
+                              {expandedPortrait === result.id ? "Sluit portret" : "Bekijk portret"}
+                            </Button>
+                          )}
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {sorted.map((key, i) => (
+                            <div key={key} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm ${i < 3 ? 'bg-violet-100 text-violet-800 font-semibold' : 'bg-gray-100 text-gray-600'}`}>
+                              <span>{NAMES[key]}</span>
+                              <span className="font-mono">{(scores as any)[key]}%</span>
+                            </div>
+                          ))}
+                        </div>
+                        {expandedPortrait === result.id && result.portraitText && (
+                          <div className="mt-4 p-4 bg-stone-50 rounded-lg border border-stone-200 prose prose-sm max-w-none whitespace-pre-wrap text-stone-700 leading-relaxed" style={{ fontFamily: "'Georgia', serif" }}>
+                            {result.portraitText}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Verified Members & Registered Users grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Verified Members */}
@@ -685,3 +787,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
