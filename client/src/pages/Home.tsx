@@ -72,12 +72,12 @@ export default function Home() {
   };
 
   const namenData = [
-    { oud: "Schizoïd", nieuw: "De teruggetrokkene", kern: "Trok zich terug wanneer de wereld te overweldigend werd" },
-    { oud: "Oraal", nieuw: "De zoeker", kern: "Ging zoeken naar de voeding, erkenning en verbinding die het miste" },
-    { oud: "Symbiotisch", nieuw: "De versmelter", kern: "Stemde zich af op de ander tot de eigen grens vervaagde" },
-    { oud: "Psychopathisch", nieuw: "De strateeg", kern: "Nam regie omdat controle veiligheid bood" },
-    { oud: "Masochistisch", nieuw: "De drager", kern: "Droeg het gewicht van anderen op de eigen schouders" },
-    { oud: "Rigide", nieuw: "De performer", kern: "Presteerde om geliefd te zijn en toonde een verzorgd, capabel zelf" },
+    { oud: "Schizoïd", nieuw: "De Ontwijker", kern: "Trok zich terug wanneer de wereld te overweldigend werd" },
+    { oud: "Oraal", nieuw: "De Zoeker", kern: "Ging zoeken naar de voeding, erkenning en verbinding die het miste" },
+    { oud: "Symbiotisch", nieuw: "De Versmelter", kern: "Stemde zich af op de ander tot de eigen grens vervaagde" },
+    { oud: "Psychopathisch", nieuw: "De Strateeg", kern: "Nam regie omdat controle veiligheid bood" },
+    { oud: "Masochistisch", nieuw: "De Drager", kern: "Droeg het gewicht van anderen op de eigen schouders" },
+    { oud: "Rigide", nieuw: "De Presteerder", kern: "Presteerde om geliefd te zijn en toonde een verzorgd, capabel zelf" },
   ];
 
   return (
@@ -300,5 +300,8 @@ export default function Home() {
     </div>
    );
 }
+
+
+
 
 
