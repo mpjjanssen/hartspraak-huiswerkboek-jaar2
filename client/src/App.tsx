@@ -1,4 +1,3 @@
-import MijnResultaten from "./pages/MijnResultaten";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
@@ -19,6 +18,7 @@ import Workshop3 from "./pages/Workshop3";
 import Workshop4 from "./pages/Workshop4";
 import Referenties from "./pages/Referenties";
 import DeMaskermaker from "./pages/DeMaskermaker";
+import MijnResultaten from "./pages/MijnResultaten";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -82,16 +82,11 @@ function MemberRouter() {
               <DeMaskermaker />
             </ProtectedRoute>
           )} />
-         <Route path="/mijn-resultaten" component={() => (
-  <ProtectedRoute>
-    <MijnResultaten />
-  </ProtectedRoute>
-)} />
-```
-
-En bovenaan in het bestand, bij de andere imports, voeg je toe:
-```
-import MijnResultaten from "./pages/MijnResultaten";
+          <Route path="/mijn-resultaten" component={() => (
+            <ProtectedRoute>
+              <MijnResultaten />
+            </ProtectedRoute>
+          )} />
           <Route path="/privacy" component={() => (
             <ProtectedRoute>
               <Privacy />
@@ -164,4 +159,3 @@ function App() {
 }
 
 export default App;
-
