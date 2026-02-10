@@ -302,6 +302,3 @@ export default function Home() {
 }
 
 
-
-
-
