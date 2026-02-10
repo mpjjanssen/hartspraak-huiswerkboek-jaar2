@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import {
   Radar,
   RadarChart,
@@ -8,6 +8,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import PortraitSection from "../components/PortraitSection";
+import { useAuth } from "../contexts/AuthContext";
 
 // ═══════════════════════════════════════════════════════════
 // TYPES
@@ -486,6 +487,22 @@ function FinalResults({ scoresI, scoresII, likertAnswers }: { scoresI: Scores; s
     }
   });
 
+  // Auto-save results to database
+  const { token } = useAuth();
+  const hasSaved = useRef(false);
+  useEffect(() => {
+    if (hasSaved.current || !token) return;
+    hasSaved.current = true;
+    const topStructures = sorted.slice(0, 3).join(",");
+    fetch("/api/spiegelwerk-results", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({
+        combined, normI, normII, normIII, profileType, topStructures,
+      }),
+    }).catch(err => console.error("Failed to save Spiegelwerk results:", err));
+  }, []);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "40px 20px" }}>
       <div style={{ maxWidth: 640, width: "100%" }}>
@@ -644,4 +661,6 @@ export default function DeMaskermaker() {
     </div>
   );
 }
+
+
 
