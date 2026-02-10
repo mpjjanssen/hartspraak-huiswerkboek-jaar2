@@ -85,13 +85,13 @@ export default function Home() {
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-primary mb-2 flex items-center justify-center gap-3">
           <Heart className="text-destructive fill-destructive" />
-          Hartspraak jaar 2 — Van masker naar zelf
+          Welkom bij Wond(er)werk
         </h1>
         <p className="text-lg font-medium text-muted-foreground mb-4">
-          Ontdek je karakterstructuren
+          Van wond naar wonder — je karakterstructuren leren kennen
         </p>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Jouw persoonlijke reis naar verdieping, verbinding en innerlijke groei gaat hier verder.
+          Hier ontdek je de patronen die je als kind hebt ontwikkeld om te overleven — en leer je ze met mildheid los te laten.
         </p>
       </div>
 
