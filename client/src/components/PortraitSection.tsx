@@ -7,6 +7,7 @@
  */
 
 import { useState, useRef } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 // Dezelfde stijl-constanten als DeMaskermaker
 const S = {
@@ -213,15 +214,19 @@ export default function PortraitSection({ normI, normII, normIII }: PortraitSect
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const portraitRef = useRef<HTMLDivElement>(null);
+  const { token } = useAuth();
 
   async function generatePortrait() {
     setLoading(true);
     setError(null);
 
     try {
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
       const response = await fetch("/api/spiegelwerk/portrait", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ normI, normII, normIII }),
       });
 
@@ -536,4 +541,6 @@ export default function PortraitSection({ normI, normII, normIII }: PortraitSect
     </div>
   );
 }
+
+
 
