@@ -161,3 +161,32 @@ export const sharedHomework = mysqlTable("shared_homework", {
 
 export type SharedHomework = typeof sharedHomework.$inferSelect;
 export type InsertSharedHomework = typeof sharedHomework.$inferInsert;
+
+/**
+ * Spiegelwerk test results — saved automatically when a user completes the test
+ */
+export const spiegelwerkResults = mysqlTable("spiegelwerk_results", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(), // References auth_users.id
+  userEmail: varchar("userEmail", { length: 320 }).notNull(),
+  // Combined scores (the final weighted result per structure, 0-100)
+  scoreA: int("scoreA").notNull(),
+  scoreB: int("scoreB").notNull(),
+  scoreS: int("scoreS").notNull(),
+  scoreC: int("scoreC").notNull(),
+  scoreD: int("scoreD").notNull(),
+  scoreE: int("scoreE").notNull(),
+  // Sub-scores per method (stored as JSON strings)
+  scoresNormI: text("scoresNormI").notNull(), // JSON: { A: number, B: number, ... }
+  scoresNormII: text("scoresNormII").notNull(),
+  scoresNormIII: text("scoresNormIII").notNull(),
+  // Profile metadata
+  profileType: varchar("profileType", { length: 20 }).notNull(), // "Piektype" | "Mengtype"
+  topStructures: varchar("topStructures", { length: 20 }).notNull(), // e.g. "A,D,S" (top 3 sorted)
+  portraitText: longtext("portraitText"), // AI-generated portrait text (saved after generation)
+  completedAt: timestamp("completedAt").defaultNow().notNull(),
+});
+
+export type SpiegelwerkResult = typeof spiegelwerkResults.$inferSelect;
+export type InsertSpiegelwerkResult = typeof spiegelwerkResults.$inferInsert;
+
