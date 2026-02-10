@@ -268,12 +268,12 @@ const LIKERT_OPTIONS = [
 // ═══════════════════════════════════════════════════════════
 
 const STRUCTURE_INFO: Record<StructureKey, { name: string; color: string; fullName: string }> = {
-  A: { name: "De teruggetrokkene", color: "#5B7B9A", fullName: "Teruggetrokken structuur" },
+  A: { name: "De Ontwijker", color: "#5B7B9A", fullName: "Ontwijkende structuur" },
   B: { name: "De zoeker", color: "#C4836A", fullName: "Zoekende structuur" },
   S: { name: "De versmelter", color: "#8B6F8E", fullName: "Versmeltende structuur" },
   C: { name: "De strateeg", color: "#6A8E6B", fullName: "Strategische structuur" },
   D: { name: "De drager", color: "#A68B5B", fullName: "Dragende structuur" },
-  E: { name: "De performer", color: "#7A8BA0", fullName: "Performende structuur" },
+  E: { name: "De Presteerder", color: "#7A8BA0", fullName: "Presterende structuur" },
 };
 
 const STRUCTURE_ORDER: StructureKey[] = ["A", "B", "S", "C", "D", "E"];
@@ -338,7 +338,7 @@ function WelcomeScreen({ onStart }: { onStart: () => void }) {
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100%", padding: "40px 20px", textAlign: "center" }}>
       <div style={{ maxWidth: 560 }}>
         <div style={{ fontSize: 11, letterSpacing: 3, textTransform: "uppercase", color: S.subtle, marginBottom: 24, fontFamily: S.fontBody }}>Hartspraak</div>
-        <h1 style={{ fontSize: 42, fontWeight: 400, color: S.text, marginBottom: 8, fontFamily: S.fontDisplay, lineHeight: 1.2 }}>De Maskermaker</h1>
+        <h1 style={{ fontSize: 42, fontWeight: 400, color: S.text, marginBottom: 8, fontFamily: S.fontDisplay, lineHeight: 1.2 }}>Wondwerk</h1>
         <p style={{ fontSize: 16, color: S.muted, marginBottom: 40, fontFamily: S.fontBody, fontStyle: "italic" }}>Karakterstructurentest</p>
         <div style={{ textAlign: "left", marginBottom: 40 }}>
           <p style={{ fontSize: 15, lineHeight: 1.8, color: S.hover, fontFamily: S.fontBody, marginBottom: 20 }}>Welkom. Deze test brengt in kaart welke karakterstructuren bij jou het sterkst aanwezig zijn. Niet als label, maar als spiegel — een uitnodiging om te zien hoe je onbewuste patronen je dagelijks leven kleuren.</p>
@@ -491,7 +491,7 @@ function FinalResults({ scoresI, scoresII, likertAnswers }: { scoresI: Scores; s
       <div style={{ maxWidth: 640, width: "100%" }}>
         <div style={{ textAlign: "center", marginBottom: 40 }}>
           <div style={{ fontSize: 11, letterSpacing: 3, textTransform: "uppercase", color: S.subtle, marginBottom: 16, fontFamily: S.fontBody }}>Resultaat</div>
-          <h2 style={{ fontSize: 32, fontWeight: 400, color: S.text, marginBottom: 8, fontFamily: S.fontDisplay }}>Jouw maskermaker-profiel</h2>
+          <h2 style={{ fontSize: 32, fontWeight: 400, color: S.text, marginBottom: 8, fontFamily: S.fontDisplay }}>Jouw Wondwerk-profiel</h2>
           <p style={{ fontSize: 14, color: S.muted, fontFamily: S.fontBody, fontStyle: "italic" }}>Gecombineerde score uit drie meetmethoden — {profileType.toLowerCase()}</p>
         </div>
         <div style={{ width: "100%", height: 360, marginBottom: 40 }}>
@@ -644,4 +644,5 @@ export default function DeMaskermaker() {
     </div>
   );
 }
+
 
