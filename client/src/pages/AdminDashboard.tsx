@@ -55,6 +55,7 @@ interface SpiegelwerkResult {
 
 export default function AdminDashboard() {
   const { admin, token, logout } = useAdminAuth();
+  const isSuperAdmin = admin?.email === "info@hartspraak.com";
   const [, setLocation] = useLocation();
   const [verifiedMembers, setVerifiedMembers] = useState<VerifiedMember[]>([]);
   const [registeredUsers, setRegisteredUsers] = useState<RegisteredUser[]>([]);
@@ -815,12 +816,16 @@ export default function AdminDashboard() {
                           <p className="text-sm text-muted-foreground">{member.email}</p>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Button size="sm" variant="ghost" onClick={() => handleEditMember(member)} title="Bewerken">
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <Button size="sm" variant="ghost" className="text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => handleDeleteMember(member)} title="Verwijderen">
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                          {isSuperAdmin && (
+                            <>
+                              <Button size="sm" variant="ghost" onClick={() => handleEditMember(member)} title="Bewerken">
+                                <Pencil className="h-4 w-4" />
+                              </Button>
+                              <Button size="sm" variant="ghost" className="text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => handleDeleteMember(member)} title="Verwijderen">
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </>
+                          )}
                           <Button size="sm" variant={member.status === "active" ? "outline" : "default"} onClick={() => handleToggleMemberStatus(member.id, member.status)}>
                             {member.status === "active" ? "Disable" : "Enable"}
                           </Button>
@@ -889,6 +894,8 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
+
 
 
 
