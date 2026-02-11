@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 interface Admin {
   id: number;
   email: string;
+  isSuperAdmin?: boolean;
 }
 
 interface AdminAuthContextType {
@@ -12,6 +13,7 @@ interface AdminAuthContextType {
   logout: () => void;
   isAuthenticated: boolean;
   isLoading: boolean;
+  isSuperAdmin: boolean;
 }
 
 const AdminAuthContext = createContext<AdminAuthContextType | undefined>(undefined);
@@ -57,6 +59,7 @@ export function AdminAuthProvider({ children }: { children: React.ReactNode }) {
         logout,
         isAuthenticated: !!token && !!admin,
         isLoading,
+        isSuperAdmin: admin?.isSuperAdmin === true,
       }}
     >
       {children}
