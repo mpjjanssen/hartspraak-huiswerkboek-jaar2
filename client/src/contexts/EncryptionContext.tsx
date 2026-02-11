@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { deriveKeyFromSession } from '@/lib/encryption';
+import { deriveKeyFromUser } from '@/lib/encryption';
 import { cleanupLegacyLocalStorage, isCleanupDone } from '@/lib/cleanupLocalStorage';
 import { useAuth } from './AuthContext';
 
@@ -28,12 +28,12 @@ interface EncryptionProviderProps {
 export function EncryptionProvider({ children }: EncryptionProviderProps) {
   const [encryptionKey, setEncryptionKey] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(false);
-  const { token, isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
-    // Derive encryption key from auth token when user is authenticated
-    if (isAuthenticated && token) {
-      const key = deriveKeyFromSession(token);
+    // Derive encryption key from user identity (stable across sessions)
+    if (isAuthenticated && user) {
+      const key = deriveKeyFromUser(user.email, user.id);
       setEncryptionKey(key);
       
       // Cleanup legacy localStorage data once per user
@@ -45,7 +45,7 @@ export function EncryptionProvider({ children }: EncryptionProviderProps) {
     }
     
     setIsReady(true);
-  }, [token, isAuthenticated]);
+  }, [user, isAuthenticated]);
 
   return (
     <EncryptionContext.Provider value={{ encryptionKey, isReady }}>
@@ -53,3 +53,4 @@ export function EncryptionProvider({ children }: EncryptionProviderProps) {
     </EncryptionContext.Provider>
   );
 }
+
