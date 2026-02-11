@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Loader2, UserPlus, Shield, LogOut, RefreshCw, BarChart3, Key, FileDown, Clock, Eye, Download, FileText, Mail, Activity } from "lucide-react";
+import { Loader2, UserPlus, Shield, LogOut, RefreshCw, BarChart3, Key, FileDown, Clock, Eye, Download, FileText, Mail, Activity, Pencil, Trash2 } from "lucide-react";
 import { useLocation } from "wouter";
 import { WorkshopReminders } from "@/components/WorkshopReminders";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -75,6 +75,13 @@ export default function AdminDashboard() {
   const [selectedSubmission, setSelectedSubmission] = useState<SharedSubmission | null>(null);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
   const [previewPdfData, setPreviewPdfData] = useState<string | null>(null);
+
+  // Edit member state
+  const [editingMember, setEditingMember] = useState<VerifiedMember | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editEmail, setEditEmail] = useState("");
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [isSavingEdit, setIsSavingEdit] = useState(false);
 
   // Daily digest state
   const [isSendingDigest, setIsSendingDigest] = useState(false);
@@ -249,6 +256,70 @@ export default function AdminDashboard() {
       fetchData();
     } catch (error) {
       toast.error("An error occurred");
+    }
+  };
+
+  const handleEditMember = (member: VerifiedMember) => {
+    setEditingMember(member);
+    setEditName(member.fullName);
+    setEditEmail(member.email);
+    setShowEditDialog(true);
+  };
+
+  const handleSaveEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingMember) return;
+    setIsSavingEdit(true);
+
+    try {
+      const response = await fetch(`/api/admin/verified-members/${editingMember.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ fullName: editName, email: editEmail }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        toast.error(data.error || "Wijziging mislukt");
+        return;
+      }
+
+      toast.success("Lid bijgewerkt");
+      setShowEditDialog(false);
+      setEditingMember(null);
+      fetchData();
+    } catch (error) {
+      toast.error("Er is een fout opgetreden");
+    } finally {
+      setIsSavingEdit(false);
+    }
+  };
+
+  const handleDeleteMember = async (member: VerifiedMember) => {
+    if (!confirm(`Weet je zeker dat je "${member.fullName}" (${member.email}) wilt verwijderen? Dit kan niet ongedaan worden gemaakt.`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/admin/verified-members/${member.id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        toast.error("Verwijderen mislukt");
+        return;
+      }
+
+      toast.success(`"${member.fullName}" verwijderd`);
+      fetchData();
+    } catch (error) {
+      toast.error("Er is een fout opgetreden");
     }
   };
 
@@ -743,9 +814,17 @@ export default function AdminDashboard() {
                           <p className="font-medium">{member.fullName}</p>
                           <p className="text-sm text-muted-foreground">{member.email}</p>
                         </div>
-                        <Button size="sm" variant={member.status === "active" ? "outline" : "default"} onClick={() => handleToggleMemberStatus(member.id, member.status)}>
-                          {member.status === "active" ? "Disable" : "Enable"}
-                        </Button>
+                        <div className="flex items-center gap-1">
+                          <Button size="sm" variant="ghost" onClick={() => handleEditMember(member)} title="Bewerken">
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button size="sm" variant="ghost" className="text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => handleDeleteMember(member)} title="Verwijderen">
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                          <Button size="sm" variant={member.status === "active" ? "outline" : "default"} onClick={() => handleToggleMemberStatus(member.id, member.status)}>
+                            {member.status === "active" ? "Disable" : "Enable"}
+                          </Button>
+                        </div>
                       </div>
                     ))
                   )}
@@ -756,6 +835,29 @@ export default function AdminDashboard() {
 
           {/* Registered Users */}
           <Card>
+
+        {/* Edit Member Dialog */}
+        <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Lid bewerken</DialogTitle>
+              <DialogDescription>Pas de naam of het e-mailadres aan</DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleSaveEdit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="editName">Naam</Label>
+                <Input id="editName" value={editName} onChange={(e) => setEditName(e.target.value)} required disabled={isSavingEdit} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="editEmail">E-mail</Label>
+                <Input id="editEmail" type="email" value={editEmail} onChange={(e) => setEditEmail(e.target.value)} required disabled={isSavingEdit} />
+              </div>
+              <Button type="submit" className="w-full" disabled={isSavingEdit}>
+                {isSavingEdit ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Opslaan"}
+              </Button>
+            </form>
+          </DialogContent>
+        </Dialog>
             <CardHeader>
               <CardTitle>Registered Users</CardTitle>
               <CardDescription>Manage user accounts</CardDescription>
@@ -787,4 +889,6 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
+
 
