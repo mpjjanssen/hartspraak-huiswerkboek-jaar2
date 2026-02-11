@@ -6,8 +6,10 @@ import { hashPassword, comparePassword, generateToken, validatePassword, require
 
 const router = express.Router();
 
+const SUPER_ADMIN_EMAIL = "info@hartspraak.com";
+
 /**
- * Admin login (only info@hartspraak.com)
+ * Admin login (all admin accounts)
  * POST /api/admin/login
  */
 router.post("/login", async (req, res) => {
@@ -21,11 +23,6 @@ router.post("/login", async (req, res) => {
     
     if (!email || !password) {
       return res.status(400).json({ error: "Email and password are required" });
-    }
-    
-    // Only allow info@hartspraak.com
-    if (email.toLowerCase() !== "info@hartspraak.com") {
-      return res.status(403).json({ error: "Unauthorized" });
     }
     
     // Find admin
@@ -65,6 +62,7 @@ router.post("/login", async (req, res) => {
       admin: {
         id: admin.id,
         email: admin.email,
+        isSuperAdmin: admin.email === SUPER_ADMIN_EMAIL,
       }
     });
   } catch (error) {
@@ -208,7 +206,7 @@ router.post("/verified-members", requireAdmin, async (req, res) => {
 });
 
 /**
- * Update verified member (status, name, email)
+ * Update verified member (status, name, email) - only superadmin can edit name/email
  * PATCH /api/admin/verified-members/:id
  */
 router.patch("/verified-members/:id", requireAdmin, async (req, res) => {
@@ -218,11 +216,13 @@ router.patch("/verified-members/:id", requireAdmin, async (req, res) => {
       return res.status(500).json({ error: "Database not available" });
     }
     
+    const adminEmail = (req as any).admin.email;
     const memberId = parseInt(req.params.id);
     const { status, fullName, email } = req.body;
     
     const updateData: Record<string, any> = {};
     
+    // Status changes allowed for all admins
     if (status) {
       if (!["active", "disabled"].includes(status)) {
         return res.status(400).json({ error: "Valid status is required (active or disabled)" });
@@ -230,18 +230,25 @@ router.patch("/verified-members/:id", requireAdmin, async (req, res) => {
       updateData.status = status;
     }
     
-    if (fullName !== undefined) {
-      if (!fullName.trim()) {
-        return res.status(400).json({ error: "Name cannot be empty" });
+    // Name/email changes only for superadmin
+    if (fullName !== undefined || email !== undefined) {
+      if (adminEmail !== SUPER_ADMIN_EMAIL) {
+        return res.status(403).json({ error: "Alleen de hoofdbeheerder mag leden bewerken" });
       }
-      updateData.fullName = fullName.trim();
-    }
-    
-    if (email !== undefined) {
-      if (!email.trim()) {
-        return res.status(400).json({ error: "Email cannot be empty" });
+      
+      if (fullName !== undefined) {
+        if (!fullName.trim()) {
+          return res.status(400).json({ error: "Name cannot be empty" });
+        }
+        updateData.fullName = fullName.trim();
       }
-      updateData.email = email.trim().toLowerCase();
+      
+      if (email !== undefined) {
+        if (!email.trim()) {
+          return res.status(400).json({ error: "Email cannot be empty" });
+        }
+        updateData.email = email.trim().toLowerCase();
+      }
     }
     
     if (Object.keys(updateData).length === 0) {
@@ -261,11 +268,16 @@ router.patch("/verified-members/:id", requireAdmin, async (req, res) => {
 });
 
 /**
- * Delete verified member
+ * Delete verified member - superadmin only
  * DELETE /api/admin/verified-members/:id
  */
 router.delete("/verified-members/:id", requireAdmin, async (req, res) => {
   try {
+    const adminEmail = (req as any).admin.email;
+    if (adminEmail !== SUPER_ADMIN_EMAIL) {
+      return res.status(403).json({ error: "Alleen de hoofdbeheerder mag leden verwijderen" });
+    }
+
     const db = await getDb();
     if (!db) {
       return res.status(500).json({ error: "Database not available" });
@@ -623,5 +635,121 @@ router.get("/usage-stats", requireAdmin, async (req, res) => {
   }
 });
 
+/**
+ * Get all admin accounts - superadmin only
+ * GET /api/admin/admins
+ */
+router.get("/admins", requireAdmin, async (req, res) => {
+  try {
+    const adminEmail = (req as any).admin.email;
+    if (adminEmail !== SUPER_ADMIN_EMAIL) {
+      return res.status(403).json({ error: "Alleen de hoofdbeheerder mag dit bekijken" });
+    }
+
+    const db = await getDb();
+    if (!db) {
+      return res.status(500).json({ error: "Database not available" });
+    }
+
+    const allAdmins = await db
+      .select({
+        id: admins.id,
+        email: admins.email,
+        createdAt: admins.createdAt,
+        lastSignedIn: admins.lastSignedIn,
+      })
+      .from(admins)
+      .orderBy(admins.createdAt);
+
+    res.json({ admins: allAdmins });
+  } catch (error) {
+    console.error("Get admins error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+/**
+ * Create new admin account - superadmin only
+ * POST /api/admin/admins
+ */
+router.post("/admins", requireAdmin, async (req, res) => {
+  try {
+    const adminEmail = (req as any).admin.email;
+    if (adminEmail !== SUPER_ADMIN_EMAIL) {
+      return res.status(403).json({ error: "Alleen de hoofdbeheerder mag admins toevoegen" });
+    }
+
+    const db = await getDb();
+    if (!db) {
+      return res.status(500).json({ error: "Database not available" });
+    }
+
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: "E-mail en wachtwoord zijn verplicht" });
+    }
+
+    const normalizedEmail = email.toLowerCase();
+
+    // Check if already exists
+    const [existing] = await db
+      .select()
+      .from(admins)
+      .where(eq(admins.email, normalizedEmail))
+      .limit(1);
+
+    if (existing) {
+      return res.status(400).json({ error: "Er bestaat al een admin met dit e-mailadres" });
+    }
+
+    const passwordHash = await hashPassword(password);
+
+    await db.insert(admins).values({
+      email: normalizedEmail,
+      passwordHash,
+    });
+
+    res.json({ success: true, message: `Admin ${normalizedEmail} aangemaakt` });
+  } catch (error) {
+    console.error("Create admin error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+/**
+ * Delete admin account - superadmin only
+ * DELETE /api/admin/admins/:id
+ */
+router.delete("/admins/:id", requireAdmin, async (req, res) => {
+  try {
+    const adminEmail = (req as any).admin.email;
+    if (adminEmail !== SUPER_ADMIN_EMAIL) {
+      return res.status(403).json({ error: "Alleen de hoofdbeheerder mag admins verwijderen" });
+    }
+
+    const db = await getDb();
+    if (!db) {
+      return res.status(500).json({ error: "Database not available" });
+    }
+
+    const adminId = parseInt(req.params.id);
+
+    // Prevent deleting yourself
+    const currentAdminId = (req as any).admin.userId;
+    if (adminId === currentAdminId) {
+      return res.status(400).json({ error: "Je kunt je eigen account niet verwijderen" });
+    }
+
+    await db.delete(admins).where(eq(admins.id, adminId));
+
+    res.json({ success: true, message: "Admin verwijderd" });
+  } catch (error) {
+    console.error("Delete admin error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 export default router;
+
 
