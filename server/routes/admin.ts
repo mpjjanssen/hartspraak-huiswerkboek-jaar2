@@ -208,7 +208,7 @@ router.post("/verified-members", requireAdmin, async (req, res) => {
 });
 
 /**
- * Update verified member status
+ * Update verified member (status, name, email)
  * PATCH /api/admin/verified-members/:id
  */
 router.patch("/verified-members/:id", requireAdmin, async (req, res) => {
@@ -219,20 +219,43 @@ router.patch("/verified-members/:id", requireAdmin, async (req, res) => {
     }
     
     const memberId = parseInt(req.params.id);
-    const { status } = req.body;
+    const { status, fullName, email } = req.body;
     
-    if (!status || !["active", "disabled"].includes(status)) {
-      return res.status(400).json({ error: "Valid status is required (active or disabled)" });
+    const updateData: Record<string, any> = {};
+    
+    if (status) {
+      if (!["active", "disabled"].includes(status)) {
+        return res.status(400).json({ error: "Valid status is required (active or disabled)" });
+      }
+      updateData.status = status;
+    }
+    
+    if (fullName !== undefined) {
+      if (!fullName.trim()) {
+        return res.status(400).json({ error: "Name cannot be empty" });
+      }
+      updateData.fullName = fullName.trim();
+    }
+    
+    if (email !== undefined) {
+      if (!email.trim()) {
+        return res.status(400).json({ error: "Email cannot be empty" });
+      }
+      updateData.email = email.trim().toLowerCase();
+    }
+    
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({ error: "No valid fields to update" });
     }
     
     await db
       .update(verifiedMembers)
-      .set({ status })
+      .set(updateData)
       .where(eq(verifiedMembers.id, memberId));
     
-    res.json({ success: true, message: "Member status updated" });
+    res.json({ success: true, message: "Member updated" });
   } catch (error) {
-    console.error("Update member status error:", error);
+    console.error("Update member error:", error);
     res.status(500).json({ error: "Server error" });
   }
 });
@@ -601,3 +624,4 @@ router.get("/usage-stats", requireAdmin, async (req, res) => {
 });
 
 export default router;
+
