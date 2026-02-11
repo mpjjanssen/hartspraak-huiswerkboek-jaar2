@@ -12,6 +12,31 @@ async function setupInitialData() {
     const connection = await mysql.createConnection(ENV.databaseUrl);
     const db = drizzle(connection);
     
+    // Ensure spiegelwerk_results table exists (migration may have been skipped)
+    console.log("[Setup] Ensuring spiegelwerk_results table exists...");
+    await connection.execute(`
+      CREATE TABLE IF NOT EXISTS spiegelwerk_results (
+        id int AUTO_INCREMENT NOT NULL,
+        userId int NOT NULL,
+        userEmail varchar(320) NOT NULL,
+        scoreA int NOT NULL,
+        scoreB int NOT NULL,
+        scoreS int NOT NULL,
+        scoreC int NOT NULL,
+        scoreD int NOT NULL,
+        scoreE int NOT NULL,
+        scoresNormI text NOT NULL,
+        scoresNormII text NOT NULL,
+        scoresNormIII text NOT NULL,
+        profileType varchar(20) NOT NULL,
+        topStructures varchar(20) NOT NULL,
+        portraitText longtext,
+        completedAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT spiegelwerk_results_id PRIMARY KEY(id)
+      )
+    `);
+    console.log("[Setup] ✅ spiegelwerk_results table ready.");
+
     // Check if verified members table is empty
     const existingMembers = await db.select().from(verifiedMembers).limit(1);
     
