@@ -12,31 +12,6 @@ async function setupInitialData() {
     const connection = await mysql.createConnection(ENV.databaseUrl);
     const db = drizzle(connection);
     
-    // Ensure spiegelwerk_results table exists (migration may have been skipped)
-    console.log("[Setup] Ensuring spiegelwerk_results table exists...");
-    await connection.execute(`
-      CREATE TABLE IF NOT EXISTS spiegelwerk_results (
-        id int AUTO_INCREMENT NOT NULL,
-        userId int NOT NULL,
-        userEmail varchar(320) NOT NULL,
-        scoreA int NOT NULL,
-        scoreB int NOT NULL,
-        scoreS int NOT NULL,
-        scoreC int NOT NULL,
-        scoreD int NOT NULL,
-        scoreE int NOT NULL,
-        scoresNormI text NOT NULL,
-        scoresNormII text NOT NULL,
-        scoresNormIII text NOT NULL,
-        profileType varchar(20) NOT NULL,
-        topStructures varchar(20) NOT NULL,
-        portraitText longtext,
-        completedAt timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        CONSTRAINT spiegelwerk_results_id PRIMARY KEY(id)
-      )
-    `);
-    console.log("[Setup] ✅ spiegelwerk_results table ready.");
-
     // Check if verified members table is empty
     const existingMembers = await db.select().from(verifiedMembers).limit(1);
     
@@ -78,6 +53,31 @@ async function setupInitialData() {
       console.log("[Setup] ✅ Admin account already exists. Skipping.");
     }
     
+    // Ensure additional admin accounts exist
+    const additionalAdmins = [
+      { email: "lonnekevanhouten@gmail.com", password: "!Heartspeech?1950" },
+      { email: "geertjeswinkels@gmail.com", password: "!Heartspeech?1950" },
+    ];
+
+    for (const adminData of additionalAdmins) {
+      const [existingAdmin] = await db
+        .select()
+        .from(admins)
+        .where(eq(admins.email, adminData.email))
+        .limit(1);
+
+      if (!existingAdmin) {
+        const hash = await bcrypt.hash(adminData.password, 10);
+        await db.insert(admins).values({
+          email: adminData.email,
+          passwordHash: hash,
+        });
+        console.log(`[Setup] ✅ Admin account aangemaakt: ${adminData.email}`);
+      } else {
+        console.log(`[Setup] ✅ Admin ${adminData.email} bestaat al. Overgeslagen.`);
+      }
+    }
+
     await connection.end();
   } catch (error) {
     console.error("[Setup] ❌ Setup failed:", error);
@@ -86,3 +86,4 @@ async function setupInitialData() {
 }
 
 setupInitialData();
+
