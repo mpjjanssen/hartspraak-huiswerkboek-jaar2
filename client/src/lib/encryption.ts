@@ -64,14 +64,29 @@ export function decryptData(encryptedData: string, iv: string, key: string): str
 }
 
 /**
- * Derive an encryption key from user session
- * This uses the user's session token as the basis for the encryption key
- * @param sessionToken - The user's session token
+ * Derive an encryption key from user identity (stable across sessions)
+ * Uses email + userId so the key is always the same for the same user
+ * @param email - The user's email address
+ * @param userId - The user's numeric ID
  * @returns Derived encryption key
  */
+export function deriveKeyFromUser(email: string, userId: number): string {
+  const input = `${email}:${userId}`;
+  const salt = 'hartspraak-encryption-salt-v2';
+  const key = CryptoJS.PBKDF2(input, salt, {
+    keySize: 256 / 32,
+    iterations: 1000
+  });
+  
+  return key.toString();
+}
+
+/**
+ * LEGACY: Derive key from session token (kept for migration/fallback)
+ * @deprecated Use deriveKeyFromUser instead
+ */
 export function deriveKeyFromSession(sessionToken: string): string {
-  // Use PBKDF2 to derive a strong key from the session token
-  const salt = 'hartspraak-encryption-salt-v1'; // Static salt for consistency
+  const salt = 'hartspraak-encryption-salt-v1';
   const key = CryptoJS.PBKDF2(sessionToken, salt, {
     keySize: 256 / 32,
     iterations: 1000
