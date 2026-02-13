@@ -373,7 +373,7 @@ function TransitionScreen({ title, subtitle, description, onContinue, buttonText
   );
 }
 
-function ScenarioQuestion({ scenario, shuffledOptions, onAnswer, scenarioIndex, total }: { scenario: Scenario; shuffledOptions: ScenarioOption[]; onAnswer: (s: StructureKey) => void; scenarioIndex: number; total: number }) {
+function ScenarioQuestion({ scenario, shuffledOptions, onAnswer, onBack, scenarioIndex, total }: { scenario: Scenario; shuffledOptions: ScenarioOption[]; onAnswer: (s: StructureKey) => void; onBack?: () => void; scenarioIndex: number; total: number }) {
   const [selected, setSelected] = useState<StructureKey | null>(null);
   const [animating, setAnimating] = useState(false);
   const handleSelect = (option: ScenarioOption) => {
@@ -385,6 +385,11 @@ function ScenarioQuestion({ scenario, shuffledOptions, onAnswer, scenarioIndex, 
   return (
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "0 20px" }}>
       <ProgressBar current={scenarioIndex + 1} total={total} label="Deel I — Scenariovragen" />
+      {onBack && scenarioIndex > 0 && (
+        <div style={{ marginBottom: 16 }}>
+          <button onClick={onBack} style={{ background: "none", border: "none", color: S.muted, fontFamily: S.fontBody, fontSize: 13, cursor: "pointer", padding: "4px 0" }}>← Vorige vraag</button>
+        </div>
+      )}
       <div style={{ marginBottom: 28 }}>
         <h3 style={{ fontSize: 20, fontWeight: 400, color: S.text, marginBottom: 14, fontFamily: S.fontDisplay }}>{scenario.title}</h3>
         <p style={{ fontSize: 15.5, lineHeight: 1.8, color: S.hover, fontFamily: S.fontBody, marginBottom: 10 }}>{scenario.situation}</p>
@@ -396,11 +401,16 @@ function ScenarioQuestion({ scenario, shuffledOptions, onAnswer, scenarioIndex, 
           return (<button key={idx} onClick={() => handleSelect(option)} style={{ padding: "16px 20px", fontSize: 14.5, lineHeight: 1.7, fontFamily: S.fontBody, color: isSelected ? "#f0ebe3" : S.hover, backgroundColor: isSelected ? S.text : S.bg, border: "1px solid", borderColor: isSelected ? S.text : S.border, borderRadius: 8, cursor: "pointer", textAlign: "left", transition: "all 0.25s ease", opacity: selected && !isSelected ? 0.5 : 1 }}>{option.text}</button>);
         })}
       </div>
+      {onBack && scenarioIndex > 0 && (
+        <div style={{ textAlign: "center", marginTop: 20 }}>
+          <button onClick={onBack} style={{ background: "none", border: "none", color: S.muted, fontFamily: S.fontBody, fontSize: 13, cursor: "pointer", padding: "8px 16px" }}>← Vorige vraag</button>
+        </div>
+      )}
     </div>
   );
 }
 
-function PairQuestion({ pair, onAnswer, pairIndex, total, flipped }: { pair: Pair; onAnswer: (s: StructureKey) => void; pairIndex: number; total: number; flipped: boolean }) {
+function PairQuestion({ pair, onAnswer, onBack, pairIndex, total, flipped }: { pair: Pair; onAnswer: (s: StructureKey) => void; onBack?: () => void; pairIndex: number; total: number; flipped: boolean }) {
   const [selected, setSelected] = useState<StructureKey | null>(null);
   const [animating, setAnimating] = useState(false);
   const optionA = flipped ? pair.b : pair.a;
@@ -414,6 +424,11 @@ function PairQuestion({ pair, onAnswer, pairIndex, total, flipped }: { pair: Pai
   return (
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "0 20px" }}>
       <ProgressBar current={pairIndex + 1} total={total} label="Deel II — Geforceerde keuze" />
+      {onBack && pairIndex > 0 && (
+        <div style={{ marginBottom: 16 }}>
+          <button onClick={onBack} style={{ background: "none", border: "none", color: S.muted, fontFamily: S.fontBody, fontSize: 13, cursor: "pointer", padding: "4px 0" }}>← Vorige vraag</button>
+        </div>
+      )}
       <p style={{ fontSize: 14, color: S.muted, fontFamily: S.fontBody, fontStyle: "italic", marginBottom: 24, textAlign: "center" }}>Welke uitspraak lijkt het meest op jou?</p>
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         {[optionA, optionB].map((option, idx) => {
@@ -422,6 +437,11 @@ function PairQuestion({ pair, onAnswer, pairIndex, total, flipped }: { pair: Pai
           return (<button key={idx} onClick={() => handleSelect(option)} style={{ padding: "24px 24px", fontSize: 15, lineHeight: 1.8, fontFamily: S.fontBody, color: isSelected ? "#f0ebe3" : S.hover, backgroundColor: isSelected ? S.text : S.bg, border: "1.5px solid", borderColor: isSelected ? S.text : S.border, borderRadius: 10, cursor: "pointer", textAlign: "left", transition: "all 0.25s ease", opacity: isOther ? 0.4 : 1 }}>{option.t}</button>);
         })}
       </div>
+      {onBack && pairIndex > 0 && (
+        <div style={{ textAlign: "center", marginTop: 20 }}>
+          <button onClick={onBack} style={{ background: "none", border: "none", color: S.muted, fontFamily: S.fontBody, fontSize: 13, cursor: "pointer", padding: "8px 16px" }}>← Vorige vraag</button>
+        </div>
+      )}
     </div>
   );
 }
@@ -609,6 +629,8 @@ export default function DeMaskermaker() {
   const [scoresI, setScoresI] = useState<Scores>({ A: 0, B: 0, S: 0, C: 0, D: 0, E: 0 });
   const [pairIndex, setPairIndex] = useState(0);
   const [scoresII, setScoresII] = useState<Scores>({ A: 0, B: 0, S: 0, C: 0, D: 0, E: 0 });
+  const [scenarioHistory, setScenarioHistory] = useState<StructureKey[]>([]);
+  const [pairHistory, setPairHistory] = useState<StructureKey[]>([]);
   const [likertAnswers, setLikertAnswers] = useState<Record<number, number>>({});
   const [likertPage, setLikertPage] = useState(0);
   const LIKERT_PAGE_SIZE = 12;
@@ -618,15 +640,33 @@ export default function DeMaskermaker() {
 
   const handleScenarioAnswer = useCallback((structure: StructureKey) => {
     setScoresI(prev => ({ ...prev, [structure]: prev[structure] + 1 }));
+    setScenarioHistory(prev => [...prev, structure]);
     if (scenarioIndex + 1 >= SCENARIOS.length) setPhase("transition-2");
     else setScenarioIndex(prev => prev + 1);
   }, [scenarioIndex]);
 
+  const handleScenarioBack = useCallback(() => {
+    if (scenarioIndex <= 0 || scenarioHistory.length === 0) return;
+    const lastAnswer = scenarioHistory[scenarioHistory.length - 1];
+    setScoresI(prev => ({ ...prev, [lastAnswer]: prev[lastAnswer] - 1 }));
+    setScenarioHistory(prev => prev.slice(0, -1));
+    setScenarioIndex(prev => prev - 1);
+  }, [scenarioIndex, scenarioHistory]);
+
   const handlePairAnswer = useCallback((structure: StructureKey) => {
     setScoresII(prev => ({ ...prev, [structure]: prev[structure] + 1 }));
+    setPairHistory(prev => [...prev, structure]);
     if (pairIndex + 1 >= PAIRS.length) setPhase("transition-3");
     else setPairIndex(prev => prev + 1);
   }, [pairIndex]);
+
+  const handlePairBack = useCallback(() => {
+    if (pairIndex <= 0 || pairHistory.length === 0) return;
+    const lastAnswer = pairHistory[pairHistory.length - 1];
+    setScoresII(prev => ({ ...prev, [lastAnswer]: prev[lastAnswer] - 1 }));
+    setPairHistory(prev => prev.slice(0, -1));
+    setPairIndex(prev => prev - 1);
+  }, [pairIndex, pairHistory]);
 
   const handleLikertAnswer = useCallback((itemId: number, value: number) => {
     setLikertAnswers(prev => ({ ...prev, [itemId]: value }));
@@ -646,9 +686,9 @@ export default function DeMaskermaker() {
       <div style={{ maxWidth: 800, margin: "0 auto", minHeight: "100vh", padding: "24px 0" }}>
         {phase === "welcome" && <WelcomeScreen onStart={() => setPhase("transition-1")} />}
         {phase === "transition-1" && <TransitionScreen subtitle="Deel I van III" title="Scenariovragen" description="Je krijgt vijftien korte situatieschetsen uit het dagelijks leven. Bij elke situatie staan zes mogelijke reacties. Kies de reactie die het dichtst bij je komt — ga op je gevoel af, niet op nadenken." onContinue={() => setPhase("part1")} buttonText="Start deel I" />}
-        {phase === "part1" && <ScenarioQuestion scenario={shuffledScenarios[scenarioIndex]} shuffledOptions={shuffledScenarios[scenarioIndex].shuffledOptions} onAnswer={handleScenarioAnswer} scenarioIndex={scenarioIndex} total={SCENARIOS.length} />}
+        {phase === "part1" && <ScenarioQuestion scenario={shuffledScenarios[scenarioIndex]} shuffledOptions={shuffledScenarios[scenarioIndex].shuffledOptions} onAnswer={handleScenarioAnswer} onBack={handleScenarioBack} scenarioIndex={scenarioIndex} total={SCENARIOS.length} />}
         {phase === "transition-2" && <TransitionScreen subtitle="Deel II van III" title="Geforceerde keuze" description="Hieronder staan dertig paren van twee uitspraken. Beide uitspraken zijn herkenbaar — het gaat er niet om welke 'beter' is. Kies steeds de uitspraak die het meest op jou lijkt, ook als het verschil klein is." onContinue={() => setPhase("part2")} buttonText="Start deel II" />}
-        {phase === "part2" && <PairQuestion pair={PAIRS[pairIndex]} flipped={pairFlips[pairIndex]} onAnswer={handlePairAnswer} pairIndex={pairIndex} total={PAIRS.length} />}
+        {phase === "part2" && <PairQuestion pair={PAIRS[pairIndex]} flipped={pairFlips[pairIndex]} onAnswer={handlePairAnswer} onBack={handlePairBack} pairIndex={pairIndex} total={PAIRS.length} />}
         {phase === "transition-3" && <TransitionScreen subtitle="Deel III van III" title="Likertschaal" description="Hieronder staan 48 korte uitspraken over het dagelijks leven. Geef bij elke uitspraak aan hoe vaak dit op jou van toepassing is. Ga op je eerste gevoel af — denk niet te lang na over je antwoord." onContinue={() => setPhase("part3")} buttonText="Start deel III" />}
         {phase === "part3" && (
           <div>
@@ -665,3 +705,4 @@ export default function DeMaskermaker() {
     </div>
   );
 }
+
